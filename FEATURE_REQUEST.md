@@ -1,4 +1,4 @@
-```markdown
+
 # Plantilla de Solicitud de Características - VersoVivo
 
 **Fecha**: 2026 | **Versión**: 2.1.0
