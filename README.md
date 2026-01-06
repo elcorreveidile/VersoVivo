@@ -200,7 +200,7 @@ Por favor lee nuestro [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) para entender nue
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT - lee el archivo [LICENSE](LICENSE) para más detalles.
+Este proyecto está bajo la Licencia MIT - lee el archivo [LICENSE.md](LICENSE.md) para más detalles.
 
 ---
 
@@ -209,7 +209,7 @@ Este proyecto está bajo la Licencia MIT - lee el archivo [LICENSE](LICENSE) par
 - **Autor**: [Javier Benítez LáinezJ
 - **Email**: [informa@blablaele.com]
 - **Website**: [https://poedronomo.com](https://poedronomo.com)
-- **Twitter**: [@tu-usuario](https://twitter.com/jabelainez)
+- **Twitter**: [@jabelainez](https://twitter.com/jabelainez)
 
 ---
 
