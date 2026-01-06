@@ -1,8 +1,3 @@
-
-
-Aquí tienes un **Código de Conducta** completo y adaptado para **VersoVivo**:
-
-```markdown
 # Código de Conducta del Proyecto VersoVivo
 
 ## Nuestro Compromiso
