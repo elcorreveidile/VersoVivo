@@ -206,7 +206,7 @@ Este proyecto está bajo la Licencia MIT - lee el archivo [LICENSE.md](LICENSE.m
 
 ## 📞 Contacto
 
-- **Autor**: [Javier Benítez LáinezJ
+- **Autor**: Javier Benítez Láinez
 - **Email**: [informa@blablaele.com]
 - **Website**: [https://poedronomo.com](https://poedronomo.com)
 - **Twitter**: [@jabelainez](https://twitter.com/jabelainez)
