@@ -192,6 +192,7 @@ npm run build:ios     # Compila para iOS
    git push origin feature/nueva-funcionalidad
    ```
 5. **Abre un Pull Request**
+6. **Visita  [FEATURE_REQUEST.md]
 
 ### Código de Conducta
 Por favor lee nuestro [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) para entender nuestras normas de comportamiento.
