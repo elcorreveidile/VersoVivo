@@ -63,7 +63,7 @@ El equipo de mantenimiento del proyecto se compromete a investigar todos los rep
 Si presencias o eres víctima de comportamiento inaceptable, o tienes cualquier otra preocupación, por favor repórtalo lo antes posible:
 
 ### 📧 Contactos del Equipo de Mantenimiento:
-- **[Informa]**: [informa2@blablaele.com]
+- **[Informa]**: [informa@blablaele.com]
 
 ### 📝 Cómo Reportar:
 1. **Envía un correo** a Informa
