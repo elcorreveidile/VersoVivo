@@ -1,8 +1,8 @@
 /**
- * Video Player Component
+ * Video Player Component (Expo Compatible)
  */
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
-import Video from 'react-native-video';
+import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
 import { colors, spacing, typography } from '@theme/index';
 import type { Poem } from '@types/index';
 
@@ -24,32 +24,57 @@ interface VideoPlayerProps {
 const { width, height } = Dimensions.get('window');
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ poem, onProgress, onEnd }) => {
-  const [paused, setPaused] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [loading, setLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const videoRef = useRef<Video>(null);
 
-  const handleProgress = useCallback(
-    (data: { currentTime: number }) => {
-      setCurrentTime(data.currentTime);
-      onProgress?.(data.currentTime);
-    },
-    [onProgress]
-  );
-
-  const handleLoad = useCallback((data: { duration: number }) => {
-    setDuration(data.duration);
-    setLoading(false);
+  useEffect(() => {
+    return () => {
+      // Cleanup
+      videoRef.current?.unloadAsync();
+    };
   }, []);
 
-  const handleEnd = useCallback(() => {
-    setPaused(true);
-    onEnd?.();
-  }, [onEnd]);
+  const handlePlaybackStatusUpdate = useCallback(
+    (status: AVPlaybackStatus) => {
+      if (status.isLoaded) {
+        setLoading(false);
+        setIsPlaying(status.isPlaying);
+        setCurrentTime(status.positionMillis / 1000);
+        setDuration(status.durationMillis ? status.durationMillis / 1000 : 0);
 
-  const togglePlayPause = useCallback(() => {
-    setPaused(prev => !prev);
+        if (status.positionMillis) {
+          onProgress?.(status.positionMillis / 1000);
+        }
+
+        if (status.didJustFinish) {
+          setIsPlaying(false);
+          onEnd?.();
+        }
+      } else {
+        setLoading(true);
+      }
+    },
+    [onProgress, onEnd]
+  );
+
+  const togglePlayPause = useCallback(async () => {
+    if (!videoRef.current) return;
+
+    try {
+      const status = await videoRef.current.getStatusAsync();
+      if (status.isLoaded) {
+        if (status.isPlaying) {
+          await videoRef.current.pauseAsync();
+        } else {
+          await videoRef.current.playAsync();
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling play/pause:', error);
+    }
   }, []);
 
   const formatTime = (seconds: number): string => {
@@ -64,13 +89,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ poem, onProgress, onEnd }) =>
         ref={videoRef}
         source={{ uri: poem.videoUrl }}
         style={styles.video}
-        paused={paused}
-        onProgress={handleProgress}
-        onLoad={handleLoad}
-        onEnd={handleEnd}
-        resizeMode="contain"
-        onBuffer={() => setLoading(true)}
-        onReadyForDisplay={() => setLoading(false)}
+        resizeMode={ResizeMode.CONTAIN}
+        shouldPlay={false}
+        onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
+        onLoadStart={() => setLoading(true)}
+        onLoad={() => setLoading(false)}
       />
 
       {loading && (
@@ -80,7 +103,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ poem, onProgress, onEnd }) =>
       )}
 
       <TouchableOpacity style={styles.overlay} onPress={togglePlayPause} activeOpacity={1}>
-        {paused && !loading && (
+        {!isPlaying && !loading && (
           <View style={styles.playButton}>
             <Text style={styles.playIcon}>▶</Text>
           </View>

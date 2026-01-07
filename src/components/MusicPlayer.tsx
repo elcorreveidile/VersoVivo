@@ -1,8 +1,8 @@
 /**
- * Music Player Component
+ * Music Player Component (Expo Compatible)
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
   Text,
@@ -11,12 +11,7 @@ import {
   ActivityIndicator,
   Animated,
 } from 'react-native';
-import TrackPlayer, {
-  usePlaybackState,
-  useProgress,
-  State,
-  Capability,
-} from 'react-native-track-player';
+import { Audio, AVPlaybackStatus } from 'expo-av';
 import { colors, typography, spacing, borderRadius } from '@theme/index';
 import type { Poem } from '@types/index';
 
@@ -28,20 +23,18 @@ interface MusicPlayerProps {
 
 const MusicPlayer: React.FC<MusicPlayerProps> = ({ poem, onProgress, onEnd }) => {
   const [loading, setLoading] = useState(true);
-  const playbackState = usePlaybackState();
-  const progress = useProgress();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [position, setPosition] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [sound, setSound] = useState<Audio.Sound>();
   const [visualizerData] = useState(new Array(20).fill(0).map(() => new Animated.Value(0.3)));
 
   useEffect(() => {
-    setupPlayer();
+    setupAudio();
     return () => {
-      TrackPlayer.reset();
+      sound?.unloadAsync();
     };
   }, [poem]);
-
-  useEffect(() => {
-    onProgress?.(progress.position);
-  }, [progress.position, onProgress]);
 
   useEffect(() => {
     // Animate visualizer bars
@@ -62,7 +55,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ poem, onProgress, onEnd }) =>
       )
     );
 
-    if (playbackState.state === State.Playing) {
+    if (isPlaying) {
       animations.forEach(anim => anim.start());
     } else {
       animations.forEach(anim => anim.stop());
@@ -71,52 +64,71 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ poem, onProgress, onEnd }) =>
     return () => {
       animations.forEach(anim => anim.stop());
     };
-  }, [playbackState.state, visualizerData]);
+  }, [isPlaying, visualizerData]);
 
-  const setupPlayer = async () => {
+  const setupAudio = async () => {
     try {
-      await TrackPlayer.setupPlayer();
-      await TrackPlayer.updateOptions({
-        capabilities: [
-          Capability.Play,
-          Capability.Pause,
-          Capability.Stop,
-          Capability.SeekTo,
-        ],
-        compactCapabilities: [Capability.Play, Capability.Pause],
+      await Audio.setAudioModeAsync({
+        playsInSilentModeIOS: true,
+        staysActiveInBackground: true,
       });
 
-      await TrackPlayer.add({
-        id: poem.id,
-        url: poem.musicUrl,
-        title: poem.title,
-        artist: poem.author,
-        duration: poem.duration,
-      });
+      const { sound: audioSound } = await Audio.Sound.createAsync(
+        { uri: poem.musicUrl },
+        { shouldPlay: false },
+        onPlaybackStatusUpdate
+      );
 
+      setSound(audioSound);
       setLoading(false);
     } catch (error) {
-      console.error('Error setting up player:', error);
+      console.error('Error setting up audio:', error);
       setLoading(false);
     }
   };
 
+  const onPlaybackStatusUpdate = useCallback(
+    (status: AVPlaybackStatus) => {
+      if (status.isLoaded) {
+        setIsPlaying(status.isPlaying);
+        setPosition(status.positionMillis / 1000);
+        setDuration(status.durationMillis ? status.durationMillis / 1000 : 0);
+
+        if (status.positionMillis) {
+          onProgress?.(status.positionMillis / 1000);
+        }
+
+        if (status.didJustFinish) {
+          setIsPlaying(false);
+          onEnd?.();
+        }
+      }
+    },
+    [onProgress, onEnd]
+  );
+
   const togglePlayPause = useCallback(async () => {
-    const state = playbackState.state;
-    if (state === State.Playing) {
-      await TrackPlayer.pause();
-    } else {
-      await TrackPlayer.play();
+    if (!sound) return;
+
+    try {
+      const status = await sound.getStatusAsync();
+      if (status.isLoaded) {
+        if (status.isPlaying) {
+          await sound.pauseAsync();
+        } else {
+          await sound.playAsync();
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling play/pause:', error);
     }
-  }, [playbackState.state]);
+  }, [sound]);
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
-
-  const isPlaying = playbackState.state === State.Playing;
 
   return (
     <View style={styles.container}>
@@ -162,16 +174,14 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ poem, onProgress, onEnd }) =>
             style={[
               styles.progressFill,
               {
-                width: `${
-                  progress.duration > 0 ? (progress.position / progress.duration) * 100 : 0
-                }%`,
+                width: `${duration > 0 ? (position / duration) * 100 : 0}%`,
               },
             ]}
           />
         </View>
         <View style={styles.timeContainer}>
-          <Text style={styles.timeText}>{formatTime(progress.position)}</Text>
-          <Text style={styles.timeText}>{formatTime(progress.duration)}</Text>
+          <Text style={styles.timeText}>{formatTime(position)}</Text>
+          <Text style={styles.timeText}>{formatTime(duration)}</Text>
         </View>
       </View>
     </View>
