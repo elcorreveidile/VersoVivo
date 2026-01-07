@@ -153,6 +153,11 @@ versovivo/
 ```
 
 ---
+## 📚 Documentación
+
+- [Technical Specification Document](docs/technical-specification.md)
+
+---
 
 ## 🔧 Desarrollo
 
