@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '@hooks/index';
 import { fetchPoems } from '@store/slices/poemsSlice';
 import { PoemCard, LoadingScreen } from '@components/index';
 import { colors, typography, spacing } from '@theme/index';
-import type { Poem } from '@types/index';
+import type { Poem } from '@types';
 
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation();

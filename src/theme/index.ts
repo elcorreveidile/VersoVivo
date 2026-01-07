@@ -15,15 +15,7 @@ export interface Theme {
 }
 
 export const lightTheme: Theme = {
-  colors: {
-    ...colors,
-    background: colors.background,
-    text: {
-      primary: colors.text.lightPrimary,
-      secondary: colors.text.lightSecondary,
-      tertiary: colors.text.lightTertiary,
-    },
-  },
+  colors,
   typography,
   spacing,
   borderRadius,
@@ -31,15 +23,7 @@ export const lightTheme: Theme = {
 };
 
 export const darkTheme: Theme = {
-  colors: {
-    ...colors,
-    background: colors.background,
-    text: {
-      primary: colors.text.darkPrimary,
-      secondary: colors.text.darkSecondary,
-      tertiary: colors.text.darkTertiary,
-    },
-  },
+  colors,
   typography,
   spacing,
   borderRadius,

@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from '@hooks/index';
 import { addToFavorites, removeFromFavorites } from '@store/slices/poemsSlice';
 import { VideoPlayer, MusicPlayer } from '@components/index';
 import { colors, typography, spacing, borderRadius } from '@theme/index';
-import { PlaybackMode } from '@types/index';
+import { PlaybackMode } from '@types';
 
 const PoemDetailScreen: React.FC = () => {
   const route = useRoute();

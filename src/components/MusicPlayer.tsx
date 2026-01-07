@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { Audio, AVPlaybackStatus } from 'expo-av';
 import { colors, typography, spacing, borderRadius } from '@theme/index';
-import type { Poem } from '@types/index';
+import type { Poem } from '@types';
 
 interface MusicPlayerProps {
   poem: Poem;

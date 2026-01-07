@@ -15,7 +15,7 @@ import { useAppDispatch, useAppSelector } from '@hooks/index';
 import { fetchFilteredPoems, setFilters } from '@store/slices/poemsSlice';
 import { PoemCard, Input } from '@components/index';
 import { colors, typography, spacing, borderRadius } from '@theme/index';
-import type { Poem, PoemTheme } from '@types/index';
+import type { Poem, PoemTheme } from '@types';
 
 const ExploreScreen: React.FC = () => {
   const navigation = useNavigation();

@@ -13,7 +13,7 @@ import {
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from './config';
-import type { User, LoginCredentials, SignupCredentials } from '@types/index';
+import type { User, LoginCredentials, SignupCredentials } from '@types';
 
 class AuthService {
   /**

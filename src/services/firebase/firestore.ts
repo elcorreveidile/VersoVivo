@@ -16,7 +16,7 @@ import {
   arrayRemove,
 } from 'firebase/firestore';
 import { db } from './config';
-import type { Poem, PoemFilter, User, UserPreferences } from '@types/index';
+import type { Poem, PoemFilter, User, UserPreferences } from '@types';
 
 class FirestoreService {
   private poemsCollection = collection(db, 'poems');

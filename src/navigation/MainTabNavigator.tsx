@@ -9,7 +9,7 @@ import HomeNavigator from './HomeNavigator';
 import ExploreNavigator from './ExploreNavigator';
 import FavoritesNavigator from './FavoritesNavigator';
 import ProfileNavigator from './ProfileNavigator';
-import type { MainTabParamList } from '@types/navigation';
+import type { MainTabParamList } from '../types/navigation';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 

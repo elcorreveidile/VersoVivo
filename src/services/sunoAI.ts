@@ -4,7 +4,7 @@
 
 import axios from 'axios';
 import { SUNO_AI_API_KEY, SUNO_AI_API_URL, API_TIMEOUT } from '@env';
-import type { MusicGenerationRequest, MusicGenerationResponse } from '@types/index';
+import type { MusicGenerationRequest, MusicGenerationResponse } from '@types';
 
 class SunoAIService {
   private apiUrl: string;

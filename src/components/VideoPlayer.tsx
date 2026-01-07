@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
 import { colors, spacing, typography } from '@theme/index';
-import type { Poem } from '@types/index';
+import type { Poem } from '@types';
 
 interface VideoPlayerProps {
   poem: Poem;

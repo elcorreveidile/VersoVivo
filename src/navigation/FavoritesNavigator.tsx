@@ -6,7 +6,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import FavoritesScreen from '@screens/favorites/FavoritesScreen';
 import PoemDetailScreen from '@screens/poem/PoemDetailScreen';
-import type { FavoritesStackParamList } from '@types/navigation';
+import type { FavoritesStackParamList } from '../types/navigation';
 
 const Stack = createStackNavigator<FavoritesStackParamList>();
 

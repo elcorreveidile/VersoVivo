@@ -3,7 +3,7 @@
  */
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { PlaybackState, PlaybackMode, Poem } from '@types/index';
+import { PlaybackMode, type PlaybackState, type Poem } from '../../types';
 
 const initialState: PlaybackState = {
   currentPoem: null,
