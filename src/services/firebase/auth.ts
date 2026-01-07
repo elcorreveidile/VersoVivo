@@ -1,17 +1,19 @@
 /**
- * Firebase Authentication Service
+ * Firebase Authentication Service (Expo Compatible)
  */
 
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { GOOGLE_WEB_CLIENT_ID } from '@env';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut as firebaseSignOut,
+  updateProfile,
+  sendPasswordResetEmail,
+  User as FirebaseUser
+} from 'firebase/auth';
+import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
+import { auth, db } from './config';
 import type { User, LoginCredentials, SignupCredentials } from '@types/index';
-
-// Configure Google Sign-In
-GoogleSignin.configure({
-  webClientId: GOOGLE_WEB_CLIENT_ID,
-});
 
 class AuthService {
   /**
@@ -19,13 +21,14 @@ class AuthService {
    */
   async signUpWithEmail(credentials: SignupCredentials): Promise<User> {
     try {
-      const userCredential = await auth().createUserWithEmailAndPassword(
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
         credentials.email,
         credentials.password
       );
 
       // Update profile with display name
-      await userCredential.user.updateProfile({
+      await updateProfile(userCredential.user, {
         displayName: credentials.displayName,
       });
 
@@ -42,7 +45,7 @@ class AuthService {
         lastLoginAt: new Date(),
       };
 
-      await firestore().collection('users').doc(user.uid).set(user);
+      await setDoc(doc(db, 'users', user.uid), user);
 
       return user;
     } catch (error: any) {
@@ -55,16 +58,16 @@ class AuthService {
    */
   async signInWithEmail(credentials: LoginCredentials): Promise<User> {
     try {
-      const userCredential = await auth().signInWithEmailAndPassword(
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
         credentials.email,
         credentials.password
       );
 
       // Update last login
-      await firestore()
-        .collection('users')
-        .doc(userCredential.user.uid)
-        .update({ lastLoginAt: new Date() });
+      await updateDoc(doc(db, 'users', userCredential.user.uid), {
+        lastLoginAt: new Date()
+      });
 
       return this.getUserData(userCredential.user.uid);
     } catch (error: any) {
@@ -73,50 +76,10 @@ class AuthService {
   }
 
   /**
-   * Sign in with Google
+   * Sign in with Google (not available in Expo Go, requires custom build)
    */
   async signInWithGoogle(): Promise<User> {
-    try {
-      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-      const { idToken } = await GoogleSignin.signIn();
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-      const userCredential = await auth().signInWithCredential(googleCredential);
-
-      // Check if user exists in Firestore
-      const userDoc = await firestore()
-        .collection('users')
-        .doc(userCredential.user.uid)
-        .get();
-
-      if (!userDoc.exists) {
-        // Create new user document
-        const user: User = {
-          uid: userCredential.user.uid,
-          email: userCredential.user.email!,
-          displayName: userCredential.user.displayName || undefined,
-          photoURL: userCredential.user.photoURL || undefined,
-          favorites: [],
-          readPoems: [],
-          listenedPoems: [],
-          watchedPoems: [],
-          createdAt: new Date(),
-          lastLoginAt: new Date(),
-        };
-
-        await firestore().collection('users').doc(user.uid).set(user);
-        return user;
-      }
-
-      // Update last login
-      await firestore()
-        .collection('users')
-        .doc(userCredential.user.uid)
-        .update({ lastLoginAt: new Date() });
-
-      return this.getUserData(userCredential.user.uid);
-    } catch (error: any) {
-      throw new Error(this.getAuthErrorMessage(error.code));
-    }
+    throw new Error('Google Sign-In requiere una compilación personalizada de Expo. Por ahora usa email/contraseña.');
   }
 
   /**
@@ -124,9 +87,7 @@ class AuthService {
    */
   async signOut(): Promise<void> {
     try {
-      await auth().signOut();
-      await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut();
+      await firebaseSignOut(auth);
     } catch (error: any) {
       throw new Error('Error signing out');
     }
@@ -135,9 +96,9 @@ class AuthService {
   /**
    * Get current user
    */
-  getCurrentUser(): Promise<User | null> {
-    const currentUser = auth().currentUser;
-    if (!currentUser) return Promise.resolve(null);
+  async getCurrentUser(): Promise<User | null> {
+    const currentUser = auth.currentUser;
+    if (!currentUser) return null;
     return this.getUserData(currentUser.uid);
   }
 
@@ -145,8 +106,8 @@ class AuthService {
    * Get user data from Firestore
    */
   async getUserData(uid: string): Promise<User> {
-    const userDoc = await firestore().collection('users').doc(uid).get();
-    if (!userDoc.exists) {
+    const userDoc = await getDoc(doc(db, 'users', uid));
+    if (!userDoc.exists()) {
       throw new Error('User not found');
     }
     return userDoc.data() as User;
@@ -157,7 +118,7 @@ class AuthService {
    */
   async resetPassword(email: string): Promise<void> {
     try {
-      await auth().sendPasswordResetEmail(email);
+      await sendPasswordResetEmail(auth, email);
     } catch (error: any) {
       throw new Error(this.getAuthErrorMessage(error.code));
     }
