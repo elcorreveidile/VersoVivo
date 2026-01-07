@@ -4,7 +4,7 @@
 
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { authService } from '@services/firebase';
-import type { AuthState, User, LoginCredentials, SignupCredentials } from '@types/index';
+import type { AuthState, User, LoginCredentials, SignupCredentials } from '@types';
 
 const initialState: AuthState = {
   user: null,

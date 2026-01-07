@@ -6,7 +6,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import ExploreScreen from '@screens/explore/ExploreScreen';
 import PoemDetailScreen from '@screens/poem/PoemDetailScreen';
-import type { ExploreStackParamList } from '@types/navigation';
+import type { ExploreStackParamList } from '../types/navigation';
 
 const Stack = createStackNavigator<ExploreStackParamList>();
 

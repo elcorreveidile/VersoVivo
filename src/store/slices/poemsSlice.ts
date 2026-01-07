@@ -4,7 +4,7 @@
 
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { firestoreService } from '@services/firebase';
-import type { Poem, PoemFilter } from '@types/index';
+import type { Poem, PoemFilter } from '@types';
 
 interface PoemsState {
   poems: Poem[];

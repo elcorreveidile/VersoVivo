@@ -6,7 +6,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '@screens/home/HomeScreen';
 import PoemDetailScreen from '@screens/poem/PoemDetailScreen';
-import type { HomeStackParamList } from '@types/navigation';
+import type { HomeStackParamList } from '../types/navigation';
 
 const Stack = createStackNavigator<HomeStackParamList>();
 

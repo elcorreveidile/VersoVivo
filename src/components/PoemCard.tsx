@@ -12,7 +12,7 @@ import {
   ImageSourcePropType,
 } from 'react-native';
 import { colors, typography, spacing, borderRadius } from '@theme/index';
-import type { Poem } from '@types/index';
+import type { Poem } from '@types';
 
 interface PoemCardProps {
   poem: Poem;

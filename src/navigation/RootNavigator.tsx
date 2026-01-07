@@ -9,7 +9,7 @@ import { useAppSelector, useAppDispatch } from '@hooks/index';
 import { getCurrentUser } from '@store/slices/authSlice';
 import AuthNavigator from './AuthNavigator';
 import MainTabNavigator from './MainTabNavigator';
-import type { RootStackParamList } from '@types/navigation';
+import type { RootStackParamList } from '../types/navigation';
 
 const Stack = createStackNavigator<RootStackParamList>();
 

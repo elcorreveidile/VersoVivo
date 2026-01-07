@@ -38,7 +38,7 @@ const Input: React.FC<InputProps> = ({
         style={[
           styles.inputContainer,
           isFocused && styles.inputContainerFocused,
-          error && styles.inputContainerError,
+          !!error && styles.inputContainerError,
         ]}>
         {icon && <View style={styles.iconContainer}>{icon}</View>}
         <TextInput
