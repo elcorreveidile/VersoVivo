@@ -1,20 +1,34 @@
 /**
- * Firebase Firestore Service
+ * Firebase Firestore Service (Expo Compatible)
  */
 
-import firestore from '@react-native-firebase/firestore';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  updateDoc,
+  query,
+  where,
+  orderBy,
+  arrayUnion,
+  arrayRemove,
+} from 'firebase/firestore';
+import { db } from './config';
 import type { Poem, PoemFilter, User, UserPreferences } from '@types/index';
 
 class FirestoreService {
-  private poemsCollection = firestore().collection('poems');
-  private usersCollection = firestore().collection('users');
+  private poemsCollection = collection(db, 'poems');
+  private usersCollection = collection(db, 'users');
 
   /**
    * Get all poems
    */
   async getAllPoems(): Promise<Poem[]> {
     try {
-      const snapshot = await this.poemsCollection.orderBy('createdAt', 'desc').get();
+      const q = query(this.poemsCollection, orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(q);
       return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Poem));
     } catch (error) {
       console.error('Error fetching poems:', error);
@@ -27,9 +41,10 @@ class FirestoreService {
    */
   async getPoemById(id: string): Promise<Poem | null> {
     try {
-      const doc = await this.poemsCollection.doc(id).get();
-      if (!doc.exists) return null;
-      return { id: doc.id, ...doc.data() } as Poem;
+      const docRef = doc(db, 'poems', id);
+      const docSnap = await getDoc(docRef);
+      if (!docSnap.exists()) return null;
+      return { id: docSnap.id, ...docSnap.data() } as Poem;
     } catch (error) {
       console.error('Error fetching poem:', error);
       throw new Error('Error al cargar el poema');
@@ -41,25 +56,27 @@ class FirestoreService {
    */
   async getFilteredPoems(filters: PoemFilter): Promise<Poem[]> {
     try {
-      let query: any = this.poemsCollection;
+      let q = query(this.poemsCollection);
 
       if (filters.author) {
-        query = query.where('author', '==', filters.author);
+        q = query(q, where('author', '==', filters.author));
       }
 
       if (filters.theme) {
-        query = query.where('theme', '==', filters.theme);
+        q = query(q, where('theme', '==', filters.theme));
       }
 
-      const snapshot = await query.orderBy('createdAt', 'desc').get();
-      let poems = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() } as Poem));
+      q = query(q, orderBy('createdAt', 'desc'));
+
+      const snapshot = await getDocs(q);
+      let poems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Poem));
 
       // Filter by duration (client-side)
       if (filters.duration) {
         const durationRanges = {
-          corta: [0, 120], // 0-2 minutes
-          media: [121, 300], // 2-5 minutes
-          larga: [301, Infinity], // 5+ minutes
+          corta: [0, 120],
+          media: [121, 300],
+          larga: [301, Infinity],
         };
         const [min, max] = durationRanges[filters.duration];
         poems = poems.filter(poem => poem.duration >= min && poem.duration <= max);
@@ -67,12 +84,12 @@ class FirestoreService {
 
       // Filter by search query
       if (filters.searchQuery) {
-        const query = filters.searchQuery.toLowerCase();
+        const searchQuery = filters.searchQuery.toLowerCase();
         poems = poems.filter(
           poem =>
-            poem.title.toLowerCase().includes(query) ||
-            poem.author.toLowerCase().includes(query) ||
-            poem.textContent.toLowerCase().includes(query)
+            poem.title.toLowerCase().includes(searchQuery) ||
+            poem.author.toLowerCase().includes(searchQuery) ||
+            poem.textContent.toLowerCase().includes(searchQuery)
         );
       }
 
@@ -88,8 +105,9 @@ class FirestoreService {
    */
   async addToFavorites(userId: string, poemId: string): Promise<void> {
     try {
-      await this.usersCollection.doc(userId).update({
-        favorites: firestore.FieldValue.arrayUnion(poemId),
+      const userRef = doc(db, 'users', userId);
+      await updateDoc(userRef, {
+        favorites: arrayUnion(poemId),
       });
     } catch (error) {
       console.error('Error adding to favorites:', error);
@@ -102,8 +120,9 @@ class FirestoreService {
    */
   async removeFromFavorites(userId: string, poemId: string): Promise<void> {
     try {
-      await this.usersCollection.doc(userId).update({
-        favorites: firestore.FieldValue.arrayRemove(poemId),
+      const userRef = doc(db, 'users', userId);
+      await updateDoc(userRef, {
+        favorites: arrayRemove(poemId),
       });
     } catch (error) {
       console.error('Error removing from favorites:', error);
@@ -116,8 +135,9 @@ class FirestoreService {
    */
   async markAsRead(userId: string, poemId: string): Promise<void> {
     try {
-      await this.usersCollection.doc(userId).update({
-        readPoems: firestore.FieldValue.arrayUnion(poemId),
+      const userRef = doc(db, 'users', userId);
+      await updateDoc(userRef, {
+        readPoems: arrayUnion(poemId),
       });
     } catch (error) {
       console.error('Error marking as read:', error);
@@ -130,8 +150,9 @@ class FirestoreService {
    */
   async markAsWatched(userId: string, poemId: string): Promise<void> {
     try {
-      await this.usersCollection.doc(userId).update({
-        watchedPoems: firestore.FieldValue.arrayUnion(poemId),
+      const userRef = doc(db, 'users', userId);
+      await updateDoc(userRef, {
+        watchedPoems: arrayUnion(poemId),
       });
     } catch (error) {
       console.error('Error marking as watched:', error);
@@ -144,8 +165,9 @@ class FirestoreService {
    */
   async markAsListened(userId: string, poemId: string): Promise<void> {
     try {
-      await this.usersCollection.doc(userId).update({
-        listenedPoems: firestore.FieldValue.arrayUnion(poemId),
+      const userRef = doc(db, 'users', userId);
+      await updateDoc(userRef, {
+        listenedPoems: arrayUnion(poemId),
       });
     } catch (error) {
       console.error('Error marking as listened:', error);
@@ -158,7 +180,8 @@ class FirestoreService {
    */
   async updateUserPreferences(userId: string, preferences: Partial<UserPreferences>): Promise<void> {
     try {
-      await this.usersCollection.doc(userId).update({
+      const userRef = doc(db, 'users', userId);
+      await updateDoc(userRef, {
         preferences: preferences,
       });
     } catch (error) {
@@ -172,7 +195,8 @@ class FirestoreService {
    */
   async getUserFavorites(userId: string): Promise<Poem[]> {
     try {
-      const userDoc = await this.usersCollection.doc(userId).get();
+      const userRef = doc(db, 'users', userId);
+      const userDoc = await getDoc(userRef);
       const userData = userDoc.data() as User;
 
       if (!userData.favorites || userData.favorites.length === 0) {
