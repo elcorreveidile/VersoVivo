@@ -46,6 +46,16 @@
         gap: 12px;
         flex-wrap: wrap;
       }
+      .coming {
+        margin-top: 16px;
+        padding-top: 12px;
+        border-top: 1px solid #1f1f1f;
+      }
+      .coming-title {
+        color: var(--gold);
+        font-weight: 600;
+        margin: 0 0 6px;
+      }
       .btn {
         appearance: none;
         border: none;
@@ -75,13 +85,15 @@
       <p class="link">
         Si no se abre automáticamente, toca el botón.
       </p>
+      <div class="coming">
+        <p class="coming-title">Pronto en App Store / Google Play</p>
+        <p class="link">Publicación prevista: 18 de enero de 2026.</p>
+      </div>
     </main>
     <script>
       const openUrl = "versovivo://book/versos-sencillos";
-      const fallbackUrl = "https://github.com/"; // Reemplazar por App Store/Play
-
       const timer = setTimeout(() => {
-        window.location.href = fallbackUrl;
+        document.body.classList.add("show-fallback");
       }, 1800);
 
       window.location.href = openUrl;
