@@ -4,10 +4,8 @@
     "slug": "versovivo",
     "version": "0.1.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#0A0A0A"
     },
@@ -19,14 +17,13 @@
       "bundleIdentifier": "com.versovivo.app"
     },
     "android": {
+      "package": "com.versovivo.app",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0A0A0A"
-      },
-      "package": "com.versovivo.app"
+      }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "bundler": "metro"
     }
   }
 }
