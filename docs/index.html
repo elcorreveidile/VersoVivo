@@ -56,6 +56,20 @@
         font-weight: 600;
         margin: 0 0 6px;
       }
+      .store-buttons {
+        display: flex;
+        gap: 10px;
+        margin: 8px 0 4px;
+        flex-wrap: wrap;
+      }
+      .store-btn {
+        text-decoration: none;
+        color: var(--text);
+        border: 1px solid #2a2a2a;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-size: 14px;
+      }
       .btn {
         appearance: none;
         border: none;
@@ -87,6 +101,10 @@
       </p>
       <div class="coming">
         <p class="coming-title">Pronto en App Store / Google Play</p>
+        <div class="store-buttons">
+          <a class="store-btn" href="#" aria-label="App Store">App Store</a>
+          <a class="store-btn" href="#" aria-label="Google Play">Google Play</a>
+        </div>
         <p class="link">Publicación prevista: 18 de enero de 2026.</p>
       </div>
     </main>
