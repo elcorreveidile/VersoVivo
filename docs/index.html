@@ -110,13 +110,7 @@
     </main>
     <script>
       const openUrl = "versovivo://book/versos-sencillos";
-      const timer = setTimeout(() => {
-        document.body.classList.add("show-fallback");
-      }, 1800);
-
-      window.location.href = openUrl;
-
-      window.addEventListener("pagehide", () => clearTimeout(timer));
+      document.getElementById("openApp").href = openUrl;
     </script>
   </body>
 </html>
