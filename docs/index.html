@@ -3,111 +3,327 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>VersoVivo – Abrir libro</title>
+    <title>VersoVivo – Poesía viva en audio, texto y video</title>
+    <meta
+      name="description"
+      content="VersoVivo es una experiencia de libros de poesía con texto, narración, música y video. Lanzamiento 18 de enero de 2026." />
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap");
       :root {
         --bg: #0a0a0a;
-        --text: #f4f1e9;
+        --bg-elev: #121212;
+        --ink: #f5f2ea;
         --muted: #b7b1a4;
         --gold: #c9a646;
+        --gold-strong: #e0c36f;
+        --line: #1f1f1f;
+      }
+      * {
+        box-sizing: border-box;
       }
       body {
         margin: 0;
-        font-family: "Georgia", "Times New Roman", serif;
+        font-family: "Manrope", system-ui, -apple-system, sans-serif;
         background: radial-gradient(circle at top, #1a1a1a 0%, var(--bg) 60%);
-        color: var(--text);
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        padding: 24px;
+        color: var(--ink);
       }
-      .card {
-        max-width: 520px;
-        width: 100%;
-        background: rgba(15, 15, 15, 0.85);
-        border: 1px solid #1f1f1f;
-        border-radius: 18px;
-        padding: 28px;
-        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
-      }
-      h1 {
-        margin: 0 0 8px;
-        font-size: 28px;
-        color: var(--gold);
-      }
-      p {
-        margin: 8px 0 0;
-        color: var(--muted);
-        line-height: 1.5;
-      }
-      .actions {
-        margin-top: 18px;
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-      }
-      .coming {
-        margin-top: 16px;
-        padding-top: 12px;
-        border-top: 1px solid #1f1f1f;
-      }
-      .coming-title {
-        color: var(--gold);
-        font-weight: 600;
-        margin: 0 0 6px;
-      }
-      .store-buttons {
-        display: flex;
-        gap: 10px;
-        margin: 8px 0 4px;
-        flex-wrap: wrap;
-      }
-      .store-btn {
+      a {
+        color: inherit;
         text-decoration: none;
-        color: var(--text);
-        border: 1px solid #2a2a2a;
-        padding: 8px 12px;
-        border-radius: 10px;
+      }
+      .page {
+        min-height: 100vh;
+      }
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 32px;
+        border-bottom: 1px solid var(--line);
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(6px);
+        z-index: 10;
+      }
+      .brand {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--gold);
+      }
+      .nav-links {
+        display: flex;
+        gap: 16px;
         font-size: 14px;
+        color: var(--muted);
+      }
+      .hero {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 32px;
+        padding: 56px 32px;
+        align-items: center;
+      }
+      .hero h1 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 44px;
+        margin: 0 0 8px;
+      }
+      .hero p {
+        color: var(--muted);
+        line-height: 1.6;
+        margin: 12px 0 0;
+      }
+      .hero .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #141414;
+        border: 1px solid var(--line);
+        padding: 6px 12px;
+        border-radius: 999px;
+        color: var(--gold);
+        font-size: 13px;
+        margin-bottom: 14px;
+      }
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 20px;
       }
       .btn {
-        appearance: none;
-        border: none;
         border-radius: 999px;
-        padding: 10px 16px;
+        padding: 12px 18px;
         font-weight: 600;
-        cursor: pointer;
+        border: 1px solid transparent;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .btn.primary {
         background: var(--gold);
         color: #111;
-        text-decoration: none;
       }
-      .link {
+      .btn.ghost {
+        border-color: var(--line);
+        color: var(--ink);
+        background: transparent;
+      }
+      .cover {
+        width: 100%;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: var(--bg-elev);
+        padding: 16px;
+        display: grid;
+        place-items: center;
+      }
+      .cover img {
+        width: 100%;
+        height: auto;
+        border-radius: 12px;
+        object-fit: contain;
+        background: #1a1a1a;
+      }
+      .section {
+        padding: 48px 32px;
+        border-top: 1px solid var(--line);
+      }
+      .section h2 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 32px;
+        margin: 0 0 16px;
+      }
+      .grid {
+        display: grid;
+        gap: 18px;
+      }
+      .grid.cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .card {
+        background: var(--bg-elev);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 18px;
+      }
+      .card h3 {
+        margin: 0 0 8px;
+        font-size: 18px;
+      }
+      .card p {
+        margin: 0;
         color: var(--muted);
-        font-size: 14px;
+        line-height: 1.6;
+      }
+      .pricing {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+      .price {
+        font-size: 28px;
+        font-weight: 600;
+        color: var(--gold-strong);
+      }
+      .badge {
+        display: inline-flex;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .cta {
+        text-align: center;
+      }
+      .cta p {
+        color: var(--muted);
+      }
+      .footer {
+        padding: 32px;
+        color: var(--muted);
+        border-top: 1px solid var(--line);
+        font-size: 13px;
+      }
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+        .grid.cols-3,
+        .pricing {
+          grid-template-columns: 1fr;
+        }
+        .nav {
+          flex-direction: column;
+          gap: 10px;
+        }
       }
     </style>
   </head>
   <body>
-    <main class="card">
-      <h1>Abrir VersoVivo</h1>
-      <p>Intentando abrir el libro en la app…</p>
-      <div class="actions">
-        <a class="btn" id="openApp" href="versovivo://book/versos-sencillos">
-          Abrir en la app
-        </a>
-      </div>
-      <p class="link">
-        Si no se abre automáticamente, toca el botón.
-      </p>
-      <div class="coming">
-        <p class="coming-title">Pronto en App Store / Google Play</p>
-        <div class="store-buttons">
-          <a class="store-btn" href="#" aria-label="App Store">App Store</a>
-          <a class="store-btn" href="#" aria-label="Google Play">Google Play</a>
+    <div class="page">
+      <nav class="nav">
+        <div class="brand">VersoVivo</div>
+        <div class="nav-links">
+          <a href="#experiencia">Experiencia</a>
+          <a href="#libros">Libros</a>
+          <a href="#autores">Autores</a>
+          <a href="#precios">Precios</a>
+          <a href="#lanzamiento">Lanzamiento</a>
         </div>
-        <p class="link">Publicación prevista: 18 de enero de 2026.</p>
-      </div>
-    </main>
+      </nav>
+
+      <section class="hero">
+        <div>
+          <div class="tag">Lanzamiento 18 · 01 · 2026</div>
+          <h1>Poesía viva en texto, narración, música y video.</h1>
+          <p>
+            VersoVivo transforma libros de poesía en una experiencia inmersiva: lees,
+            escuchas y ves cada poema. Una app para lectores y un escaparate para autores.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" id="openApp" href="versovivo://book/versos-sencillos">
+              Abrir libro en la app
+            </a>
+            <a class="btn ghost" href="#lanzamiento">Avisarme del lanzamiento</a>
+          </div>
+        </div>
+        <div class="cover">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/versovivo-ded94.firebasestorage.app/o/covers%2Fportada_versos.JPEG?alt=media&token=eb6c3195-0dd8-4786-8fa5-ece2d3a03fda"
+            alt="Portada del libro Versos sencillos para despistar a la poesía" />
+        </div>
+      </section>
+
+      <section class="section" id="experiencia">
+        <h2>La experiencia VersoVivo</h2>
+        <div class="grid cols-3">
+          <div class="card">
+            <h3>Lectura sin fricción</h3>
+            <p>Texto limpio, tipografías cuidadas y modos de lectura adaptables.</p>
+          </div>
+          <div class="card">
+            <h3>Narración + Música</h3>
+            <p>Escucha poemas con voz y música original como parte del mismo libro.</p>
+          </div>
+          <div class="card">
+            <h3>Video-poemas</h3>
+            <p>Cuando el poema pide imagen, la app lo ofrece con un solo toque.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="libros">
+        <h2>Libros disponibles</h2>
+        <div class="card">
+          <div class="badge">Libro 01</div>
+          <h3>Versos sencillos para despistar a la poesía</h3>
+          <p>Javier Benítez Láinez · Granada</p>
+          <p>
+            Poemario de lenguaje claro y tono irónico que explora el desgaste del amor, la
+            memoria y el paso del tiempo.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" id="autores">
+        <h2>Para autores</h2>
+        <div class="grid cols-3">
+          <div class="card">
+            <h3>Publica tu libro</h3>
+            <p>Sube poemas, audio, narración y video. VersoVivo se encarga del formato.</p>
+          </div>
+          <div class="card">
+            <h3>Distribución moderna</h3>
+            <p>QR en el libro físico y acceso digital inmediato para tus lectores.</p>
+          </div>
+          <div class="card">
+            <h3>Ingresos y suscripciones</h3>
+            <p>Compra por libro o acceso por suscripción mensual.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="precios">
+        <h2>Precios y suscripción</h2>
+        <div class="pricing">
+          <div class="card">
+            <div class="badge">Libro</div>
+            <div class="price">€9,90</div>
+            <p>Compra individual con acceso completo.</p>
+          </div>
+          <div class="card">
+            <div class="badge">Suscripción mensual</div>
+            <div class="price">€6,90</div>
+            <p>Acceso a todo el catálogo publicado.</p>
+          </div>
+          <div class="card">
+            <div class="badge">Autores</div>
+            <div class="price">A consultar</div>
+            <p>Distribución, edición y monetización de tu obra.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section cta" id="lanzamiento">
+        <h2>18 de enero de 2026</h2>
+        <p>Apúntate para recibir el aviso del lanzamiento.</p>
+        <div class="hero-actions" style="justify-content:center;">
+          <a class="btn primary" href="mailto:hola@versovivo.com?subject=Avisarme%20del%20lanzamiento">
+            Quiero el aviso
+          </a>
+          <a class="btn ghost" href="#experiencia">Ver la experiencia</a>
+        </div>
+        <p class="link">Pronto en App Store / Google Play.</p>
+      </section>
+
+      <footer class="footer">
+        © 2026 VersoVivo · Granada · contacto: hola@versovivo.com
+      </footer>
+    </div>
     <script>
       const openUrl = "versovivo://book/versos-sencillos";
       document.getElementById("openApp").href = openUrl;
