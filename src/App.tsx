@@ -9,7 +9,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { store } from '@store/index';
 import RootNavigator from '@navigation/RootNavigator';
 import { colors } from '@theme/index';
-import 'react-native-gesture-handler';
 
 const App: React.FC = () => {
   useEffect(() => {
