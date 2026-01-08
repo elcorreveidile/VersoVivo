@@ -116,7 +116,7 @@
         border-radius: 18px;
         border: 1px solid var(--line);
         background: var(--bg-elev);
-        padding: 16px;
+        padding: 12px;
         display: grid;
         place-items: center;
       }
@@ -126,6 +126,32 @@
         border-radius: 12px;
         object-fit: contain;
         background: #1a1a1a;
+      }
+      .hero-side {
+        display: grid;
+        gap: 16px;
+        align-content: start;
+      }
+      .book-summary {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--bg-elev);
+        padding: 16px;
+      }
+      .book-summary h3 {
+        margin: 0 0 6px;
+        font-size: 18px;
+      }
+      .book-summary p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      .book-meta {
+        margin-top: 10px;
+        color: var(--gold-strong);
+        font-size: 13px;
+        font-weight: 600;
       }
       .section {
         padding: 48px 32px;
@@ -231,10 +257,20 @@
             <a class="btn ghost" href="#lanzamiento">Avisarme del lanzamiento</a>
           </div>
         </div>
-        <div class="cover">
+        <div class="hero-side">
+          <div class="cover">
           <img
             src="https://firebasestorage.googleapis.com/v0/b/versovivo-ded94.firebasestorage.app/o/covers%2Fportada_versos.JPEG?alt=media&token=eb6c3195-0dd8-4786-8fa5-ece2d3a03fda"
             alt="Portada del libro Versos sencillos para despistar a la poesía" />
+          </div>
+          <div class="book-summary">
+            <h3>Versos sencillos para despistar a la poesía</h3>
+            <p>
+              Poemario de lenguaje claro y tono irónico que explora el desgaste del amor,
+              la memoria y el paso del tiempo. Lectura con voz, música y video.
+            </p>
+            <div class="book-meta">Javier Benítez Láinez · Granada</div>
+          </div>
         </div>
       </section>
 
@@ -312,7 +348,7 @@
         <h2>18 de enero de 2026</h2>
         <p>Apúntate para recibir el aviso del lanzamiento.</p>
         <div class="hero-actions" style="justify-content:center;">
-          <a class="btn primary" href="mailto:hola@versovivo.com?subject=Avisarme%20del%20lanzamiento">
+          <a class="btn primary" href="mailto:info@poedronomo.com?subject=Avisarme%20del%20lanzamiento">
             Quiero el aviso
           </a>
           <a class="btn ghost" href="#experiencia">Ver la experiencia</a>
@@ -321,7 +357,7 @@
       </section>
 
       <footer class="footer">
-        © 2026 VersoVivo · Granada · contacto: hola@versovivo.com
+        © 2026 VersoVivo · Granada · contacto: info@poedronomo.com
       </footer>
     </div>
     <script>
