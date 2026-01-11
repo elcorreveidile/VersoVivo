@@ -123,3 +123,18 @@ export interface MusicGenerationResponse {
   jobId?: string;
   message?: string;
 }
+
+// Invitation Types
+export type InvitationContactType = 'email' | 'whatsapp';
+
+export interface InvitationReservation {
+  id: string;
+  contact: string;
+  contactType: InvitationContactType;
+  createdAt: Date | null;
+}
+
+export interface InvitationAvailability {
+  remaining: number;
+  total: number;
+}
