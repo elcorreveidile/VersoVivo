@@ -17,6 +17,29 @@ const RootNavigator: React.FC = () => {
   const dispatch = useAppDispatch();
   const { isAuthenticated, isLoading } = useAppSelector(state => state.auth);
 
+  const linking = {
+    prefixes: ['versovivo://', 'https://versovivo.app'],
+    config: {
+      screens: {
+        Auth: {
+          screens: {
+            Login: 'login',
+            Signup: 'registro',
+            InvitationReserve: 'invitaciones',
+          },
+        },
+        MainTabs: {
+          screens: {
+            Home: 'home',
+            Explore: 'explorar',
+            Favorites: 'favoritos',
+            Profile: 'perfil',
+          },
+        },
+      },
+    },
+  };
+
   useEffect(() => {
     // Check if user is already logged in
     dispatch(getCurrentUser());
@@ -28,7 +51,7 @@ const RootNavigator: React.FC = () => {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
           <Stack.Screen name="MainTabs" component={MainTabNavigator} />

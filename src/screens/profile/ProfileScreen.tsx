@@ -27,6 +27,10 @@ const ProfileScreen: React.FC = () => {
     navigation.navigate('About' as never);
   };
 
+  const navigateToInvitations = () => {
+    navigation.navigate('InvitationAdmin' as never);
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -66,6 +70,12 @@ const ProfileScreen: React.FC = () => {
         <TouchableOpacity style={styles.menuItem} onPress={navigateToAbout}>
           <Text style={styles.menuIcon}>ℹ️</Text>
           <Text style={styles.menuText}>Acerca de</Text>
+          <Text style={styles.menuArrow}>→</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.menuItem} onPress={navigateToInvitations}>
+          <Text style={styles.menuIcon}>🎟️</Text>
+          <Text style={styles.menuText}>Reservas de invitaciones</Text>
           <Text style={styles.menuArrow}>→</Text>
         </TouchableOpacity>
       </View>
