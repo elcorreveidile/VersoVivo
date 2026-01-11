@@ -12,7 +12,6 @@ export type RootStackParamList = {
   Auth: undefined;
   Login: undefined;
   Signup: undefined;
-  InvitationReserve: undefined;
 };
 
 export type MainTabParamList = {
@@ -41,5 +40,4 @@ export type ProfileStackParamList = {
   ProfileScreen: undefined;
   Settings: undefined;
   About: undefined;
-  InvitationAdmin: undefined;
 };
