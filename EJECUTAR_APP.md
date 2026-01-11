@@ -59,6 +59,16 @@ npm install
 npm start -- --clear
 ```
 
+### Error: "npm ci can only install packages..."
+
+Significa que `package.json` y `package-lock.json` no están sincronizados.
+
+```bash
+npm install
+```
+
+Luego vuelve a intentar el build.
+
 ### Error: "Firebase not initialized"
 
 Verifica que tu archivo `.env` tenga las credenciales correctas:
@@ -125,6 +135,11 @@ Ve a Firebase Console → Firestore Database y agrega un documento de prueba:
 - ❌ Reproductor de música avanzado (requiere build personalizado)
 
 **Solución**: Estas características funcionarán cuando hagas un build nativo más adelante.
+
+### Builds estables (punto 1)
+
+- No cambies dependencias sin regenerar el lockfile.
+- EAS usa `npm ci`; un lockfile desalineado rompe el build.
 
 ---
 

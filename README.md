@@ -62,12 +62,14 @@ VersoVivo revoluciona la forma de consumir poesía en la era digital. Cada poema
 
 | Tecnología | Versión | Descripción |
 |------------|---------|-------------|
-| **React Native** | ^0.72.0 | Framework multiplataforma |
-| **TypeScript** | ^5.0.0 | Tipado estático para JavaScript |
-| **Firebase** | ^10.0.0 | Backend como servicio (BaaS) |
+| **Expo SDK** | 54.x | Plataforma y tooling |
+| **React Native** | 0.72.7 | Framework multiplataforma |
+| **React** | 18.2.0 | UI library |
+| **TypeScript** | 5.3.x | Tipado estático para JavaScript |
+| **Firebase** | 10.7.x | Backend como servicio (BaaS) |
 | **Firestore** | - | Base de datos NoSQL |
-| **Redux Toolkit** | ^1.9.0 | Gestión de estado |
-| **React Navigation** | ^6.0.0 | Navegación entre pantallas |
+| **Redux Toolkit** | 1.9.x | Gestión de estado |
+| **React Navigation** | 6.1.x | Navegación entre pantallas |
 | **Suno AI API** | - | Generación de música con IA |
 
 ---
@@ -156,6 +158,8 @@ versovivo/
 ## 📚 Documentación
 
 - [Technical Specification Document](docs/technical-specification.md)
+- [Guía de configuración y builds estables](SETUP.md)
+- [Guía rápida de ejecución](EJECUTAR_APP.md)
 
 ---
 
@@ -176,6 +180,20 @@ npm run build:ios     # Compila para iOS
 - Seguir el estilo de código configurado en ESLint
 - Escribir tests para componentes y servicios críticos
 - Documentar funciones y componentes complejos
+
+---
+
+## ✅ Estabilidad de builds (punto 1)
+
+Para evitar builds rotos o pantallas en blanco:
+
+1. **Mantener `package.json` y `package-lock.json` siempre sincronizados.**
+   - Si cambias dependencias: `npm install` y commitea ambos archivos.
+   - En CI/EAS se usa `npm ci`; si hay desfase el build falla.
+2. **No mezclar configuración nativa en `app.json` si existen `ios/` y `android/`.**
+   - En este repo mantenemos config nativa en `ios/` y `android/`.
+3. **Variables de entorno en EAS siempre completas.**
+   - Firebase se inicializa al arrancar; si faltan env vars la app no abre.
 
 ---
 
@@ -241,4 +259,3 @@ Este proyecto está bajo la Licencia MIT - lee el archivo [LICENSE.md](LICENSE.m
 
 **"La poesía es el lenguaje del alma, y VersoVivo es su voz en la era digital"** 🌟
 ```
-

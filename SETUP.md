@@ -4,11 +4,11 @@ Esta guía proporciona instrucciones detalladas para configurar el proyecto Vers
 
 ## 📋 Requisitos del Sistema
 
-### Software Requerido
+### Software Requerido (versiones alineadas con build estable)
 
 - **Node.js**: >= 18.0.0 (recomendado: 18.x LTS)
 - **npm**: >= 8.0.0 o **yarn**: >= 1.22.0
-- **React Native CLI**: Instalado globalmente
+- **Expo CLI**: Vía `npx expo` (no requiere instalación global)
 - **Git**: Para control de versiones
 
 ### Para Desarrollo iOS
@@ -34,10 +34,10 @@ git clone https://github.com/elcorreveidile/VersoVivo.git
 cd VersoVivo
 ```
 
-### 2. Instalar Dependencias
+### 2. Instalar Dependencias (con lockfile)
 
 ```bash
-# Usando npm
+# Usando npm (mantener package.json y package-lock.json sincronizados)
 npm install
 
 # O usando yarn
@@ -51,7 +51,7 @@ yarn install
 cp .env.example .env
 ```
 
-Edita el archivo `.env` con tus credenciales:
+Edita el archivo `.env` con tus credenciales (todas son necesarias para producción):
 
 ```env
 # Firebase Configuration
@@ -61,7 +61,7 @@ FIREBASE_PROJECT_ID=tu-proyecto-id
 FIREBASE_STORAGE_BUCKET=tu-proyecto.appspot.com
 FIREBASE_MESSAGING_SENDER_ID=123456789
 FIREBASE_APP_ID=1:123456789:web:abcdef
-FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
+# FIREBASE_MEASUREMENT_ID es opcional si no usas Analytics
 
 # Suno AI Configuration
 SUNO_AI_API_KEY=tu-suno-api-key
@@ -335,6 +335,12 @@ VersoVivo/
 
 ## 🚢 Preparar para Producción
 
+### 0. Notas sobre builds estables
+
+- Este repo mantiene `ios/` y `android/` en control de versiones, por lo que **no usamos CNG**.
+- No uses campos `expo.ios`/`expo.android` en `app.json` si ya están los proyectos nativos.
+- EAS usa `npm ci`: si el lockfile no coincide, el build falla.
+
 ### 1. Actualizar Variables de Entorno
 
 ```bash
@@ -352,7 +358,7 @@ Cambia las reglas de Firestore y Storage a producción (más restrictivas).
 ### 3. Build para iOS
 
 ```bash
-npm run build:ios
+npx eas build -p ios --profile production --clear-cache
 
 # O desde Xcode:
 # Product → Archive → Distribute App
@@ -361,7 +367,7 @@ npm run build:ios
 ### 4. Build para Android
 
 ```bash
-npm run build:android
+npx eas build -p android --profile production --clear-cache
 
 # El APK se generará en:
 # android/app/build/outputs/apk/release/app-release.apk
