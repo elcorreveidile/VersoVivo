@@ -62,12 +62,15 @@ VersoVivo revoluciona la forma de consumir poesía en la era digital. Cada poema
 
 | Tecnología | Versión | Descripción |
 |------------|---------|-------------|
-| **React Native** | ^0.72.0 | Framework multiplataforma |
-| **TypeScript** | ^5.0.0 | Tipado estático para JavaScript |
-| **Firebase** | ^10.0.0 | Backend como servicio (BaaS) |
+| **Expo SDK** | 49.0.23 | Plataforma y tooling |
+| **React Native** | 0.72.7 | Framework multiplataforma |
+| **React** | 18.2.0 | UI library |
+| **TypeScript** | 5.3.x | Tipado estático para JavaScript |
+| **Firebase** | 10.7.x | Backend como servicio (BaaS) |
 | **Firestore** | - | Base de datos NoSQL |
-| **Redux Toolkit** | ^1.9.0 | Gestión de estado |
-| **React Navigation** | ^6.0.0 | Navegación entre pantallas |
+| **Redux Toolkit** | 1.9.x | Gestión de estado |
+| **React Navigation** | 6.1.x | Navegación entre pantallas |
+| **Expo AV** | 16.0.x | Reproductor audio/video |
 | **Suno AI API** | - | Generación de música con IA |
 
 ---
