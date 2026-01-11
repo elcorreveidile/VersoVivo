@@ -14,25 +14,13 @@ import {
   orderBy,
   arrayUnion,
   arrayRemove,
-  runTransaction,
-  serverTimestamp,
 } from 'firebase/firestore';
 import { db } from './config';
-import type {
-  InvitationAvailability,
-  InvitationContactType,
-  InvitationReservation,
-  Poem,
-  PoemFilter,
-  User,
-  UserPreferences,
-} from '@types';
+import type { Poem, PoemFilter, User, UserPreferences } from '@types';
 
 class FirestoreService {
   private poemsCollection = collection(db, 'poems');
   private usersCollection = collection(db, 'users');
-  private invitationReservationsCollection = collection(db, 'invitationReservations');
-  private invitationMetaDoc = doc(db, 'invitationMeta', 'summary');
 
   /**
    * Get all poems
@@ -223,108 +211,6 @@ class FirestoreService {
     } catch (error) {
       console.error('Error fetching favorites:', error);
       throw new Error('Error al cargar favoritos');
-    }
-  }
-
-  /**
-   * Get invitation availability summary
-   */
-  async getInvitationAvailability(): Promise<InvitationAvailability> {
-    try {
-      const snapshot = await getDoc(this.invitationMetaDoc);
-      if (!snapshot.exists()) {
-        return { remaining: 10, total: 10 };
-      }
-
-      const data = snapshot.data();
-      const total = typeof data.total === 'number' ? data.total : 10;
-      const remaining =
-        typeof data.remaining === 'number' ? data.remaining : total;
-
-      return { remaining, total };
-    } catch (error) {
-      console.error('Error fetching invitation availability:', error);
-      throw new Error('Error al cargar disponibilidad de invitaciones');
-    }
-  }
-
-  /**
-   * Reserve an invitation
-   */
-  async reserveInvitation(
-    contact: string,
-    contactType: InvitationContactType
-  ): Promise<{ reservationId: string; remaining: number; total: number }> {
-    try {
-      return await runTransaction(db, async transaction => {
-        const metaSnapshot = await transaction.get(this.invitationMetaDoc);
-
-        let total = 10;
-        let remaining = 10;
-
-        if (metaSnapshot.exists()) {
-          const data = metaSnapshot.data();
-          total = typeof data.total === 'number' ? data.total : total;
-          remaining =
-            typeof data.remaining === 'number' ? data.remaining : total;
-        }
-
-        if (remaining <= 0) {
-          throw new Error('No quedan invitaciones');
-        }
-
-        const reservationRef = doc(this.invitationReservationsCollection);
-
-        transaction.set(reservationRef, {
-          contact,
-          contactType,
-          createdAt: serverTimestamp(),
-        });
-
-        transaction.set(
-          this.invitationMetaDoc,
-          {
-            total,
-            remaining: remaining - 1,
-            updatedAt: serverTimestamp(),
-          },
-          { merge: true }
-        );
-
-        return {
-          reservationId: reservationRef.id,
-          remaining: remaining - 1,
-          total,
-        };
-      });
-    } catch (error) {
-      console.error('Error reserving invitation:', error);
-      throw new Error('No quedan invitaciones disponibles');
-    }
-  }
-
-  /**
-   * Get all invitation reservations
-   */
-  async getInvitationReservations(): Promise<InvitationReservation[]> {
-    try {
-      const q = query(this.invitationReservationsCollection, orderBy('createdAt', 'desc'));
-      const snapshot = await getDocs(q);
-
-      return snapshot.docs.map(docSnapshot => {
-        const data = docSnapshot.data();
-        const createdAt = data.createdAt?.toDate ? data.createdAt.toDate() : null;
-
-        return {
-          id: docSnapshot.id,
-          contact: data.contact,
-          contactType: data.contactType,
-          createdAt,
-        } as InvitationReservation;
-      });
-    } catch (error) {
-      console.error('Error fetching invitation reservations:', error);
-      throw new Error('Error al cargar reservas de invitaciones');
     }
   }
 }

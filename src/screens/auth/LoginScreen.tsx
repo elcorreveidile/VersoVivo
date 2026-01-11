@@ -67,10 +67,6 @@ const LoginScreen: React.FC = () => {
     navigation.navigate('Signup' as never);
   };
 
-  const navigateToInvitations = () => {
-    navigation.navigate('InvitationReserve' as never);
-  };
-
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -125,12 +121,6 @@ const LoginScreen: React.FC = () => {
           <TouchableOpacity onPress={navigateToSignup} style={styles.signupLink}>
             <Text style={styles.signupText}>
               ¿No tienes cuenta? <Text style={styles.signupTextBold}>Regístrate</Text>
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={navigateToInvitations} style={styles.invitationLink}>
-            <Text style={styles.invitationText}>
-              ¿Necesitas una invitación? <Text style={styles.signupTextBold}>Resérvala aquí</Text>
             </Text>
           </TouchableOpacity>
         </View>
@@ -190,15 +180,7 @@ const styles = StyleSheet.create({
     marginTop: spacing.xl,
     alignItems: 'center',
   },
-  invitationLink: {
-    marginTop: spacing.md,
-    alignItems: 'center',
-  },
   signupText: {
-    color: colors.text.darkSecondary,
-    fontSize: typography.fontSize.sm,
-  },
-  invitationText: {
     color: colors.text.darkSecondary,
     fontSize: typography.fontSize.sm,
   },
