@@ -362,6 +362,79 @@
         <p class="link">Pronto en App Store / Google Play.</p>
         <p class="link">Versión web en preparación.</p>
       </section>
+<section id="invitaciones" class="card">
+  <h2>Reserva tu invitación (50)</h2>
+  <p id="vv-remaining">Cargando invitaciones disponibles…</p>
+
+  <form id="vv-form">
+    <label for="vv-contacto">Correo o WhatsApp</label>
+    <input id="vv-contacto" name="contacto" type="text" placeholder="correo@dominio.com o +34 6XX XXX XXX" required />
+
+    <label class="consent">
+      <input id="vv-consent" type="checkbox" required />
+      Acepto el uso de mis datos para enviarme el código de invitación.
+    </label>
+
+    <button type="submit">Reservar</button>
+  </form>
+
+  <p id="vv-result" style="margin-top:12px;"></p>
+</section>
+
+<script>
+  // Pega aquí la URL de tu Apps Script (la del despliegue)
+  const VV_API_URL = "https://script.google.com/macros/s/AKfycbwKGPOTB1ads-nKeimmdaFM16fQ8eQEFCoEUvqDBv77TF2B1Eg4t9_vKKzYN7A_PPgI/exec";
+
+  async function vvRefreshRemaining() {
+    try {
+      const r = await fetch(VV_API_URL, { method: "GET" });
+      const data = await r.json();
+      const el = document.getElementById("vv-remaining");
+      if (data && typeof data.remaining === "number") {
+        el.textContent = data.remaining > 0
+          ? `Quedan ${data.remaining} invitaciones.`
+          : "Invitaciones agotadas.";
+      } else {
+        el.textContent = "No se pudo cargar el cupo.";
+      }
+    } catch {
+      document.getElementById("vv-remaining").textContent = "No se pudo cargar el cupo.";
+    }
+  }
+
+  document.getElementById("vv-form").addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const contacto = document.getElementById("vv-contacto").value.trim();
+    const result = document.getElementById("vv-result");
+    result.textContent = "Reservando…";
+
+    try {
+      const r = await fetch(VV_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contacto, userAgent: navigator.userAgent })
+      });
+
+      const data = await r.json();
+
+      if (!r.ok || !data.ok) {
+        result.textContent = data.error || "Error al reservar.";
+        await vvRefreshRemaining();
+        return;
+      }
+
+      // Si quieres NO mostrar el código en pantalla, comenta la línea del código.
+      result.textContent = data.message + (data.codigo ? ` (Código: ${data.codigo})` : "");
+      document.getElementById("vv-form").reset();
+      await vvRefreshRemaining();
+
+    } catch (e) {
+      result.textContent = "Error de red. Inténtalo de nuevo.";
+    }
+  });
+
+  vvRefreshRemaining();
+</script>
 
       <footer class="footer">
         © 2026 VersoVivo · Granada · contacto: info@poedronomo.com ·
