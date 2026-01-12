@@ -3,6 +3,7 @@
  */
 
 import { initializeApp, getApps } from 'firebase/app';
+// @ts-ignore - getReactNativePersistence exists in runtime but missing from Firebase v10 types
 import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
