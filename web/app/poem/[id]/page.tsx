@@ -4,16 +4,21 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { getPoemById } from '@/lib/firebase/poems';
+import { getPoemById, addToFavorites, removeFromFavorites, markAsRead } from '@/lib/firebase/poems';
 import { Poem } from '@/types/poem';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function PoemDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const { user, userProfile, refreshProfile } = useAuth();
   const [poem, setPoem] = useState<Poem | null>(null);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState<'text' | 'video' | 'music'>('text');
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
+  const [markedAsRead, setMarkedAsRead] = useState(false);
 
   useEffect(() => {
     if (params.id) {
@@ -21,11 +26,54 @@ export default function PoemDetailPage() {
     }
   }, [params.id]);
 
+  useEffect(() => {
+    // Check if poem is in favorites
+    if (poem && userProfile) {
+      setIsFavorite(userProfile.favoritePoems?.includes(poem.id) || false);
+    }
+  }, [poem, userProfile]);
+
   const loadPoem = async (id: string) => {
     setLoading(true);
     const loadedPoem = await getPoemById(id);
     setPoem(loadedPoem);
+
+    // Mark as read if user is authenticated and not already marked
+    if (loadedPoem && userProfile && !markedAsRead) {
+      await markAsRead(userProfile.uid, loadedPoem.id);
+      await refreshProfile();
+      setMarkedAsRead(true);
+    }
+
     setLoading(false);
+  };
+
+  const handleToggleFavorite = async () => {
+    if (!poem || !userProfile) return;
+
+    setFavoriteLoading(true);
+
+    if (isFavorite) {
+      const result = await removeFromFavorites(userProfile.uid, poem.id);
+      if (result.error) {
+        alert('Error al eliminar de favoritos: ' + result.error);
+        setFavoriteLoading(false);
+        return;
+      }
+      setIsFavorite(false);
+    } else {
+      const result = await addToFavorites(userProfile.uid, poem.id);
+      if (result.error) {
+        alert('Error al agregar a favoritos: ' + result.error);
+        setFavoriteLoading(false);
+        return;
+      }
+      setIsFavorite(true);
+    }
+
+    // Refresh profile to update counts
+    await refreshProfile();
+    setFavoriteLoading(false);
   };
 
   if (loading) {
@@ -159,10 +207,31 @@ export default function PoemDetailPage() {
 
         {/* Actions */}
         <div className="mt-8 flex flex-wrap gap-4">
-          <Button size="lg">Agregar a Favoritos</Button>
+          <Button
+            size="lg"
+            onClick={handleToggleFavorite}
+            disabled={favoriteLoading || !user}
+            className={isFavorite ? 'bg-red-600 hover:bg-red-700' : ''}
+          >
+            {favoriteLoading ? (
+              'Cargando...'
+            ) : isFavorite ? (
+              '♥ Eliminar de Favoritos'
+            ) : (
+              '♡ Agregar a Favoritos'
+            )}
+          </Button>
           <Button size="lg" variant="outline">
             Compartir
           </Button>
+          {!user && (
+            <p className="w-full text-sm text-gray-600 mt-2">
+              <Link href="/login" className="text-blue-600 hover:underline">
+                Inicia sesión
+              </Link>
+              {' '}para guardar favoritos
+            </p>
+          )}
         </div>
       </div>
     </div>

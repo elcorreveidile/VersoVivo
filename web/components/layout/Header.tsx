@@ -1,10 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+import { signOut } from '@/lib/firebase/auth';
 import { cn } from '@/lib/utils';
 
-const navigation = [
+// Public navigation
+const publicNavigation = [
+  { name: 'Inicio', href: '/' },
+  { name: 'Explorar', href: '/explore' },
+];
+
+// Authenticated navigation
+const authNavigation = [
   { name: 'Inicio', href: '/' },
   { name: 'Explorar', href: '/explore' },
   { name: 'Favoritos', href: '/favorites' },
@@ -13,6 +22,15 @@ const navigation = [
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, userProfile, loading } = useAuth();
+
+  const navigation = user ? authNavigation : publicNavigation;
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/');
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
@@ -39,18 +57,47 @@ export default function Header() {
         </div>
 
         <div className="flex items-center space-x-4">
-          <Link
-            href="/login"
-            className="text-sm font-medium text-gray-700 hover:text-blue-600"
-          >
-            Iniciar Sesión
-          </Link>
-          <Link
-            href="/register"
-            className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-          >
-            Registrarse
-          </Link>
+          {loading ? (
+            <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200"></div>
+          ) : user ? (
+            <>
+              {/* User Avatar */}
+              <div className="flex items-center space-x-3">
+                {userProfile?.photoURL ? (
+                  <img
+                    src={userProfile.photoURL}
+                    alt={userProfile.displayName || 'Usuario'}
+                    className="h-8 w-8 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-sm font-medium">
+                    {userProfile?.displayName?.charAt(0).toUpperCase() || 'U'}
+                  </div>
+                )}
+                <button
+                  onClick={handleSignOut}
+                  className="text-sm font-medium text-gray-700 hover:text-blue-600"
+                >
+                  Cerrar Sesión
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="text-sm font-medium text-gray-700 hover:text-blue-600"
+              >
+                Iniciar Sesión
+              </Link>
+              <Link
+                href="/register"
+                className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              >
+                Registrarse
+              </Link>
+            </>
+          )}
         </div>
       </nav>
     </header>
