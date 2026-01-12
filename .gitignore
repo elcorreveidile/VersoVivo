@@ -73,3 +73,5 @@ ios/GoogleService-Info.plist
 
 # Submodules and dependencies
 docs/MyLibrary/
+.vercel
+.env*.local

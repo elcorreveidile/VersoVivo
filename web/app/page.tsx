@@ -96,10 +96,10 @@ export default function HomePage() {
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm text-gray-600 line-clamp-3">
-                        {poem.content.substring(0, 150)}...
+                        {poem.content ? poem.content.substring(0, 150) : 'Sin descripción'}...
                       </p>
                       <div className="mt-4 flex flex-wrap gap-2">
-                        {poem.tags.slice(0, 3).map((tag) => (
+                        {poem.tags && poem.tags.length > 0 && poem.tags.slice(0, 3).map((tag) => (
                           <span
                             key={tag}
                             className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700"
