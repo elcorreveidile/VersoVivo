@@ -63,30 +63,56 @@ export const getAdminStats = async (): Promise<AdminStats> => {
       return lastLogin && lastLogin > sevenDaysAgo;
     }).length;
 
-    // Get top read poems
+    // Get all poems data
     const allPoems = poemsSnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
 
+    // Get all users data for calculating read/favorite counts
+    const allUsers = usersSnapshot.docs.map(doc => doc.data() as User);
+
+    // Calculate top read poems from user readPoems arrays
+    const poemReadCounts = new Map<string, number>();
+    allUsers.forEach(user => {
+      if (user.readPoems) {
+        user.readPoems.forEach(poemId => {
+          const current = poemReadCounts.get(poemId) || 0;
+          poemReadCounts.set(poemId, current + 1);
+        });
+      }
+    });
+
     const topReadPoems = allPoems
       .map(poem => ({
         id: poem.id,
         title: poem.title,
-        reads: poem.readCount || 0
+        reads: poemReadCounts.get(poem.id) || 0
       }))
       .sort((a, b) => b.reads - a.reads)
-      .slice(0, 10);
+      .slice(0, 10)
+      .filter(p => p.reads > 0);
 
-    // Get top favorite poems
+    // Calculate top favorite poems from user favoritePoems arrays
+    const poemFavoriteCounts = new Map<string, number>();
+    allUsers.forEach(user => {
+      if (user.favoritePoems) {
+        user.favoritePoems.forEach(poemId => {
+          const current = poemFavoriteCounts.get(poemId) || 0;
+          poemFavoriteCounts.set(poemId, current + 1);
+        });
+      }
+    });
+
     const topFavoritePoems = allPoems
       .map(poem => ({
         id: poem.id,
         title: poem.title,
-        favorites: poem.favoriteCount || 0
+        favorites: poemFavoriteCounts.get(poem.id) || 0
       }))
       .sort((a, b) => b.favorites - a.favorites)
-      .slice(0, 10);
+      .slice(0, 10)
+      .filter(p => p.favorites > 0);
 
     // Get new users this week
     const weekAgo = new Date();
