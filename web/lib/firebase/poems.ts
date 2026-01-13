@@ -107,3 +107,17 @@ export const markAsRead = async (userId: string, poemId: string) => {
     return { error: error.message };
   }
 };
+
+export const isPoemFavorite = async (userId: string, poemId: string): Promise<boolean> => {
+  try {
+    const userDoc = await getDoc(doc(db, USERS_COLLECTION, userId));
+    if (!userDoc.exists()) {
+      return false;
+    }
+    const favoritePoems = userDoc.data().favoritePoems || [];
+    return favoritePoems.includes(poemId);
+  } catch (error) {
+    console.error('Error checking favorite status:', error);
+    return false;
+  }
+};

@@ -4,10 +4,8 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { getPoemById } from '@/lib/firebase/poems';
+import { getPoemById, addToFavorites, removeFromFavorites, markAsRead, isPoemFavorite } from '@/lib/firebase/poems';
 import { useAuth } from '@/contexts/AuthContext';
-import { addToFavorites, removeFromFavorites, isPoemFavorite } from '@/lib/firebase/poems';
-import { markAsRead } from '@/lib/firebase/user';
 import { Poem } from '@/types/poem';
 import Link from 'next/link';
 
