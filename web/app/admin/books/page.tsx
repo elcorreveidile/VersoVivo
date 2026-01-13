@@ -204,7 +204,7 @@ function BooksContent() {
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between text-sm">
                     <span className="text-white/60">Precio:</span>
-                    <span className="text-[#FFD700] font-semibold">€{book.price.toFixed(2)}</span>
+                    <span className="text-[#FFD700] font-semibold">€{(book.price || 0).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-white/60">Poemas:</span>
