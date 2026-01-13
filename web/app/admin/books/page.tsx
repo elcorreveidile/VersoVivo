@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { AdminRoute } from '@/components/auth/AdminRoute';
+import AdminRoute from '@/components/auth/AdminRoute';
 import { getAllBooks, deleteBook } from '@/lib/firebase/admin';
 import { Book } from '@/types/poem';
 import Link from 'next/link';

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { AdminRoute } from '@/components/auth/AdminRoute';
+import AdminRoute from '@/components/auth/AdminRoute';
 import { getBookById, updateBook, logActivity } from '@/lib/firebase/admin';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
