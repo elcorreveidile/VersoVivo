@@ -80,7 +80,7 @@ export default function PoemDetailPage() {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <div className="animate-pulse text-xl text-gray-600">Cargando poema...</div>
+          <div className="animate-pulse text-xl text-gray-400">Cargando poema...</div>
         </div>
       </div>
     );
@@ -90,9 +90,9 @@ export default function PoemDetailPage() {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Poema no encontrado</h1>
+          <h1 className="text-2xl font-bold text-white">Poema no encontrado</h1>
           <Link href="/explore">
-            <Button className="mt-4">Volver a Explorar</Button>
+            <Button className="mt-4 bg-amber-500 text-black hover:bg-amber-400">Volver a Explorar</Button>
           </Link>
         </div>
       </div>
@@ -100,26 +100,26 @@ export default function PoemDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12">
+    <div className="min-h-screen fade-in py-12">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <Link href="/explore">
-          <Button variant="outline" className="mb-6">
+          <Button variant="outline" className="mb-6 border-white/20 text-white hover:bg-white/5 hover:border-white/40">
             ← Volver
           </Button>
         </Link>
 
         {/* Poem Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
             {poem.title}
           </h1>
-          <p className="mt-2 text-xl text-gray-600">por {poem.author}</p>
+          <p className="mt-2 text-xl text-gray-400">por {poem.author}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             {poem.tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700"
+                className="inline-flex items-center rounded-full bg-amber-500/10 px-3 py-1 text-sm font-medium text-amber-400 border border-amber-500/20"
               >
                 {tag}
               </span>
@@ -128,14 +128,14 @@ export default function PoemDetailPage() {
         </div>
 
         {/* Mode Tabs */}
-        <div className="mb-6 border-b border-gray-200">
+        <div className="mb-6 border-b border-white/10">
           <nav className="flex space-x-8" aria-label="Tabs">
             <button
               onClick={() => setMode('text')}
               className={`border-b-2 py-4 px-1 text-sm font-medium ${
                 mode === 'text'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                  ? 'border-amber-500 text-amber-400'
+                  : 'border-transparent text-gray-400 hover:border-gray-600 hover:text-gray-300'
               }`}
             >
               Lectura
@@ -145,8 +145,8 @@ export default function PoemDetailPage() {
                 onClick={() => setMode('video')}
                 className={`border-b-2 py-4 px-1 text-sm font-medium ${
                   mode === 'video'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                    ? 'border-amber-500 text-amber-400'
+                    : 'border-transparent text-gray-400 hover:border-gray-600 hover:text-gray-300'
                 }`}
               >
                 Video
@@ -157,8 +157,8 @@ export default function PoemDetailPage() {
                 onClick={() => setMode('music')}
                 className={`border-b-2 py-4 px-1 text-sm font-medium ${
                   mode === 'music'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                    ? 'border-amber-500 text-amber-400'
+                    : 'border-transparent text-gray-400 hover:border-gray-600 hover:text-gray-300'
                 }`}
               >
                 Música
@@ -168,11 +168,11 @@ export default function PoemDetailPage() {
         </div>
 
         {/* Mode Content */}
-        <Card>
+        <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
           <CardContent className="p-8">
             {mode === 'text' && (
               <div className="prose prose-lg max-w-none">
-                <div className="whitespace-pre-wrap text-gray-800 leading-relaxed text-lg font-serif">
+                <div className="whitespace-pre-wrap text-gray-200 leading-relaxed text-lg font-serif">
                   {poem.content}
                 </div>
               </div>
@@ -196,7 +196,7 @@ export default function PoemDetailPage() {
                     controls
                     className="w-full"
                   />
-                  <p className="mt-4 text-sm text-gray-600">
+                  <p className="mt-4 text-sm text-gray-400">
                     Versión musicada generada con inteligencia artificial
                   </p>
                 </div>
@@ -211,7 +211,7 @@ export default function PoemDetailPage() {
             size="lg"
             onClick={handleToggleFavorite}
             disabled={favoriteLoading || !user}
-            className={isFavorite ? 'bg-red-600 hover:bg-red-700' : ''}
+            className={isFavorite ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-amber-500 text-black hover:bg-amber-400'}
           >
             {favoriteLoading ? (
               'Cargando...'
@@ -221,12 +221,12 @@ export default function PoemDetailPage() {
               '♡ Agregar a Favoritos'
             )}
           </Button>
-          <Button size="lg" variant="outline">
+          <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/5 hover:border-white/40">
             Compartir
           </Button>
           {!user && (
-            <p className="w-full text-sm text-gray-600 mt-2">
-              <Link href="/login" className="text-blue-600 hover:underline">
+            <p className="w-full text-sm text-gray-400 mt-2">
+              <Link href="/login" className="text-amber-400 hover:underline">
                 Inicia sesión
               </Link>
               {' '}para guardar favoritos
