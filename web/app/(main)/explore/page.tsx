@@ -43,13 +43,13 @@ export default function ExplorePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 fade-in">
+    <div className="min-h-screen bg-black py-12 fade-in">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-4xl font-bold tracking-tight text-white">
             Explorar Poemas
           </h1>
-          <p className="mt-2 text-lg text-gray-600">
+          <p className="mt-2 text-lg text-white/60">
             Descubre nuestra colección completa de poemas
           </p>
         </div>
@@ -61,7 +61,7 @@ export default function ExplorePage() {
             placeholder="Buscar por título, autor o etiqueta..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="max-w-2xl"
+            className="max-w-2xl bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
           />
         </div>
 
@@ -69,28 +69,28 @@ export default function ExplorePage() {
         {loading ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[...Array(9)].map((_, i) => (
-              <Card key={i} className="animate-pulse">
+              <Card key={i} className="animate-pulse bg-white/5 border-white/10 backdrop-blur-sm">
                 <CardHeader>
-                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-3 bg-gray-200 rounded w-1/2 mt-2"></div>
+                  <div className="h-4 bg-white/10 rounded w-3/4"></div>
+                  <div className="h-3 bg-white/10 rounded w-1/2 mt-2"></div>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-20 bg-gray-200 rounded"></div>
+                  <div className="h-20 bg-white/10 rounded"></div>
                 </CardContent>
               </Card>
             ))}
           </div>
         ) : filteredPoems.length > 0 ? (
           <>
-            <p className="mb-4 text-sm text-gray-600">
+            <p className="mb-4 text-sm text-white/60">
               Mostrando {filteredPoems.length} poem{filteredPoems.length !== 1 ? 'as' : 'a'}
             </p>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {filteredPoems.map((poem) => (
                 <Link key={poem.id} href={`/poem/${poem.id}`}>
-                  <Card className="transition-shadow hover:shadow-lg cursor-pointer h-full">
+                  <Card className="card-hover cursor-pointer h-full bg-white/5 border-white/10 backdrop-blur-sm hover:border-[#FFD700]/30">
                     {poem.thumbnailUrl && (
-                      <div className="aspect-video w-full overflow-hidden rounded-t-xl bg-gray-100">
+                      <div className="aspect-video w-full overflow-hidden rounded-t-xl bg-white/5">
                         <img
                           src={poem.thumbnailUrl}
                           alt={poem.title}
@@ -99,18 +99,18 @@ export default function ExplorePage() {
                       </div>
                     )}
                     <CardHeader>
-                      <CardTitle className="text-xl">{poem.title}</CardTitle>
-                      <p className="text-sm text-gray-600 mt-1">por {poem.author}</p>
+                      <CardTitle className="text-xl text-white">{poem.title}</CardTitle>
+                      <p className="text-sm text-white/60 mt-1">por {poem.author}</p>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-gray-600 line-clamp-3">
+                      <p className="text-sm text-white/60 line-clamp-3">
                         {poem.content ? poem.content.substring(0, 150) : 'Sin descripción'}...
                       </p>
                       <div className="mt-4 flex flex-wrap gap-2">
                         {poem.tags?.slice(0, 3).map((tag) => (
                           <span
                             key={tag}
-                            className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700"
+                            className="inline-flex items-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/20 px-2.5 py-0.5 text-xs font-medium text-[#FFD700]"
                           >
                             {tag}
                           </span>
@@ -124,7 +124,7 @@ export default function ExplorePage() {
           </>
         ) : (
           <div className="text-center py-12">
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-white/60">
               {searchTerm ? 'No se encontraron poemas que coincidan con tu búsqueda.' : 'No hay poemas disponibles.'}
             </p>
           </div>

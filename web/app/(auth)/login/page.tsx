@@ -30,15 +30,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-200px)] items-center justify-center bg-gradient-to-b from-blue-50 to-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="flex min-h-[calc(100vh-200px)] items-center justify-center bg-black py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">
         <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+          <h2 className="text-3xl font-bold tracking-tight text-white">
             Iniciar Sesión
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-white/60">
             ¿No tienes cuenta?{' '}
-            <Link href="/register" className="font-medium text-blue-600 hover:text-blue-500">
+            <Link href="/register" className="font-medium text-[#FFD700] hover:text-[#FFEC8B]">
               Regístrate aquí
             </Link>
           </p>
@@ -46,13 +46,13 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           {error && (
-            <div className="rounded-lg bg-red-50 p-4 text-sm text-red-800">
+            <div className="rounded-lg bg-red-900/50 border border-red-500/30 p-4 text-sm text-red-200">
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="block text-sm font-medium text-white/80">
               Email
             </label>
             <Input
@@ -61,13 +61,13 @@ export default function LoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-2"
+              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
               placeholder="tu@email.com"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="block text-sm font-medium text-white/80">
               Contraseña
             </label>
             <Input
@@ -76,7 +76,7 @@ export default function LoginPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-2"
+              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
               placeholder="••••••••"
             />
           </div>
@@ -84,7 +84,7 @@ export default function LoginPage() {
           <div>
             <Link
               href="/forgot-password"
-              className="text-sm text-blue-600 hover:text-blue-500"
+              className="text-sm text-[#FFD700] hover:text-[#FFEC8B]"
             >
               ¿Olvidaste tu contraseña?
             </Link>
@@ -93,7 +93,7 @@ export default function LoginPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full"
+            className="w-full bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
             size="lg"
           >
             {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}

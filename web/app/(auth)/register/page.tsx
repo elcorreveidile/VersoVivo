@@ -43,15 +43,15 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-200px)] items-center justify-center bg-gradient-to-b from-blue-50 to-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="flex min-h-[calc(100vh-200px)] items-center justify-center bg-black py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">
         <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+          <h2 className="text-3xl font-bold tracking-tight text-white">
             Crear Cuenta
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-white/60">
             ¿Ya tienes cuenta?{' '}
-            <Link href="/login" className="font-medium text-blue-600 hover:text-blue-500">
+            <Link href="/login" className="font-medium text-[#FFD700] hover:text-[#FFEC8B]">
               Inicia sesión aquí
             </Link>
           </p>
@@ -59,13 +59,13 @@ export default function RegisterPage() {
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           {error && (
-            <div className="rounded-lg bg-red-50 p-4 text-sm text-red-800">
+            <div className="rounded-lg bg-red-900/50 border border-red-500/30 p-4 text-sm text-red-200">
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="name" className="block text-sm font-medium text-white/80">
               Nombre (opcional)
             </label>
             <Input
@@ -73,13 +73,13 @@ export default function RegisterPage() {
               type="text"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
-              className="mt-2"
+              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
               placeholder="Tu nombre"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="block text-sm font-medium text-white/80">
               Email
             </label>
             <Input
@@ -88,13 +88,13 @@ export default function RegisterPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-2"
+              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
               placeholder="tu@email.com"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="block text-sm font-medium text-white/80">
               Contraseña
             </label>
             <Input
@@ -103,13 +103,13 @@ export default function RegisterPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-2"
+              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
               placeholder="Mínimo 6 caracteres"
             />
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-white/80">
               Confirmar Contraseña
             </label>
             <Input
@@ -118,7 +118,7 @@ export default function RegisterPage() {
               required
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="mt-2"
+              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
               placeholder="Repite tu contraseña"
             />
           </div>
@@ -126,7 +126,7 @@ export default function RegisterPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full"
+            className="w-full bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
             size="lg"
           >
             {loading ? 'Creando cuenta...' : 'Crear Cuenta'}

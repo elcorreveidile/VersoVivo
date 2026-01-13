@@ -85,28 +85,29 @@ function ProfileContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 fade-in">
+    <div className="min-h-screen bg-black py-12 fade-in">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-4xl font-bold tracking-tight text-white">
             Mi Perfil
           </h1>
-          <p className="mt-2 text-lg text-gray-600">
+          <p className="mt-2 text-lg text-white/60">
             Gestiona tu información y preferencias
           </p>
         </div>
 
         {/* Profile Card */}
-        <Card className="mb-8 ">
+        <Card className="mb-8 bg-white/5 border-white/10 backdrop-blur-sm">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>Información Personal</CardTitle>
+              <CardTitle className="text-white">Información Personal</CardTitle>
               {!editing && (
                 <Button
                   onClick={() => setEditing(true)}
                   variant="outline"
                   size="sm"
+                  className="border-white/20 text-white hover:bg-white/10 hover:text-[#FFD700]"
                 >
                   Editar Perfil
                 </Button>
@@ -115,7 +116,7 @@ function ProfileContent() {
           </CardHeader>
           <CardContent>
             {error && (
-              <div className="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-800">
+              <div className="mb-4 rounded-lg bg-red-900/50 border border-red-500/30 p-4 text-sm text-red-200">
                 {error}
               </div>
             )}
@@ -127,49 +128,51 @@ function ProfileContent() {
                   <img
                     src={photoURL}
                     alt={displayName || 'Usuario'}
-                    className="h-24 w-24 rounded-full object-cover border-4 border-gray-200"
+                    className="h-24 w-24 rounded-full object-cover ring-4 ring-[#FFD700]/30"
                   />
                 ) : (
-                  <div className="flex h-24 w-24 items-center justify-center rounded-full bg-amber-500 text-black text-3xl font-bold border-4 border-gray-200">
+                  <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#FFD700] text-black text-3xl font-bold ring-4 ring-[#FFD700]/30">
                     {displayName?.charAt(0).toUpperCase() || 'U'}
                   </div>
                 )}
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-white">
                     {displayName || 'Usuario'}
                   </h3>
-                  <p className="text-gray-600">{userProfile.email}</p>
+                  <p className="text-white/60">{userProfile.email}</p>
                 </div>
               </div>
 
               {/* Edit Form */}
               {editing ? (
-                <div className="space-y-4 border-t border-t pt-6">
+                <div className="space-y-4 border-t border-white/10 pt-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-white/80 mb-2">
                       Nombre de Visualización
                     </label>
                     <Input
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
                       placeholder="Tu nombre"
+                      className="bg-white/5 border-white/10 text-white placeholder:text-white/40"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-white/80 mb-2">
                       URL de Foto de Perfil
                     </label>
                     <Input
                       value={photoURL}
                       onChange={(e) => setPhotoURL(e.target.value)}
                       placeholder="https://ejemplo.com/foto.jpg"
+                      className="bg-white/5 border-white/10 text-white placeholder:text-white/40"
                     />
                   </div>
                   <div className="flex space-x-3">
                     <Button
                       onClick={handleSave}
                       disabled={saving}
-                      className="flex-1"
+                      className="flex-1 bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
                     >
                       {saving ? 'Guardando...' : 'Guardar Cambios'}
                     </Button>
@@ -177,7 +180,7 @@ function ProfileContent() {
                       onClick={handleCancel}
                       variant="outline"
                       disabled={saving}
-                      className="flex-1"
+                      className="flex-1 border-white/20 text-white hover:bg-white/10"
                     >
                       Cancelar
                     </Button>
@@ -191,13 +194,13 @@ function ProfileContent() {
         {/* Stats Card */}
         <div className="grid grid-cols-2 gap-6 mb-8">
           {stats.map((stat) => (
-            <Card key={stat.label} className="">
+            <Card key={stat.label} className="bg-white/5 border-white/10 backdrop-blur-sm card-hover">
               <CardContent className="pt-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600">
+                  <div className="text-3xl font-bold text-[#FFD700]">
                     {stat.value}
                   </div>
-                  <div className="mt-2 text-sm font-medium text-gray-600">
+                  <div className="mt-2 text-sm font-medium text-white/60">
                     {stat.label}
                   </div>
                 </div>
@@ -207,13 +210,13 @@ function ProfileContent() {
         </div>
 
         {/* Recently Read */}
-        <Card className="">
+        <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle>Lecturas Recientes</CardTitle>
+            <CardTitle className="text-white">Lecturas Recientes</CardTitle>
           </CardHeader>
           <CardContent>
             {loading ? (
-              <div className="text-center py-8 text-gray-600">
+              <div className="text-center py-8 text-white/60">
                 Cargando poemas leídos...
               </div>
             ) : readPoems.length > 0 ? (
@@ -222,20 +225,20 @@ function ProfileContent() {
                   <Link
                     key={poem.id}
                     href={`/poem/${poem.id}`}
-                    className="block p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
+                    className="block p-4 rounded-lg border border-white/10 hover:border-[#FFD700]/50 hover:bg-white/5 transition-all"
                   >
-                    <h4 className="font-semibold text-gray-900">{poem.title}</h4>
-                    <p className="text-sm text-gray-600 mt-1">por {poem.author}</p>
+                    <h4 className="font-semibold text-white">{poem.title}</h4>
+                    <p className="text-sm text-white/60 mt-1">por {poem.author}</p>
                   </Link>
                 ))}
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-gray-600 mb-4">
+                <p className="text-white/60 mb-4">
                   Aún no has leído ningún poema
                 </p>
                 <Link href="/explore">
-                  <Button>Explorar Poemas</Button>
+                  <Button className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">Explorar Poemas</Button>
                 </Link>
               </div>
             )}
@@ -247,7 +250,7 @@ function ProfileContent() {
           <Button
             onClick={handleSignOut}
             variant="outline"
-            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+            className="border-red-500/30 text-red-400 hover:bg-red-950/30 hover:text-red-300"
           >
             Cerrar Sesión
           </Button>
