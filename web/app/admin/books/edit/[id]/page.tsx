@@ -47,13 +47,13 @@ function EditBookContent() {
 
     setBook(data);
     setFormData({
-      title: data.title,
-      author: data.author,
-      description: data.description,
+      title: data.title || '',
+      author: data.author || '',
+      description: data.description || '',
       coverUrl: data.coverUrl || '',
-      price: data.price,
-      status: data.status,
-      inSubscription: data.inSubscription,
+      price: data.price || 6.99,
+      status: data.status || 'draft',
+      inSubscription: data.inSubscription || false,
     });
     setLoading(false);
   };
