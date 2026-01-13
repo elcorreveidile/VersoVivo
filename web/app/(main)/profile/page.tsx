@@ -85,20 +85,20 @@ function ProfileContent() {
   ];
 
   return (
-    <div className="min-h-screen fade-in py-12">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 fade-in">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold tracking-tight text-white">
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900">
             Mi Perfil
           </h1>
-          <p className="mt-2 text-lg text-gray-400">
+          <p className="mt-2 text-lg text-gray-600">
             Gestiona tu información y preferencias
           </p>
         </div>
 
         {/* Profile Card */}
-        <Card className="mb-8 bg-white/5 border-white/10 backdrop-blur-sm">
+        <Card className="mb-8 ">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>Información Personal</CardTitle>
@@ -127,26 +127,26 @@ function ProfileContent() {
                   <img
                     src={photoURL}
                     alt={displayName || 'Usuario'}
-                    className="h-24 w-24 rounded-full object-cover border-4 border-white/20"
+                    className="h-24 w-24 rounded-full object-cover border-4 border-gray-200"
                   />
                 ) : (
-                  <div className="flex h-24 w-24 items-center justify-center rounded-full bg-amber-500 text-black text-3xl font-bold border-4 border-white/20">
+                  <div className="flex h-24 w-24 items-center justify-center rounded-full bg-amber-500 text-black text-3xl font-bold border-4 border-gray-200">
                     {displayName?.charAt(0).toUpperCase() || 'U'}
                   </div>
                 )}
                 <div>
-                  <h3 className="text-xl font-semibold text-white">
+                  <h3 className="text-xl font-semibold text-gray-900">
                     {displayName || 'Usuario'}
                   </h3>
-                  <p className="text-gray-400">{userProfile.email}</p>
+                  <p className="text-gray-600">{userProfile.email}</p>
                 </div>
               </div>
 
               {/* Edit Form */}
               {editing ? (
-                <div className="space-y-4 border-t border-white/10 pt-6">
+                <div className="space-y-4 border-t border-t pt-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       Nombre de Visualización
                     </label>
                     <Input
@@ -156,7 +156,7 @@ function ProfileContent() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       URL de Foto de Perfil
                     </label>
                     <Input
@@ -191,13 +191,13 @@ function ProfileContent() {
         {/* Stats Card */}
         <div className="grid grid-cols-2 gap-6 mb-8">
           {stats.map((stat) => (
-            <Card key={stat.label} className="bg-white/5 border-white/10 backdrop-blur-sm">
+            <Card key={stat.label} className="">
               <CardContent className="pt-6">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-blue-600">
                     {stat.value}
                   </div>
-                  <div className="mt-2 text-sm font-medium text-gray-400">
+                  <div className="mt-2 text-sm font-medium text-gray-600">
                     {stat.label}
                   </div>
                 </div>
@@ -207,13 +207,13 @@ function ProfileContent() {
         </div>
 
         {/* Recently Read */}
-        <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+        <Card className="">
           <CardHeader>
             <CardTitle>Lecturas Recientes</CardTitle>
           </CardHeader>
           <CardContent>
             {loading ? (
-              <div className="text-center py-8 text-gray-400">
+              <div className="text-center py-8 text-gray-600">
                 Cargando poemas leídos...
               </div>
             ) : readPoems.length > 0 ? (
@@ -222,10 +222,10 @@ function ProfileContent() {
                   <Link
                     key={poem.id}
                     href={`/poem/${poem.id}`}
-                    className="block p-4 rounded-lg border border-white/10 hover:border-amber-500/30 hover:bg-white/5 transition-colors"
+                    className="block p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
                   >
-                    <h4 className="font-semibold text-white">{poem.title}</h4>
-                    <p className="text-sm text-gray-400 mt-1">por {poem.author}</p>
+                    <h4 className="font-semibold text-gray-900">{poem.title}</h4>
+                    <p className="text-sm text-gray-600 mt-1">por {poem.author}</p>
                   </Link>
                 ))}
               </div>
@@ -247,7 +247,7 @@ function ProfileContent() {
           <Button
             onClick={handleSignOut}
             variant="outline"
-            className="text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/20"
+            className="text-red-600 hover:text-red-700 hover:bg-red-50"
           >
             Cerrar Sesión
           </Button>
