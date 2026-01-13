@@ -239,6 +239,74 @@ export const logActivity = async (log: Omit<ActivityLog, 'id' | 'timestamp'>): P
   }
 };
 
+// ============================================
+// POEMS MANAGEMENT
+// ============================================
+
+export const getAllPoemsForAdmin = async (): Promise<any[]> => {
+  try {
+    const snapshot = await getDocs(query(collection(db, POEMS_COLLECTION), orderBy('createdAt', 'desc')));
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error('Error fetching poems:', error);
+    return [];
+  }
+};
+
+export const getPoemByIdForAdmin = async (id: string): Promise<any | null> => {
+  try {
+    const docRef = doc(db, POEMS_COLLECTION, id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() };
+    }
+    return null;
+  } catch (error) {
+    console.error('Error fetching poem:', error);
+    return null;
+  }
+};
+
+export const createPoem = async (poem: Omit<any, 'id' | 'createdAt' | 'updatedAt'>): Promise<{ success: boolean; poemId?: string; error?: string }> => {
+  try {
+    const poemsRef = collection(db, POEMS_COLLECTION);
+    const newPoemRef = await addDoc(poemsRef, {
+      ...poem,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+
+    return { success: true, poemId: newPoemRef.id };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+};
+
+export const updatePoem = async (poemId: string, poem: Partial<any>): Promise<{ success: boolean; error?: string }> => {
+  try {
+    const poemRef = doc(db, POEMS_COLLECTION, poemId);
+    await updateDoc(poemRef, {
+      ...poem,
+      updatedAt: new Date()
+    });
+
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+};
+
+export const deletePoem = async (poemId: string): Promise<{ success: boolean; error?: string }> => {
+  try {
+    const poemRef = doc(db, POEMS_COLLECTION, poemId);
+    await deleteDoc(poemRef);
+
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+};
+
 export const getActivityLogs = async (limitCount: number = 100): Promise<ActivityLog[]> => {
   try {
     const q = query(
