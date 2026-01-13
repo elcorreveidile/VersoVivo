@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { AdminRoute } from '@/components/auth/AdminRoute';
+import AdminRoute from '@/components/auth/AdminRoute';
 import { createPoem, logActivity, getAllBooks } from '@/lib/firebase/admin';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -30,19 +30,14 @@ function NewPoemContent() {
     bookId: '',
   });
 
-  useState(() => {
-    // Load books on mount
-    getAllBooks().then(setBooks).finally(() => setLoadingBooks(false));
-  });
-
   useEffect(() => {
+    const loadBooks = async () => {
+      const booksData = await getAllBooks();
+      setBooks(booksData);
+      setLoadingBooks(false);
+    };
     loadBooks();
   }, []);
-
-  const loadBooks = async () => {
-    const booksData = await getAllBooks();
-    setBooks(booksData);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

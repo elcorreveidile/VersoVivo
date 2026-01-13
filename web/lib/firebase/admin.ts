@@ -67,7 +67,7 @@ export const getAdminStats = async (): Promise<AdminStats> => {
     const allPoems = poemsSnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
-    }));
+    })) as any[];
 
     // Get all users data for calculating read/favorite counts
     const allUsers = usersSnapshot.docs.map(doc => doc.data() as User);
