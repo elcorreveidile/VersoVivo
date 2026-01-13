@@ -107,7 +107,7 @@ function ProfileContent() {
                   onClick={() => setEditing(true)}
                   variant="outline"
                   size="sm"
-                  className="border-white/20 text-white hover:bg-white/10 hover:text-[#FFD700]"
+                  className="border-white/30 text-[#FFD700] hover:bg-white/10 hover:border-[#FFD700]/50"
                 >
                   Editar Perfil
                 </Button>

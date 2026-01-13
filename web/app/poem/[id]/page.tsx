@@ -233,7 +233,7 @@ export default function PoemDetailPage() {
         {/* Back Button */}
         <div className="mt-8">
           <Link href="/explore">
-            <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:text-[#FFD700]">
+            <Button variant="outline" className="border-white/30 text-[#FFD700] hover:bg-white/10 hover:border-[#FFD700]/50">
               ← Volver a Explorar
             </Button>
           </Link>

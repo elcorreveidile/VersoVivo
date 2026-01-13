@@ -41,7 +41,7 @@ export default function HomePage() {
                 </Button>
               </Link>
               <Link href="/register">
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:text-[#FFD700]">
+                <Button size="lg" variant="outline" className="border-white/30 text-[#FFD700] hover:bg-white/10 hover:border-[#FFD700]/50">
                   Crear Cuenta
                 </Button>
               </Link>
@@ -121,7 +121,7 @@ export default function HomePage() {
 
           <div className="mt-12 text-center">
             <Link href="/explore">
-              <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:text-[#FFD700]">
+              <Button size="lg" variant="outline" className="border-white/30 text-[#FFD700] hover:bg-white/10 hover:border-[#FFD700]/50">
                 Ver Todos los Poemas
               </Button>
             </Link>
