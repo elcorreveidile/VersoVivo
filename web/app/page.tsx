@@ -25,14 +25,14 @@ export default function HomePage() {
   return (
     <div className="min-h-screen fade-in">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-amber-900/30 to-black text-white">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
         <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
           <div className="text-center fade-in">
-            <h1 className="text-5xl font-bold tracking-tight sm:text-7xl bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200 bg-clip-text text-transparent">
+            <h1 className="text-5xl font-bold tracking-tight sm:text-7xl text-white drop-shadow-2xl">
               VersoVivo
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-300 sm:text-xl max-w-3xl mx-auto">
+            <p className="mt-6 text-lg leading-8 text-white sm:text-xl max-w-3xl mx-auto font-medium">
               Poesía que cobra vida a través del texto, el video y la música generada por IA
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
@@ -52,13 +52,13 @@ export default function HomePage() {
       </section>
 
       {/* Featured Poems Section */}
-      <section className="py-16">
+      <section className="py-16 bg-gradient-to-b from-black/50 to-transparent">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl drop-shadow-lg">
               Poemas Destacados
             </h2>
-            <p className="mt-4 text-lg text-gray-400">
+            <p className="mt-4 text-lg text-gray-300">
               Descubre nuestra selección de poemas más recientes
             </p>
           </div>
@@ -116,7 +116,7 @@ export default function HomePage() {
             </div>
           ) : (
             <div className="mt-12 text-center">
-              <p className="text-gray-400">No hay poemas disponibles en este momento.</p>
+              <p className="text-gray-300">No hay poemas disponibles en este momento.</p>
             </div>
           )}
 
@@ -131,10 +131,10 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-gradient-to-b from-transparent to-black/30">
+      <section className="py-16 bg-gradient-to-b from-black/50 to-black/80">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl drop-shadow-lg">
               Tres Formatos de Experiencia
             </h2>
           </div>
@@ -147,7 +147,7 @@ export default function HomePage() {
                 </svg>
               </div>
               <h3 className="mt-6 text-lg font-semibold text-white">Lectura Inmersiva</h3>
-              <p className="mt-2 text-base text-gray-400">
+              <p className="mt-2 text-base text-gray-300">
                 Texto con tipografía elegante y animaciones sutiles
               </p>
             </div>
@@ -159,7 +159,7 @@ export default function HomePage() {
                 </svg>
               </div>
               <h3 className="mt-6 text-lg font-semibold text-white">Recitación en Video</h3>
-              <p className="mt-2 text-base text-gray-400">
+              <p className="mt-2 text-base text-gray-300">
                 Interpretación visual del poema por su autor
               </p>
             </div>
@@ -171,7 +171,7 @@ export default function HomePage() {
                 </svg>
               </div>
               <h3 className="mt-6 text-lg font-semibold text-white">Versión Musicada</h3>
-              <p className="mt-2 text-base text-gray-400">
+              <p className="mt-2 text-base text-gray-300">
                 Adaptación musical generada con inteligencia artificial
               </p>
             </div>
