@@ -208,7 +208,7 @@ function BooksContent() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-white/60">Poemas:</span>
-                    <span className="text-white">{book.poems.length}</span>
+                    <span className="text-white">{book.poems?.length || 0}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-white/60">Suscripción:</span>

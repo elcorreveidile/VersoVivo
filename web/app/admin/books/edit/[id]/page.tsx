@@ -311,7 +311,7 @@ function EditBookContent() {
             )}
 
             {/* Poem count info */}
-            {book && book.poems.length > 0 && (
+            {book && book.poems && book.poems.length > 0 && (
               <div className="bg-white/5 border border-white/10 rounded-lg p-4">
                 <div className="text-sm text-white/60">
                   Este libro contiene <span className="text-[#FFD700] font-semibold">{book.poems.length}</span> poema{book.poems.length !== 1 ? 's' : ''}
