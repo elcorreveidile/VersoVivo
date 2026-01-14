@@ -204,7 +204,7 @@ function SyncContent() {
                 {Object.entries(storageUsage.filesByType).map(([type, count]) => (
                   <div key={type} className="flex justify-between text-sm">
                     <span className="text-white/60 capitalize">{type === 'video' ? 'Videos' : type === 'music' ? 'Música' : type === 'thumbnail' ? 'Miniaturas' : type}:</span>
-                    <span className="text-white font-semibold">{count}</span>
+                    <span className="text-white font-semibold">{count as number}</span>
                   </div>
                 ))}
               </div>
