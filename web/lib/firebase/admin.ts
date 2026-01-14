@@ -501,7 +501,7 @@ export const importPoemsFromJSON = async (
         }
 
         // Verificar si ya existe
-        const existing = await getDoc(query(
+        const existing = await getDocs(query(
           collection(db, POEMS_COLLECTION),
           where('title', '==', poem.title),
           where('author', '==', poem.author)
