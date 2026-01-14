@@ -304,7 +304,7 @@ export const updatePoem = async (poemId: string, poem: Partial<any>): Promise<{ 
       if (!currentPoemDoc.exists()) {
         return { success: false, error: 'Poema no encontrado' };
       }
-      const currentPoem = { id: currentPoemDoc.id, ...currentPoemDoc.data() };
+      const currentPoem: any = { id: currentPoemDoc.id, ...currentPoemDoc.data() };
       const oldBookId = currentPoem.bookId;
       const newBookId = poem.bookId;
 

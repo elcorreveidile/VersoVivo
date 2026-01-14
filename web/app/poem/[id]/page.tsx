@@ -133,7 +133,7 @@ export default function PoemDetailPage() {
           {/* Tags */}
           {poem.tags && poem.tags.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">
-              {poem.tags.map((tag) => (
+              {poem.tags.map((tag: string) => (
                 <span
                   key={tag}
                   className="inline-flex items-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/20 px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium text-[#FFD700]"

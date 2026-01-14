@@ -332,7 +332,7 @@ function SyncContent() {
             {consistencyIssues.length > 0 && (
               <div className="space-y-2 pt-4 border-t border-white/10">
                 <h3 className="text-sm font-medium text-white">Problems encontrados:</h3>
-                {consistencyIssues.map((issue, idx) => (
+                {consistencyIssues.map((issue: any, idx: number) => (
                   <div key={idx} className={`p-3 rounded ${
                     issue.type === 'error' ? 'bg-red-900/30' : 'bg-yellow-900/30'
                   }`}>

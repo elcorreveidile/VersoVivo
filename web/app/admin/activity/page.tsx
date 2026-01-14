@@ -249,7 +249,7 @@ function ActivityContent() {
 
                         return changedFields.length > 0 ? (
                           <div className="space-y-2">
-                            {changedFields.map((key) => {
+                            {changedFields.map((key: string) => {
                               const beforeValue = before![key];
                               const afterValue = after[key];
                               const displayBefore = typeof beforeValue === 'object' ? '[Objeto]' : String(beforeValue ?? '').substring(0, 100);
