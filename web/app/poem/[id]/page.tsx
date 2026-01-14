@@ -8,10 +8,12 @@ import { getPoemById, addToFavorites, removeFromFavorites, markAsRead, isPoemFav
 import { useAuth } from '@/contexts/AuthContext';
 import { Poem } from '@/types/poem';
 import Link from 'next/link';
+import { useToast } from '@/components/ui/toast';
 
 type ViewMode = 'text' | 'video' | 'music' | 'voice';
 
 export default function PoemDetailPage() {
+  const { addToast } = useToast();
   const params = useParams();
   const poemId = params.id as string;
   const { user, userProfile } = useAuth();
@@ -20,9 +22,12 @@ export default function PoemDetailPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('text');
   const [isFavorite, setIsFavorite] = useState(false);
   const [togglingFavorite, setTogglingFavorite] = useState(false);
+  const [showTranslation, setShowTranslation] = useState(false);
 
   useEffect(() => {
     loadPoem();
+    // Reset translation state when poem changes
+    setShowTranslation(false);
   }, [poemId]);
 
   useEffect(() => {
@@ -47,7 +52,11 @@ export default function PoemDetailPage() {
 
   const handleToggleFavorite = async () => {
     if (!user || !userProfile || !poem) {
-      alert('Debes iniciar sesión para agregar poemas a favoritos');
+      addToast({
+        title: 'Inicia sesión',
+        description: 'Debes iniciar sesión para agregar poemas a favoritos',
+        variant: 'info',
+      });
       return;
     }
 
@@ -56,13 +65,27 @@ export default function PoemDetailPage() {
     try {
       if (isFavorite) {
         await removeFromFavorites(userProfile.uid, poem.id);
+        addToast({
+          title: 'Eliminado de favoritos',
+          description: `"${poem.title}" ya no está en tus favoritos`,
+          variant: 'success',
+        });
       } else {
         await addToFavorites(userProfile.uid, poem.id);
+        addToast({
+          title: 'Agregado a favoritos',
+          description: `"${poem.title}" ha sido agregado a tus favoritos`,
+          variant: 'success',
+        });
       }
       setIsFavorite(!isFavorite);
     } catch (error) {
       console.error('Error toggling favorite:', error);
-      alert('Error al actualizar favoritos');
+      addToast({
+        title: 'Error',
+        description: 'Error al actualizar favoritos',
+        variant: 'error',
+      });
     } finally {
       setTogglingFavorite(false);
     }
@@ -198,10 +221,33 @@ export default function PoemDetailPage() {
         <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
           <CardContent className="p-4 sm:p-6 lg:p-8">
             {viewMode === 'text' && (
-              <div className="prose prose-invert max-w-none">
-                <p className="text-base sm:text-lg text-white/90 whitespace-pre-wrap leading-relaxed">
-                  {poem.content}
-                </p>
+              <div>
+                {/* Translation button */}
+                {poem.contentSpanish && (
+                  <div className="mb-4 flex justify-end">
+                    <button
+                      onClick={() => setShowTranslation(!showTranslation)}
+                      className="flex items-center gap-2 px-4 py-2 bg-[#FFD700]/10 hover:bg-[#FFD700]/20 border border-[#FFD700]/30 text-[#FFD700] rounded-lg transition-colors text-sm font-medium"
+                    >
+                      <span>🌐</span>
+                      <span>{showTranslation ? 'Ver original' : 'Ver traducción'}</span>
+                    </button>
+                  </div>
+                )}
+
+                {/* Poem content */}
+                <div className="prose prose-invert max-w-none">
+                  <p className="text-base sm:text-lg text-white/90 whitespace-pre-wrap leading-relaxed">
+                    {showTranslation && poem.contentSpanish ? poem.contentSpanish : poem.content}
+                  </p>
+                </div>
+
+                {/* Language indicator */}
+                {poem.originalLanguage && !showTranslation && (
+                  <div className="mt-4 text-xs text-white/40">
+                    Idioma original: {poem.originalLanguage === 'gl' ? 'Gallego' : poem.originalLanguage === 'en' ? 'Inglés' : poem.originalLanguage === 'fr' ? 'Francés' : poem.originalLanguage}
+                  </div>
+                )}
               </div>
             )}
 

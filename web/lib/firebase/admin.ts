@@ -1,11 +1,28 @@
-import { doc, getDoc, getDocs, collection, setDoc, updateDoc, addDoc, deleteDoc, query, where, orderBy, limit, getDocsFromCache } from 'firebase/firestore';
+import { doc, getDoc, getDocs, collection, setDoc, updateDoc, addDoc, deleteDoc, query, where, orderBy, limit, startAfter, getDocsFromCache, QueryDocumentSnapshot } from 'firebase/firestore';
 import { db } from './config';
-import { User, Book, ActivityLog, AdminStats } from '@/types/poem';
+import { User, Book, ActivityLog, AdminStats, Poem } from '@/types/poem';
 
 const USERS_COLLECTION = 'users';
 const POEMS_COLLECTION = 'poems';
 const BOOKS_COLLECTION = 'books';
 const ACTIVITY_LOG_COLLECTION = 'activityLog';
+
+// ============================================
+// PAGINATION HELPERS
+// ============================================
+
+export interface PaginatedResult<T> {
+  items: T[];
+  totalItems: number;
+  currentPage: number;
+  totalPages: number;
+  itemsPerPage: number;
+  hasMore: boolean;
+}
+
+const calculateTotalPages = (totalItems: number, itemsPerPage: number): number => {
+  return Math.ceil(totalItems / itemsPerPage);
+};
 
 // ============================================
 // ADMIN VERIFICATION
@@ -67,7 +84,7 @@ export const getAdminStats = async (): Promise<AdminStats> => {
     const allPoems = poemsSnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
-    })) as any[];
+    })) as Array<Poem & { id: string }>;
 
     // Get all users data for calculating read/favorite counts
     const allUsers = usersSnapshot.docs.map(doc => doc.data() as User);
@@ -169,6 +186,60 @@ export const getAllBooks = async (): Promise<Book[]> => {
   }
 };
 
+export const getBooksPaginated = async (
+  page: number = 1,
+  itemsPerPage: number = 12,
+  lastDoc?: QueryDocumentSnapshot
+): Promise<PaginatedResult<Book>> => {
+  try {
+    // Get total count
+    const allSnapshot = await getDocs(collection(db, BOOKS_COLLECTION));
+    const totalItems = allSnapshot.size;
+
+    // Build query with pagination
+    let q = query(
+      collection(db, BOOKS_COLLECTION),
+      orderBy('createdAt', 'desc'),
+      limit(itemsPerPage)
+    );
+
+    // If we have a last document, start after it
+    if (lastDoc) {
+      q = query(
+        collection(db, BOOKS_COLLECTION),
+        orderBy('createdAt', 'desc'),
+        startAfter(lastDoc),
+        limit(itemsPerPage)
+      );
+    }
+
+    const snapshot = await getDocs(q);
+    const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Book));
+
+    const totalPages = calculateTotalPages(totalItems, itemsPerPage);
+    const hasMore = page < totalPages;
+
+    return {
+      items,
+      totalItems,
+      currentPage: page,
+      totalPages,
+      itemsPerPage,
+      hasMore,
+    };
+  } catch (error) {
+    console.error('Error fetching books paginated:', error);
+    return {
+      items: [],
+      totalItems: 0,
+      currentPage: page,
+      totalPages: 0,
+      itemsPerPage,
+      hasMore: false,
+    };
+  }
+};
+
 export const getBookById = async (id: string): Promise<Book | null> => {
   try {
     const docRef = doc(db, BOOKS_COLLECTION, id);
@@ -186,8 +257,10 @@ export const getBookById = async (id: string): Promise<Book | null> => {
 export const createBook = async (book: Omit<Book, 'id' | 'createdAt' | 'updatedAt'>): Promise<{ success: boolean; bookId?: string; error?: string }> => {
   try {
     const booksRef = collection(db, BOOKS_COLLECTION);
+    // Limpiar campos undefined antes de enviar
+    const cleanedBook = removeUndefinedFields(book);
     const newBookRef = await addDoc(booksRef, {
-      ...book,
+      ...cleanedBook,
       createdAt: new Date(),
       updatedAt: new Date()
     });
@@ -201,8 +274,10 @@ export const createBook = async (book: Omit<Book, 'id' | 'createdAt' | 'updatedA
 export const updateBook = async (bookId: string, book: Partial<Book>): Promise<{ success: boolean; error?: string }> => {
   try {
     const bookRef = doc(db, BOOKS_COLLECTION, bookId);
+    // Limpiar campos undefined antes de enviar
+    const cleanedBook = removeUndefinedFields(book);
     await updateDoc(bookRef, {
-      ...book,
+      ...cleanedBook,
       updatedAt: new Date()
     });
 
@@ -243,22 +318,76 @@ export const logActivity = async (log: Omit<ActivityLog, 'id' | 'timestamp'>): P
 // POEMS MANAGEMENT
 // ============================================
 
-export const getAllPoemsForAdmin = async (): Promise<any[]> => {
+export const getAllPoemsForAdmin = async (): Promise<Poem[]> => {
   try {
     const snapshot = await getDocs(query(collection(db, POEMS_COLLECTION), orderBy('createdAt', 'desc')));
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Poem));
   } catch (error) {
     console.error('Error fetching poems:', error);
     return [];
   }
 };
 
-export const getPoemByIdForAdmin = async (id: string): Promise<any | null> => {
+export const getPoemsPaginated = async (
+  page: number = 1,
+  itemsPerPage: number = 12,
+  lastDoc?: QueryDocumentSnapshot
+): Promise<PaginatedResult<Poem>> => {
+  try {
+    // Get total count
+    const allSnapshot = await getDocs(collection(db, POEMS_COLLECTION));
+    const totalItems = allSnapshot.size;
+
+    // Build query with pagination
+    let q = query(
+      collection(db, POEMS_COLLECTION),
+      orderBy('createdAt', 'desc'),
+      limit(itemsPerPage)
+    );
+
+    // If we have a last document, start after it
+    if (lastDoc) {
+      q = query(
+        collection(db, POEMS_COLLECTION),
+        orderBy('createdAt', 'desc'),
+        startAfter(lastDoc),
+        limit(itemsPerPage)
+      );
+    }
+
+    const snapshot = await getDocs(q);
+    const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Poem));
+
+    const totalPages = calculateTotalPages(totalItems, itemsPerPage);
+    const hasMore = page < totalPages;
+
+    return {
+      items,
+      totalItems,
+      currentPage: page,
+      totalPages,
+      itemsPerPage,
+      hasMore,
+    };
+  } catch (error) {
+    console.error('Error fetching poems paginated:', error);
+    return {
+      items: [],
+      totalItems: 0,
+      currentPage: page,
+      totalPages: 0,
+      itemsPerPage,
+      hasMore: false,
+    };
+  }
+};
+
+export const getPoemByIdForAdmin = async (id: string): Promise<Poem | null> => {
   try {
     const docRef = doc(db, POEMS_COLLECTION, id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      return { id: docSnap.id, ...docSnap.data() };
+      return { id: docSnap.id, ...docSnap.data() } as Poem;
     }
     return null;
   } catch (error) {
@@ -267,25 +396,30 @@ export const getPoemByIdForAdmin = async (id: string): Promise<any | null> => {
   }
 };
 
-export const createPoem = async (poem: Omit<any, 'id' | 'createdAt' | 'updatedAt'>): Promise<{ success: boolean; poemId?: string; error?: string }> => {
+// Helper function para remover campos undefined de un objeto
+const removeUndefinedFields = <T extends Record<string, unknown>>(obj: T): T => {
+  const cleaned = {} as Partial<T>;
+  for (const key in obj) {
+    if (obj[key] !== undefined) {
+      (cleaned as any)[key] = obj[key];
+    }
+  }
+  return cleaned as T;
+};
+
+export const createPoem = async (poem: Omit<Poem, 'id' | 'createdAt' | 'updatedAt'>): Promise<{ success: boolean; poemId?: string; error?: string }> => {
   try {
     const poemsRef = collection(db, POEMS_COLLECTION);
+    // Limpiar campos undefined antes de enviar
+    const cleanedPoem = removeUndefinedFields(poem);
     const newPoemRef = await addDoc(poemsRef, {
-      ...poem,
+      ...cleanedPoem,
       createdAt: new Date(),
       updatedAt: new Date()
     });
 
-    // Si se creó con bookId, añadir el poema al array poems del libro
-    if (poem.bookId) {
-      const bookRef = doc(db, BOOKS_COLLECTION, poem.bookId);
-      const bookDoc = await getDoc(bookRef);
-      if (bookDoc.exists()) {
-        const bookData = bookDoc.data();
-        const updatedPoems = [...(bookData.poems || []), newPoemRef.id];
-        await updateDoc(bookRef, { poems: updatedPoems, updatedAt: new Date() });
-      }
-    }
+    // NOTA: Ya no sincronizamos el array poems del libro
+    // Usar solo Poem.bookId para la relación
 
     return { success: true, poemId: newPoemRef.id };
   } catch (error: any) {
@@ -293,46 +427,17 @@ export const createPoem = async (poem: Omit<any, 'id' | 'createdAt' | 'updatedAt
   }
 };
 
-export const updatePoem = async (poemId: string, poem: Partial<any>): Promise<{ success: boolean; error?: string }> => {
+export const updatePoem = async (poemId: string, poem: Partial<Poem>): Promise<{ success: boolean; error?: string }> => {
   try {
     const poemRef = doc(db, POEMS_COLLECTION, poemId);
 
-    // Si se está actualizando el bookId, sincronizar con el libro
-    if ('bookId' in poem) {
-      // Obtener el poema actual para saber su bookId anterior
-      const currentPoemDoc = await getDoc(poemRef);
-      if (!currentPoemDoc.exists()) {
-        return { success: false, error: 'Poema no encontrado' };
-      }
-      const currentPoem: any = { id: currentPoemDoc.id, ...currentPoemDoc.data() };
-      const oldBookId = currentPoem.bookId;
-      const newBookId = poem.bookId;
+    // NOTA: Ya no sincronizamos el array poems del libro
+    // Usar solo Poem.bookId para la relación
 
-      // Si tenía un libro anterior y es diferente, quitar el poema de ese libro
-      if (oldBookId && oldBookId !== newBookId) {
-        const oldBookRef = doc(db, BOOKS_COLLECTION, oldBookId);
-        const oldBookDoc = await getDoc(oldBookRef);
-        if (oldBookDoc.exists()) {
-          const oldBookData = oldBookDoc.data();
-          const updatedPoems = (oldBookData.poems || []).filter((id: string) => id !== poemId);
-          await updateDoc(oldBookRef, { poems: updatedPoems, updatedAt: new Date() });
-        }
-      }
-
-      // Si se está asignando un nuevo libro, añadir el poema a ese libro
-      if (newBookId) {
-        const newBookRef = doc(db, BOOKS_COLLECTION, newBookId);
-        const newBookDoc = await getDoc(newBookRef);
-        if (newBookDoc.exists()) {
-          const newBookData = newBookDoc.data();
-          const updatedPoems = [...(newBookData.poems || []), poemId];
-          await updateDoc(newBookRef, { poems: updatedPoems, updatedAt: new Date() });
-        }
-      }
-    }
-
+    // Limpiar campos undefined antes de enviar
+    const cleanedPoem = removeUndefinedFields(poem);
     await updateDoc(poemRef, {
-      ...poem,
+      ...cleanedPoem,
       updatedAt: new Date()
     });
 
@@ -344,27 +449,11 @@ export const updatePoem = async (poemId: string, poem: Partial<any>): Promise<{ 
 
 export const deletePoem = async (poemId: string): Promise<{ success: boolean; error?: string }> => {
   try {
-    // Primero obtener el poema para saber su bookId
     const poemRef = doc(db, POEMS_COLLECTION, poemId);
-    const poemDoc = await getDoc(poemRef);
 
-    if (poemDoc.exists()) {
-      const poemData = poemDoc.data();
-      const bookId = poemData.bookId;
+    // NOTA: Ya no sincronizamos el array poems del libro
+    // Solo eliminamos el poema
 
-      // Si tiene un libro, quitar el poema del array poems del libro
-      if (bookId) {
-        const bookRef = doc(db, BOOKS_COLLECTION, bookId);
-        const bookDoc = await getDoc(bookRef);
-        if (bookDoc.exists()) {
-          const bookData = bookDoc.data();
-          const updatedPoems = (bookData.poems || []).filter((id: string) => id !== poemId);
-          await updateDoc(bookRef, { poems: updatedPoems, updatedAt: new Date() });
-        }
-      }
-    }
-
-    // Eliminar el poema
     await deleteDoc(poemRef);
 
     return { success: true };
@@ -458,7 +547,7 @@ export const exportBooksToJSON = async (): Promise<string> => {
   }
 };
 
-export const exportAllData = async (): Promise<{ poems: any[]; books: any[] }> => {
+export const exportAllData = async (): Promise<{ poems: Poem[]; books: Book[] }> => {
   try {
     const [poems, books] = await Promise.all([
       getAllPoemsForAdmin(),
@@ -650,15 +739,23 @@ export const verifyDataConsistency = async (): Promise<{
     // Verificar poemas sin libro
     const poems = await getAllPoemsForAdmin();
     const books = await getAllBooks();
-    const bookPoemIds = new Set<string>();
+    const validBookIds = new Set<string>(books.map(b => b.id));
 
-    books.forEach(book => {
-      if (book.poems) {
-        book.poems.forEach(id => bookPoemIds.add(id));
-      }
-    });
+    // Verificar poemas que tienen bookId pero el libro no existe
+    const poemsWithInvalidBook = poems.filter(poem =>
+      poem.bookId && !validBookIds.has(poem.bookId)
+    );
+    if (poemsWithInvalidBook.length > 0) {
+      issues.push({
+        type: 'error',
+        description: 'Poemas con libro asociado que no existe',
+        count: poemsWithInvalidBook.length,
+        items: poemsWithInvalidBook.slice(0, 10).map(p => `${p.title} -> ${p.bookId}`)
+      });
+    }
 
-    const orphanPoems = poems.filter(poem => !bookPoemIds.has(poem.id));
+    // Verificar poemas sin ningún libro asociado (sin bookId)
+    const orphanPoems = poems.filter(poem => !poem.bookId);
     if (orphanPoems.length > 0) {
       issues.push({
         type: 'warning',

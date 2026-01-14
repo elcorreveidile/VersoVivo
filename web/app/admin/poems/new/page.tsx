@@ -6,17 +6,20 @@ import { useRouter } from 'next/navigation';
 import AdminRoute from '@/components/auth/AdminRoute';
 import { createPoem, logActivity, getAllBooks } from '@/lib/firebase/admin';
 import { useAuth } from '@/contexts/AuthContext';
+import { Book } from '@/types/poem';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
+import { useToast } from '@/components/ui/toast';
 
 function NewPoemContent() {
+  const { addToast } = useToast();
   const router = useRouter();
   const { user, userProfile } = useAuth();
   const [loading, setLoading] = useState(false);
   const [loadingBooks, setLoadingBooks] = useState(true);
-  const [books, setBooks] = useState<any[]>([]);
+  const [books, setBooks] = useState<Book[]>([]);
   const [error, setError] = useState('');
 
   const [formData, setFormData] = useState({
@@ -30,6 +33,8 @@ function NewPoemContent() {
     voiceUrl: '',
     thumbnailUrl: '',
     bookId: '',
+    contentSpanish: '',
+    originalLanguage: '',
   });
 
   useEffect(() => {
@@ -64,7 +69,6 @@ function NewPoemContent() {
         ...formData,
         tags: tagsArray,
         bookId: formData.bookId || undefined,
-        duration: undefined,
       });
 
       if (!result.success || !result.poemId) {
@@ -84,10 +88,20 @@ function NewPoemContent() {
         });
       }
 
-      alert('Poema creado exitosamente');
+      addToast({
+        title: 'Poema creado',
+        description: `"${formData.title}" ha sido creado exitosamente`,
+        variant: 'success',
+      });
       router.push('/admin/poems');
     } catch (err: any) {
-      setError(err.message || 'Error al crear poema');
+      const errorMsg = err.message || 'Error al crear poema';
+      setError(errorMsg);
+      addToast({
+        title: 'Error al crear poema',
+        description: errorMsg,
+        variant: 'error',
+      });
       setLoading(false);
     }
   };
@@ -163,6 +177,52 @@ function NewPoemContent() {
                 className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:border-[#FFD700] focus:outline-none"
                 placeholder="Escribe el poema aquí..."
               />
+            </div>
+
+            {/* Translation Section */}
+            <div className="pt-4 border-t border-white/10 space-y-4">
+              <h3 className="text-lg font-semibold text-white">🌐 Traducción (Opcional)</h3>
+
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-2">
+                  Idioma Original
+                </label>
+                <select
+                  value={formData.originalLanguage}
+                  onChange={(e) => setFormData({ ...formData, originalLanguage: e.target.value })}
+                  className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[#FFD700] focus:outline-none"
+                >
+                  <option value="" className="bg-black">Español (sin traducción)</option>
+                  <option value="gl" className="bg-black">Gallego</option>
+                  <option value="en" className="bg-black">Inglés</option>
+                  <option value="fr" className="bg-black">Francés</option>
+                  <option value="pt" className="bg-black">Portugués</option>
+                  <option value="de" className="bg-black">Alemán</option>
+                  <option value="it" className="bg-black">Italiano</option>
+                  <option value="other" className="bg-black">Otro</option>
+                </select>
+                <p className="text-xs text-white/40 mt-1">
+                  Selecciona el idioma del texto original arriba
+                </p>
+              </div>
+
+              {formData.originalLanguage && (
+                <div>
+                  <label className="block text-sm font-medium text-white/80 mb-2">
+                    Traducción al Español
+                  </label>
+                  <textarea
+                    value={formData.contentSpanish}
+                    onChange={(e) => setFormData({ ...formData, contentSpanish: e.target.value })}
+                    rows={10}
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:border-[#FFD700] focus:outline-none"
+                    placeholder="Pega aquí la traducción del poema al español..."
+                  />
+                  <p className="text-xs text-white/40 mt-1">
+                    Los usuarios podrán alternar entre el texto original y la traducción
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Category */}

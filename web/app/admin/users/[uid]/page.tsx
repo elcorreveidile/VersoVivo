@@ -6,6 +6,7 @@ import AdminRoute from '@/components/auth/AdminRoute';
 import { getAllPoemsForAdmin } from '@/lib/firebase/admin';
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
+import { User, Poem } from '@/types/poem';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
@@ -14,8 +15,8 @@ function UserDetailContent() {
   const router = useRouter();
   const params = useParams();
   const userId = params.uid as string;
-  const [user, setUser] = useState<any>(null);
-  const [poems, setPoems] = useState<any[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const [poems, setPoems] = useState<Poem[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -30,7 +31,7 @@ function UserDetailContent() {
       // Cargar usuario
       const userDoc = await getDoc(doc(db, 'users', userId));
       if (userDoc.exists()) {
-        setUser({ id: userDoc.id, ...userDoc.data() });
+        setUser({ uid: userDoc.id, ...userDoc.data() } as User);
       }
 
       // Cargar poemas para mostrar favoritos/leídos
@@ -196,19 +197,19 @@ function UserDetailContent() {
           <div className="grid sm:grid-cols-2 gap-4 text-sm">
             <div>
               <span className="text-white/60">UID:</span>
-              <span className="text-white ml-2 font-mono text-xs">{user.id}</span>
+              <span className="text-white ml-2 font-mono text-xs">{user.uid}</span>
             </div>
             <div>
               <span className="text-white/60">Creado:</span>
               <span className="text-white ml-2">
-                {user.createdAt ? new Date(user.createdAt.seconds * 1000).toLocaleDateString('es-ES') : 'N/A'}
+                {user.createdAt ? new Date(user.createdAt).toLocaleDateString('es-ES') : 'N/A'}
               </span>
             </div>
             {user.lastLoginAt && (
               <div>
                 <span className="text-white/60">Último acceso:</span>
                 <span className="text-white ml-2">
-                  {new Date(user.lastLoginAt.seconds * 1000).toLocaleDateString('es-ES')}
+                  {new Date(user.lastLoginAt).toLocaleDateString('es-ES')}
                 </span>
               </div>
             )}

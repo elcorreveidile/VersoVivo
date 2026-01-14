@@ -1,0 +1,131 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================================
+    // HELPER FUNCTIONS
+    // ============================================
+
+    // Helper function to check if user is authenticated
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Helper function to check if user is owner
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Admin verification using Custom Claims (método escalable)
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.admin == true;
+    }
+
+    // Editor verification (using database field)
+    function isEditor() {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'editor';
+    }
+
+    // Admin or Editor check
+    function isAdminOrEditor() {
+      return isAdmin() || isEditor();
+    }
+
+    // ============================================
+    // USERS COLLECTION
+    // ============================================
+    match /users/{userId} {
+      // Read: Owner or admin
+      allow read: if isOwner(userId) || isAdmin();
+
+      // Create: Owner can create (with restrictions on role)
+      allow create: if isOwner(userId) &&
+        (
+          !('role' in request.resource.data) ||
+          request.resource.data.role == 'user' ||
+          request.resource.data.role == 'editor'
+        );
+
+      // Update: Owner can update own profile (with restrictions)
+      allow update: if isOwner(userId) &&
+        request.resource.data.role == resource.data.role &&
+        request.resource.data.diff(resource.data).changedKeys().hasOnly([
+          'displayName',
+          'photoURL',
+          'favoritePoems',
+          'readPoems',
+          'listenedPoems',
+          'watchedPoems',
+          'subscription',
+          'preferences',
+          'lastLoginAt',
+          'active'
+        ]);
+
+      // Delete: Only admin
+      allow delete: if isAdmin();
+
+      // Admin write override
+      allow write: if isAdmin();
+    }
+
+    // ============================================
+    // POEMS COLLECTION
+    // ============================================
+    match /poems/{poemId} {
+      // Read: Public (anyone can read)
+      allow read: if true;
+
+      // Create, Update, Delete: Admin only
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ============================================
+    // BOOKS COLLECTION
+    // ============================================
+    match /books/{bookId} {
+      // Read: Public (anyone can read)
+      allow read: if true;
+
+      // Create, Update, Delete: Admin only
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ============================================
+    // ACTIVITY LOG COLLECTION
+    // ============================================
+    match /activityLog/{logId} {
+      // Read: Admin only
+      allow read: if isAdmin();
+
+      // Write: Server only (Admin SDK bypasses rules)
+      allow write: if false;
+    }
+
+    // ============================================
+    // PURCHASES COLLECTION
+    // ============================================
+    match /purchases/{purchaseId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow create: if false; // Purchases created server-side only
+      allow update, delete: if isAdmin();
+    }
+
+    // ============================================
+    // SUBSCRIPTIONS COLLECTION
+    // ============================================
+    match /subscriptions/{subscriptionId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    // ============================================
+    // DEFAULT DENY
+    // ============================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

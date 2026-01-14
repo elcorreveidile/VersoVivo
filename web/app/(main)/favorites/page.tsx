@@ -9,8 +9,10 @@ import { getUserFavorites } from '@/lib/firebase/user';
 import { removeFromFavorites } from '@/lib/firebase/poems';
 import { Poem } from '@/types/poem';
 import Link from 'next/link';
+import { useToast } from '@/components/ui/toast';
 
 function FavoritesContent() {
+  const { addToast } = useToast();
   const { userProfile, refreshProfile } = useAuth();
   const [favorites, setFavorites] = useState<Poem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -36,15 +38,28 @@ function FavoritesContent() {
     const result = await removeFromFavorites(userProfile.uid, poemId);
 
     if (result.error) {
-      alert('Error al eliminar de favoritos: ' + result.error);
+      addToast({
+        title: 'Error al eliminar de favoritos',
+        description: result.error,
+        variant: 'error',
+      });
       setRemoving(null);
       return;
     }
 
     // Remove from local state
+    const removedPoem = favorites.find(p => p.id === poemId);
     setFavorites((prev) => prev.filter((p) => p.id !== poemId));
     await refreshProfile();
     setRemoving(null);
+
+    if (removedPoem) {
+      addToast({
+        title: 'Eliminado de favoritos',
+        description: `"${removedPoem.title}" ya no está en tus favoritos`,
+        variant: 'success',
+      });
+    }
   };
 
   if (loading) {

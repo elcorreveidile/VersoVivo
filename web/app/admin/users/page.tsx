@@ -3,13 +3,14 @@
 import { useEffect, useState } from 'react';
 import AdminRoute from '@/components/auth/AdminRoute';
 import { getAllUsers } from '@/lib/firebase/admin';
+import { User } from '@/types/poem';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 function UsersContent() {
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState<string>('all');

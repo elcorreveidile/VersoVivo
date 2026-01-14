@@ -30,8 +30,12 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return isSignedIn() &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+      // ✅ NUEVO: Usa Custom Claims (más escalable)
+      return isSignedIn() && request.auth.token.admin == true;
+
+      // ❌ VIEJO (Eliminado): Usaba la base de datos
+      // return isSignedIn() &&
+      //   get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
 
     function isEditor() {

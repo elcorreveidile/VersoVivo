@@ -7,16 +7,25 @@ import {
   where,
   orderBy,
   limit,
+  startAfter,
   addDoc,
   updateDoc,
   arrayUnion,
-  arrayRemove
+  arrayRemove,
+  QueryDocumentSnapshot
 } from 'firebase/firestore';
 import { db } from './config';
 import { Poem } from '@/types/poem';
 
 const POEMS_COLLECTION = 'poems';
 const USERS_COLLECTION = 'users';
+
+// Re-export PaginatedResult from admin
+export type { PaginatedResult } from './admin';
+
+const calculateTotalPages = (totalItems: number, itemsPerPage: number): number => {
+  return Math.ceil(totalItems / itemsPerPage);
+};
 
 export const getFeaturedPoems = async (count: number = 6): Promise<Poem[]> => {
   try {
@@ -40,6 +49,67 @@ export const getAllPoems = async (): Promise<Poem[]> => {
   } catch (error) {
     console.error('Error fetching poems:', error);
     return [];
+  }
+};
+
+export const getPoemsPaginated = async (
+  page: number = 1,
+  itemsPerPage: number = 12,
+  lastDoc?: QueryDocumentSnapshot
+): Promise<{
+  items: Poem[];
+  totalItems: number;
+  currentPage: number;
+  totalPages: number;
+  itemsPerPage: number;
+  hasMore: boolean;
+}> => {
+  try {
+    // Get total count
+    const allSnapshot = await getDocs(collection(db, POEMS_COLLECTION));
+    const totalItems = allSnapshot.size;
+
+    // Build query with pagination
+    let q = query(
+      collection(db, POEMS_COLLECTION),
+      orderBy('createdAt', 'desc'),
+      limit(itemsPerPage)
+    );
+
+    // If we have a last document, start after it
+    if (lastDoc) {
+      q = query(
+        collection(db, POEMS_COLLECTION),
+        orderBy('createdAt', 'desc'),
+        startAfter(lastDoc),
+        limit(itemsPerPage)
+      );
+    }
+
+    const snapshot = await getDocs(q);
+    const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Poem));
+
+    const totalPages = calculateTotalPages(totalItems, itemsPerPage);
+    const hasMore = page < totalPages;
+
+    return {
+      items,
+      totalItems,
+      currentPage: page,
+      totalPages,
+      itemsPerPage,
+      hasMore,
+    };
+  } catch (error) {
+    console.error('Error fetching poems paginated:', error);
+    return {
+      items: [],
+      totalItems: 0,
+      currentPage: page,
+      totalPages: 0,
+      itemsPerPage,
+      hasMore: false,
+    };
   }
 };
 

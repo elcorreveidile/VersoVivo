@@ -2,28 +2,37 @@
 
 import { useEffect, useState } from 'react';
 import AdminRoute from '@/components/auth/AdminRoute';
-import { getAllBooks, deleteBook } from '@/lib/firebase/admin';
+import { getBooksPaginated, deleteBook } from '@/lib/firebase/admin';
 import { Book } from '@/types/poem';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Pagination } from '@/components/ui/pagination';
+import { useToast } from '@/components/ui/toast';
 
 function BooksContent() {
+  const { addToast } = useToast();
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'draft' | 'published' | 'archived'>('all');
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 12;
 
   useEffect(() => {
     loadBooks();
-  }, []);
+  }, [currentPage]);
 
   const loadBooks = async () => {
     setLoading(true);
-    const data = await getAllBooks();
-    setBooks(data);
+    const result = await getBooksPaginated(currentPage, itemsPerPage);
+    setBooks(result.items);
+    setTotalPages(result.totalPages);
+    setTotalItems(result.totalItems);
     setLoading(false);
   };
 
@@ -38,7 +47,11 @@ function BooksContent() {
     const result = await deleteBook(bookId);
 
     if (result.error) {
-      alert('Error al eliminar libro: ' + result.error);
+      addToast({
+        title: 'Error al eliminar libro',
+        description: result.error,
+        variant: 'error',
+      });
       setDeleting(null);
       return;
     }
@@ -46,6 +59,12 @@ function BooksContent() {
     // Remove from local state
     setBooks((prev) => prev.filter((b) => b.id !== bookId));
     setDeleting(null);
+
+    addToast({
+      title: 'Libro eliminado',
+      description: `"${bookTitle}" ha sido eliminado correctamente`,
+      variant: 'success',
+    });
   };
 
   const filteredBooks = books.filter((book) => {
@@ -55,6 +74,11 @@ function BooksContent() {
     const matchesStatus = filterStatus === 'all' || book.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const getStatusColor = (status: Book['status']) => {
     switch (status) {
@@ -172,77 +196,90 @@ function BooksContent() {
 
       {/* Books Grid */}
       {filteredBooks.length > 0 ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredBooks.map((book) => (
-            <Card key={book.id} className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-[#FFD700]/30 transition-all">
-              <CardContent className="p-6">
-                {/* Cover and basic info */}
-                <div className="flex items-start space-x-4 mb-4">
-                  {book.coverUrl ? (
-                    <img
-                      src={book.coverUrl}
-                      alt={book.title}
-                      className="w-20 h-28 object-cover rounded"
-                    />
-                  ) : (
-                    <div className="w-20 h-28 bg-white/10 rounded flex items-center justify-center text-white/20">
-                      📚
+        <>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredBooks.map((book) => (
+              <Card key={book.id} className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-[#FFD700]/30 transition-all">
+                <CardContent className="p-6">
+                  {/* Cover and basic info */}
+                  <div className="flex items-start space-x-4 mb-4">
+                    {book.coverUrl ? (
+                      <img
+                        src={book.coverUrl}
+                        alt={book.title}
+                        className="w-20 h-28 object-cover rounded"
+                      />
+                    ) : (
+                      <div className="w-20 h-28 bg-white/10 rounded flex items-center justify-center text-white/20">
+                        📚
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg font-semibold text-white truncate">{book.title}</h3>
+                      <p className="text-sm text-white/60">{book.author}</p>
+                      <div className="mt-2">
+                        <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium border ${getStatusColor(book.status)}`}>
+                          {getStatusLabel(book.status)}
+                        </span>
+                      </div>
                     </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-semibold text-white truncate">{book.title}</h3>
-                    <p className="text-sm text-white/60">{book.author}</p>
-                    <div className="mt-2">
-                      <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium border ${getStatusColor(book.status)}`}>
-                        {getStatusLabel(book.status)}
+                  </div>
+
+                  {/* Details */}
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-white/60">Precio:</span>
+                      <span className="text-[#FFD700] font-semibold">€{(book.price || 0).toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-white/60">Poemas:</span>
+                      <span className="text-white">{book.poems?.length || 0}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-white/60">Suscripción:</span>
+                      <span className={`font-medium ${book.inSubscription ? 'text-green-400' : 'text-white/40'}`}>
+                        {book.inSubscription ? 'Sí' : 'No'}
                       </span>
                     </div>
                   </div>
-                </div>
 
-                {/* Details */}
-                <div className="space-y-2 mb-4">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-white/60">Precio:</span>
-                    <span className="text-[#FFD700] font-semibold">€{(book.price || 0).toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-white/60">Poemas:</span>
-                    <span className="text-white">{book.poems?.length || 0}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-white/60">Suscripción:</span>
-                    <span className={`font-medium ${book.inSubscription ? 'text-green-400' : 'text-white/40'}`}>
-                      {book.inSubscription ? 'Sí' : 'No'}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-2">
-                  <Link href={`/admin/books/edit/${book.id}`} className="flex-1">
+                  {/* Actions */}
+                  <div className="flex gap-2">
+                    <Link href={`/admin/books/edit/${book.id}`} className="flex-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                      >
+                        Editar
+                      </Button>
+                    </Link>
                     <Button
+                      onClick={() => handleDelete(book.id, book.title)}
+                      disabled={deleting === book.id}
                       variant="outline"
                       size="sm"
-                      className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                      className="border-red-500/30 text-red-400 hover:bg-red-950/30 hover:text-red-300"
                     >
-                      Editar
+                      {deleting === book.id ? '...' : 'Eliminar'}
                     </Button>
-                  </Link>
-                  <Button
-                    onClick={() => handleDelete(book.id, book.title)}
-                    disabled={deleting === book.id}
-                    variant="outline"
-                    size="sm"
-                    className="border-red-500/30 text-red-400 hover:bg-red-950/30 hover:text-red-300"
-                  >
-                    {deleting === book.id ? '...' : 'Eliminar'}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && !searchTerm && filterStatus === 'all' && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={totalItems}
+              itemsPerPage={itemsPerPage}
+              onPageChange={handlePageChange}
+            />
+          )}
+        </>
       ) : (
         <Card className="bg-white/5 border-white/10">
           <CardContent className="p-12 text-center">

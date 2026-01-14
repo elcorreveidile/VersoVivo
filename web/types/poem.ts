@@ -10,6 +10,9 @@ export interface Poem {
   musicUrl?: string;
   voiceUrl?: string;
   thumbnailUrl?: string;
+  contentSpanish?: string;  // Traducción al español
+  originalLanguage?: string; // Idioma original: 'gl' (gallego), 'en', 'fr', etc.
+  bookId?: string; // Referencia opcional al libro
   createdAt: Date;
   updatedAt: Date;
 }

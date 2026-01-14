@@ -10,8 +10,10 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { Book } from '@/types/poem';
+import { useToast } from '@/components/ui/toast';
 
 function EditBookContent() {
+  const { addToast } = useToast();
   const router = useRouter();
   const params = useParams();
   const bookId = params.id as string;
@@ -101,10 +103,20 @@ function EditBookContent() {
         });
       }
 
-      alert('Libro actualizado exitosamente');
+      addToast({
+        title: 'Libro actualizado',
+        description: `"${formData.title}" ha sido actualizado exitosamente`,
+        variant: 'success',
+      });
       router.push('/admin/books');
     } catch (err: any) {
-      setError(err.message || 'Error al actualizar libro');
+      const errorMsg = err.message || 'Error al actualizar libro';
+      setError(errorMsg);
+      addToast({
+        title: 'Error al actualizar libro',
+        description: errorMsg,
+        variant: 'error',
+      });
       setSaving(false);
     }
   };

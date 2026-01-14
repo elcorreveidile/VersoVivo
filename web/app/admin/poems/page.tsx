@@ -2,30 +2,40 @@
 
 import { useEffect, useState } from 'react';
 import AdminRoute from '@/components/auth/AdminRoute';
-import { getAllPoemsForAdmin, deletePoem, getAllBooks } from '@/lib/firebase/admin';
+import { getPoemsPaginated, deletePoem, getAllBooks } from '@/lib/firebase/admin';
+import { Poem, Book } from '@/types/poem';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Pagination } from '@/components/ui/pagination';
+import { useToast } from '@/components/ui/toast';
 
 function PoemsContent() {
-  const [poems, setPoems] = useState<any[]>([]);
-  const [books, setBooks] = useState<any[]>([]);
+  const { addToast } = useToast();
+  const [poems, setPoems] = useState<Poem[]>([]);
+  const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterBook, setFilterBook] = useState<string>('all');
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 12;
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [currentPage]);
 
   const loadData = async () => {
     setLoading(true);
-    const poemsData = await getAllPoemsForAdmin();
+    const result = await getPoemsPaginated(currentPage, itemsPerPage);
     const booksData = await getAllBooks();
-    setPoems(poemsData);
+    setPoems(result.items);
     setBooks(booksData);
+    setTotalPages(result.totalPages);
+    setTotalItems(result.totalItems);
     setLoading(false);
   };
 
@@ -40,7 +50,11 @@ function PoemsContent() {
     const result = await deletePoem(poemId);
 
     if (result.error) {
-      alert('Error al eliminar poema: ' + result.error);
+      addToast({
+        title: 'Error al eliminar poema',
+        description: result.error,
+        variant: 'error',
+      });
       setDeleting(null);
       return;
     }
@@ -48,9 +62,15 @@ function PoemsContent() {
     // Remove from local state
     setPoems((prev) => prev.filter((p) => p.id !== poemId));
     setDeleting(null);
+
+    addToast({
+      title: 'Poema eliminado',
+      description: `"${poemTitle}" ha sido eliminado correctamente`,
+      variant: 'success',
+    });
   };
 
-  const getBookTitle = (bookId: string) => {
+  const getBookTitle = (bookId: string | undefined) => {
     if (!bookId) return 'Sin libro';
     const book = books.find(b => b.id === bookId);
     return book ? book.title : 'Libro no encontrado';
@@ -63,6 +83,11 @@ function PoemsContent() {
     const matchesBook = filterBook === 'all' || poem.bookId === filterBook;
     return matchesSearch && matchesBook;
   });
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="space-y-6">
@@ -124,100 +149,113 @@ function PoemsContent() {
           ))}
         </div>
       ) : filteredPoems.length > 0 ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredPoems.map((poem) => (
-            <Card key={poem.id} className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-[#FFD700]/30 transition-all">
-              <CardContent className="p-6">
-                {/* Title and Author */}
-                <div className="mb-4">
-                  <h3 className="text-lg font-semibold text-white mb-1">{poem.title}</h3>
-                  <p className="text-sm text-white/60">por {poem.author}</p>
-                </div>
-
-                {/* Multimedia indicators */}
-                <div className="flex gap-2 mb-4">
-                  {poem.content && (
-                    <span className="inline-flex items-center text-xs bg-white/10 text-white/60 px-2 py-1 rounded">
-                      📄 Texto
-                    </span>
-                  )}
-                  {poem.videoUrl && (
-                    <span className="inline-flex items-center text-xs bg-[#FFD700]/10 text-[#FFD700] px-2 py-1 rounded">
-                      🎬 Video
-                    </span>
-                  )}
-                  {poem.musicUrl && (
-                    <span className="inline-flex items-center text-xs bg-[#FFD700]/10 text-[#FFD700] px-2 py-1 rounded">
-                      🎵 Música
-                    </span>
-                  )}
-                  {poem.voiceUrl && (
-                    <span className="inline-flex items-center text-xs bg-[#FFD700]/10 text-[#FFD700] px-2 py-1 rounded">
-                      🎙️ Voz
-                    </span>
-                  )}
-                  {poem.thumbnailUrl && (
-                    <span className="inline-flex items-center text-xs bg-white/10 text-white/60 px-2 py-1 rounded">
-                      🖼️ Miniatura
-                    </span>
-                  )}
-                </div>
-
-                {/* Content preview */}
-                {poem.content && (
-                  <div className="mb-4 text-sm text-white/40 line-clamp-3">
-                    {poem.content.substring(0, 120)}...
+        <>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredPoems.map((poem) => (
+              <Card key={poem.id} className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-[#FFD700]/30 transition-all">
+                <CardContent className="p-6">
+                  {/* Title and Author */}
+                  <div className="mb-4">
+                    <h3 className="text-lg font-semibold text-white mb-1">{poem.title}</h3>
+                    <p className="text-sm text-white/60">por {poem.author}</p>
                   </div>
-                )}
 
-                {/* Book association */}
-                <div className="mb-4 text-sm">
-                  <span className="text-white/60">Libro: </span>
-                  <span className="text-white font-medium">{getBookTitle(poem.bookId)}</span>
-                </div>
-
-                {/* Tags */}
-                {poem.tags && poem.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {poem.tags.slice(0, 3).map((tag: string) => (
-                      <span
-                        key={tag}
-                        className="inline-flex items-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/20 px-2 py-1 text-xs font-medium text-[#FFD700]"
-                      >
-                        {tag}
+                  {/* Multimedia indicators */}
+                  <div className="flex gap-2 mb-4">
+                    {poem.content && (
+                      <span className="inline-flex items-center text-xs bg-white/10 text-white/60 px-2 py-1 rounded">
+                        📄 Texto
                       </span>
-                    ))}
-                    {poem.tags.length > 3 && (
-                      <span className="text-xs text-white/40">+{poem.tags.length - 3}</span>
+                    )}
+                    {poem.videoUrl && (
+                      <span className="inline-flex items-center text-xs bg-[#FFD700]/10 text-[#FFD700] px-2 py-1 rounded">
+                        🎬 Video
+                      </span>
+                    )}
+                    {poem.musicUrl && (
+                      <span className="inline-flex items-center text-xs bg-[#FFD700]/10 text-[#FFD700] px-2 py-1 rounded">
+                        🎵 Música
+                      </span>
+                    )}
+                    {poem.voiceUrl && (
+                      <span className="inline-flex items-center text-xs bg-[#FFD700]/10 text-[#FFD700] px-2 py-1 rounded">
+                        🎙️ Voz
+                      </span>
+                    )}
+                    {poem.thumbnailUrl && (
+                      <span className="inline-flex items-center text-xs bg-white/10 text-white/60 px-2 py-1 rounded">
+                        🖼️ Miniatura
+                      </span>
                     )}
                   </div>
-                )}
 
-                {/* Actions */}
-                <div className="flex gap-2">
-                  <Link href={`/admin/poems/edit/${poem.id}`} className="flex-1">
+                  {/* Content preview */}
+                  {poem.content && (
+                    <div className="mb-4 text-sm text-white/40 line-clamp-3">
+                      {poem.content.substring(0, 120)}...
+                    </div>
+                  )}
+
+                  {/* Book association */}
+                  <div className="mb-4 text-sm">
+                    <span className="text-white/60">Libro: </span>
+                    <span className="text-white font-medium">{getBookTitle(poem.bookId)}</span>
+                  </div>
+
+                  {/* Tags */}
+                  {poem.tags && poem.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {poem.tags.slice(0, 3).map((tag: string) => (
+                        <span
+                          key={tag}
+                          className="inline-flex items-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/20 px-2 py-1 text-xs font-medium text-[#FFD700]"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      {poem.tags.length > 3 && (
+                        <span className="text-xs text-white/40">+{poem.tags.length - 3}</span>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Actions */}
+                  <div className="flex gap-2">
+                    <Link href={`/admin/poems/edit/${poem.id}`} className="flex-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                      >
+                        Editar
+                      </Button>
+                    </Link>
                     <Button
+                      onClick={() => handleDelete(poem.id, poem.title)}
+                      disabled={deleting === poem.id}
                       variant="outline"
                       size="sm"
-                      className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                      className="border-red-500/30 text-red-400 hover:bg-red-950/30 hover:text-red-300"
                     >
-                      Editar
+                      {deleting === poem.id ? '...' : 'Eliminar'}
                     </Button>
-                  </Link>
-                  <Button
-                    onClick={() => handleDelete(poem.id, poem.title)}
-                    disabled={deleting === poem.id}
-                    variant="outline"
-                    size="sm"
-                    className="border-red-500/30 text-red-400 hover:bg-red-950/30 hover:text-red-300"
-                  >
-                    {deleting === poem.id ? '...' : 'Eliminar'}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && !searchTerm && filterBook === 'all' && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={totalItems}
+              itemsPerPage={itemsPerPage}
+              onPageChange={handlePageChange}
+            />
+          )}
+        </>
       ) : (
         <Card className="bg-white/5 border-white/10">
           <CardContent className="p-12 text-center">

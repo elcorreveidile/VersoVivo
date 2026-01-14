@@ -9,8 +9,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
+import { useToast } from '@/components/ui/toast';
 
 function NewBookContent() {
+  const { addToast } = useToast();
   const router = useRouter();
   const { user, userProfile } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -67,10 +69,20 @@ function NewBookContent() {
         });
       }
 
-      alert('Libro creado exitosamente');
+      addToast({
+        title: 'Libro creado',
+        description: `"${formData.title}" ha sido creado exitosamente`,
+        variant: 'success',
+      });
       router.push('/admin/books');
     } catch (err: any) {
-      setError(err.message || 'Error al crear libro');
+      const errorMsg = err.message || 'Error al crear libro';
+      setError(errorMsg);
+      addToast({
+        title: 'Error al crear libro',
+        description: errorMsg,
+        variant: 'error',
+      });
       setLoading(false);
     }
   };

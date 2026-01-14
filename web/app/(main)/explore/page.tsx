@@ -4,18 +4,23 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { getAllPoems, searchPoems } from '@/lib/firebase/poems';
+import { getPoemsPaginated, searchPoems } from '@/lib/firebase/poems';
 import { Poem } from '@/types/poem';
+import { Pagination } from '@/components/ui/pagination';
 
 export default function ExplorePage() {
   const [poems, setPoems] = useState<Poem[]>([]);
   const [filteredPoems, setFilteredPoems] = useState<Poem[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 12;
 
   useEffect(() => {
     loadPoems();
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     if (searchTerm) {
@@ -27,9 +32,11 @@ export default function ExplorePage() {
 
   const loadPoems = async () => {
     setLoading(true);
-    const allPoems = await getAllPoems();
-    setPoems(allPoems);
-    setFilteredPoems(allPoems);
+    const result = await getPoemsPaginated(currentPage, itemsPerPage);
+    setPoems(result.items);
+    setFilteredPoems(result.items);
+    setTotalPages(result.totalPages);
+    setTotalItems(result.totalItems);
     setLoading(false);
   };
 
@@ -40,6 +47,11 @@ export default function ExplorePage() {
       const results = await searchPoems(term);
       setFilteredPoems(results);
     }
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -83,7 +95,7 @@ export default function ExplorePage() {
         ) : filteredPoems.length > 0 ? (
           <>
             <p className="mb-4 text-sm text-white/60">
-              Mostrando {filteredPoems.length} poem{filteredPoems.length !== 1 ? 'as' : 'a'}
+              Mostrando {!searchTerm ? totalItems : filteredPoems.length} poem{(!searchTerm ? totalItems : filteredPoems.length) !== 1 ? 'as' : 'a'}
             </p>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {filteredPoems.map((poem) => (
@@ -121,6 +133,17 @@ export default function ExplorePage() {
                 </Link>
               ))}
             </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && !searchTerm && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                totalItems={totalItems}
+                itemsPerPage={itemsPerPage}
+                onPageChange={handlePageChange}
+              />
+            )}
           </>
         ) : (
           <div className="text-center py-12">

@@ -11,6 +11,7 @@ interface AuthContextType {
   userProfile: User | null;
   loading: boolean;
   refreshProfile: () => Promise<void>;
+  refreshToken: () => Promise<void>; // Nueva función para refresh del token
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -46,8 +47,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const refreshToken = async () => {
+    if (user) {
+      try {
+        // Forzar el refresh del token ID para obtener nuevos custom claims
+        await user.getIdToken(true);
+        console.log('✅ Token ID refreshiado');
+      } catch (error) {
+        console.error('❌ Error al refrescar token:', error);
+      }
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, userProfile, loading, refreshProfile }}>
+    <AuthContext.Provider value={{ user, userProfile, loading, refreshProfile, refreshToken }}>
       {children}
     </AuthContext.Provider>
   );

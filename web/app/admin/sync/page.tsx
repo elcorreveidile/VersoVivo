@@ -16,9 +16,21 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
+interface StorageUsage {
+  totalFiles: number;
+  filesByType: Record<string, number>;
+}
+
+interface ConsistencyIssue {
+  type: string;
+  description: string;
+  count: number;
+  items?: string[];
+}
+
 function SyncContent() {
-  const [storageUsage, setStorageUsage] = useState<any>(null);
-  const [consistencyIssues, setConsistencyIssues] = useState<any[]>([]);
+  const [storageUsage, setStorageUsage] = useState<StorageUsage | null>(null);
+  const [consistencyIssues, setConsistencyIssues] = useState<ConsistencyIssue[]>([]);
   const [loading, setLoading] = useState(false);
   const [importing, setImporting] = useState(false);
   const [exporting, setExporting] = useState(false);

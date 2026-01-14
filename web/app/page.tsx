@@ -6,8 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { getFeaturedPoems } from '@/lib/firebase/poems';
 import { Poem } from '@/types/poem';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function HomePage() {
+  const { user, userProfile } = useAuth();
   const [poems, setPoems] = useState<Poem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -40,11 +42,19 @@ export default function HomePage() {
                   Explorar Poemas
                 </Button>
               </Link>
-              <Link href="/register">
-                <Button size="lg" className="bg-black/60 backdrop-blur-sm border border-white/20 text-[#FFD700] hover:bg-black/80 hover:border-[#FFD700]/50">
-                  Crear Cuenta
-                </Button>
-              </Link>
+              {user ? (
+                <Link href="/profile">
+                  <Button size="lg" className="bg-black/60 backdrop-blur-sm border border-white/20 text-[#FFD700] hover:bg-black/80 hover:border-[#FFD700]/50">
+                    👋 Hola, {userProfile?.displayName?.split(' ')[0] || 'Usuario'}
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/register">
+                  <Button size="lg" className="bg-black/60 backdrop-blur-sm border border-white/20 text-[#FFD700] hover:bg-black/80 hover:border-[#FFD700]/50">
+                    Crear Cuenta
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         </div>
