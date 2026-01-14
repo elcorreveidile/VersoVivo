@@ -268,7 +268,7 @@ function UserDetailContent() {
 
             {favoritePoemsList.length > 0 && (
               <div className="mt-4 space-y-2 max-h-60 overflow-y-auto">
-                {favoritePoemsList.slice(0, 10).map(poem => (
+                {favoritePoemsList.slice(0, 10).map((poem: any) => (
                   <div key={poem.id} className="text-sm p-2 bg-white/5 rounded">
                     <div className="text-white font-medium">{poem.title}</div>
                     <div className="text-white/60 text-xs">{poem.author}</div>
@@ -292,7 +292,7 @@ function UserDetailContent() {
 
             {readPoemsList.length > 0 && (
               <div className="mt-4 space-y-2 max-h-60 overflow-y-auto">
-                {readPoemsList.slice(0, 10).map(poem => (
+                {readPoemsList.slice(0, 10).map((poem: any) => (
                   <div key={poem.id} className="text-sm p-2 bg-white/5 rounded">
                     <div className="text-white font-medium">{poem.title}</div>
                     <div className="text-white/60 text-xs">{poem.author}</div>
