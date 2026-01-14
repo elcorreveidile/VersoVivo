@@ -236,20 +236,24 @@ function ActivityContent() {
 
                       {/* For update actions, show only changed fields */}
                       {log.action === 'update' && log.changes.before && log.changes.after && (() => {
+                        // Store before/after in variables to avoid TypeScript errors
+                        const before = log.changes.before;
+                        const after = log.changes.after;
+
                         // Find fields that actually changed
-                        const changedFields = Object.keys(log.changes.after).filter(key => {
-                          const before = log.changes.before[key];
-                          const after = log.changes.after[key];
-                          return JSON.stringify(before) !== JSON.stringify(after);
+                        const changedFields = Object.keys(after).filter(key => {
+                          const beforeValue = before?.[key];
+                          const afterValue = after[key];
+                          return JSON.stringify(beforeValue) !== JSON.stringify(afterValue);
                         });
 
                         return changedFields.length > 0 ? (
                           <div className="space-y-2">
                             {changedFields.map((key) => {
-                              const before = log.changes.before[key];
-                              const after = log.changes.after[key];
-                              const displayBefore = typeof before === 'object' ? '[Objeto]' : String(before).substring(0, 100);
-                              const displayAfter = typeof after === 'object' ? '[Objeto]' : String(after).substring(0, 100);
+                              const beforeValue = before![key];
+                              const afterValue = after[key];
+                              const displayBefore = typeof beforeValue === 'object' ? '[Objeto]' : String(beforeValue ?? '').substring(0, 100);
+                              const displayAfter = typeof afterValue === 'object' ? '[Objeto]' : String(afterValue ?? '').substring(0, 100);
 
                               return (
                                 <div key={key} className="text-xs">
