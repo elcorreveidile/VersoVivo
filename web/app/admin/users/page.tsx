@@ -35,12 +35,17 @@ function UsersContent() {
 
   const formatDate = (date: any) => {
     if (!date) return 'N/A';
-    const d = date.toDate ? date.toDate() : new Date(date);
-    return d.toLocaleDateString('es-ES', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+    try {
+      const d = date.toDate ? date.toDate() : new Date(date);
+      if (isNaN(d.getTime())) return 'Fecha inválida';
+      return d.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    } catch {
+      return 'N/A';
+    }
   };
 
   return (
@@ -171,6 +176,16 @@ function UsersContent() {
                     </span>
                   </div>
                 )}
+                {/* Actions */}
+                <div className="pt-4 border-t border-white/10">
+                  <Link href={`/admin/users/${user.uid}`} className="block">
+                    <Button
+                      className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                    >
+                      Ver Detalles
+                    </Button>
+                  </Link>
+                </div>
               </CardContent>
             </Card>
           ))}

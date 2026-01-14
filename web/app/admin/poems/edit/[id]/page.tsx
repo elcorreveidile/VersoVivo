@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import React from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import AdminRoute from '@/components/auth/AdminRoute';
 import { getPoemByIdForAdmin, updatePoem, logActivity, getAllBooks } from '@/lib/firebase/admin';
@@ -29,6 +30,7 @@ function EditPoemContent() {
     tags: '',
     videoUrl: '',
     musicUrl: '',
+    voiceUrl: '',
     thumbnailUrl: '',
     bookId: '',
   });
@@ -60,6 +62,7 @@ function EditPoemContent() {
       tags: poemData.tags ? poemData.tags.join(', ') : '',
       videoUrl: poemData.videoUrl || '',
       musicUrl: poemData.musicUrl || '',
+      voiceUrl: poemData.voiceUrl || '',
       thumbnailUrl: poemData.thumbnailUrl || '',
       bookId: poemData.bookId || '',
     });
@@ -153,7 +156,7 @@ function EditPoemContent() {
           <p className="text-white/60">Modifica los datos del poema</p>
         </div>
         <Link href="/admin/poems">
-          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+          <Button variant="outline" className="bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black">
             ← Volver
           </Button>
         </Link>
@@ -255,12 +258,49 @@ function EditPoemContent() {
                 className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[#FFD700] focus:outline-none"
               >
                 <option value="" className="bg-black">Sin libro</option>
-                {books.map((book) => (
-                  <option key={book.id} value={book.id} className="bg-black">
-                    {book.title}
-                  </option>
-                ))}
+                {books
+                  .sort((a, b) => {
+                    // Prioritize books by the same author as the poem
+                    const poemAuthor = formData.author?.toLowerCase().trim();
+                    const aAuthor = a.author?.toLowerCase().trim();
+                    const bAuthor = b.author?.toLowerCase().trim();
+
+                    const aMatches = aAuthor === poemAuthor;
+                    const bMatches = bAuthor === poemAuthor;
+
+                    if (aMatches && !bMatches) return -1;
+                    if (!aMatches && bMatches) return 1;
+                    return 0;
+                  })
+                  .map((book, index, sortedBooks) => {
+                    const poemAuthor = formData.author?.toLowerCase().trim();
+                    const bookAuthor = book.author?.toLowerCase().trim();
+                    const isSameAuthor = bookAuthor === poemAuthor;
+                    const prevBook = index > 0 ? sortedBooks[index - 1] : null;
+                    const prevWasSameAuthor = prevBook ? prevBook.author?.toLowerCase().trim() === poemAuthor : false;
+
+                    // Add separator before first non-matching book
+                    const showSeparator = isSameAuthor === false && prevWasSameAuthor === true;
+
+                    return (
+                      <React.Fragment key={book.id}>
+                        {showSeparator && (
+                          <option disabled className="bg-black/50 text-white/40">
+                            ──────────
+                          </option>
+                        )}
+                        <option value={book.id} className="bg-black">
+                          {book.title} {isSameAuthor ? '✓' : ''} {book.author ? `(${book.author})` : ''}
+                        </option>
+                      </React.Fragment>
+                    );
+                  })}
               </select>
+              <p className="text-xs text-white/40 mt-1">
+                {formData.author && books.some(b => b.author?.toLowerCase().trim() === formData.author.toLowerCase().trim())
+                  ? `✓ Libros de "${formData.author}" aparecen primero`
+                  : 'Todos los libros disponibles'}
+              </p>
             </div>
 
             {/* Multimedia URLs */}
@@ -299,6 +339,21 @@ function EditPoemContent() {
 
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">
+                  🎙️ URL de la Voz (narración)
+                </label>
+                <Input
+                  type="url"
+                  value={formData.voiceUrl}
+                  onChange={(e) => setFormData({ ...formData, voiceUrl: e.target.value })}
+                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                />
+                {formData.voiceUrl && (
+                  <p className="text-xs text-green-400 mt-1">✓ Voz configurada</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-2">
                   🖼️ URL de Miniatura
                 </label>
                 <Input
@@ -327,7 +382,7 @@ function EditPoemContent() {
                   type="button"
                   variant="outline"
                   disabled={saving}
-                  className="w-full border-white/20 text-white hover:bg-white/10"
+                  className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
                 >
                   Cancelar
                 </Button>

@@ -61,6 +61,8 @@
 - ✅ TypeError: `price.toFixed()` en undefined → Añadido valor por defecto
 - ✅ Importe incorrecto de AdminRoute → Cambiado a default import
 - ✅ TypeScript errors → Añadido type assertions
+- ✅ Libros sin campos opcionales (price, poems, etc.) → Campos hechos opcionales en tipo Book
+- ✅ Botones ilegibles (texto blanco sobre fondo claro) → Cambiado a estilo negro/amarillo para todos los botones admin
 
 ---
 
@@ -69,6 +71,11 @@
 **Fase 7: Sincronización** (NO implementada todavía)
 - El enlace existe en el sidebar (/admin/sync) pero la página no existe
 - Necesita requisitos del usuario para implementar
+
+**Configuración necesaria:**
+- [ ] **URGENTE:** Configurar reglas de Firestore para activityLog (ver FIRESTORE_RULES.md)
+  - Actualmente da error "Missing or insufficient permissions" en /admin/activity
+  - Las reglas necesarias están documentadas en `/FIRESTORE_RULES.md`
 
 **Posibles mejoras pendientes:**
 - [ ] Añadir www.versovivo.ai a dominios OAuth de Firebase

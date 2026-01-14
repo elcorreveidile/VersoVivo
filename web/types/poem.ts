@@ -8,6 +8,7 @@ export interface Poem {
   duration?: number;
   videoUrl?: string;
   musicUrl?: string;
+  voiceUrl?: string;
   thumbnailUrl?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -24,11 +25,14 @@ export interface User {
   email: string;
   displayName?: string;
   photoURL?: string;
-  favoritePoems: string[];
-  readPoems: string[];
+  favoritePoems?: string[];
+  readPoems?: string[];
+  listenedPoems?: string[];
+  watchedPoems?: string[];
   role: 'user' | 'admin';
   createdAt: Date;
   lastLoginAt?: Date;
+  active?: boolean;
 }
 
 export interface Book {
@@ -37,11 +41,11 @@ export interface Book {
   author: string;
   description: string;
   coverUrl?: string;
-  price: number;
-  currency: 'EUR';
-  status: 'draft' | 'published' | 'archived';
-  poems: string[]; // Array of poem IDs
-  inSubscription: boolean;
+  price?: number;
+  currency?: 'EUR';
+  status?: 'draft' | 'published' | 'archived';
+  poems?: string[]; // Array of poem IDs
+  inSubscription?: boolean;
   createdAt: Date;
   updatedAt: Date;
   publishedAt?: Date;

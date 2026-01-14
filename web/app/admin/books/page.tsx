@@ -224,7 +224,7 @@ function BooksContent() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-full border-white/20 text-white hover:bg-white/10 hover:text-[#FFD700]"
+                      className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
                     >
                       Editar
                     </Button>

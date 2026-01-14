@@ -9,7 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Poem } from '@/types/poem';
 import Link from 'next/link';
 
-type ViewMode = 'text' | 'video' | 'music';
+type ViewMode = 'text' | 'video' | 'music' | 'voice';
 
 export default function PoemDetailPage() {
   const params = useParams();
@@ -98,16 +98,16 @@ export default function PoemDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black py-12 fade-in">
+    <div className="min-h-screen bg-black py-6 sm:py-12 fade-in">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-start justify-between">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div className="flex-1">
-              <h1 className="text-4xl font-bold tracking-tight text-white mb-2">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white mb-2">
                 {poem.title}
               </h1>
-              <p className="text-xl text-white/60">por {poem.author}</p>
+              <p className="text-base sm:text-lg lg:text-xl text-white/60">por {poem.author}</p>
             </div>
 
             {/* Favorite Button */}
@@ -115,10 +115,10 @@ export default function PoemDetailPage() {
               onClick={handleToggleFavorite}
               disabled={togglingFavorite || !user}
               variant={isFavorite ? "outline" : "default"}
-              className={`ml-4 ${isFavorite
+              className={`${isFavorite
                 ? 'border-red-500/30 text-red-400 hover:bg-red-950/30'
                 : 'bg-[#FFD700] text-black hover:bg-[#FFEC8B]'
-              }`}
+              } ${!user ? 'w-full sm:w-auto' : ''}`}
             >
               {togglingFavorite ? (
                 <span className="animate-pulse">...</span>
@@ -136,7 +136,7 @@ export default function PoemDetailPage() {
               {poem.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/20 px-3 py-1 text-sm font-medium text-[#FFD700]"
+                  className="inline-flex items-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/20 px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium text-[#FFD700]"
                 >
                   {tag}
                 </span>
@@ -147,48 +147,59 @@ export default function PoemDetailPage() {
 
         {/* View Mode Tabs */}
         <div className="mb-6 border-b border-white/10">
-          <nav className="flex space-x-8">
+          <nav className="flex overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
             <button
               onClick={() => setViewMode('text')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`py-3 px-3 sm:py-4 sm:px-4 border-b-2 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap ${
                 viewMode === 'text'
                   ? 'border-[#FFD700] text-[#FFD700]'
                   : 'border-transparent text-white/60 hover:text-white hover:border-white/30'
               }`}
             >
-              Lectura
+              📄 Lectura
             </button>
             <button
               onClick={() => setViewMode('video')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`py-3 px-3 sm:py-4 sm:px-4 border-b-2 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap ${
                 viewMode === 'video'
                   ? 'border-[#FFD700] text-[#FFD700]'
                   : 'border-transparent text-white/60 hover:text-white hover:border-white/30'
               }`}
               disabled={!poem.videoUrl}
             >
-              Video
+              🎬 Video
             </button>
             <button
               onClick={() => setViewMode('music')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`py-3 px-3 sm:py-4 sm:px-4 border-b-2 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap ${
                 viewMode === 'music'
                   ? 'border-[#FFD700] text-[#FFD700]'
                   : 'border-transparent text-white/60 hover:text-white hover:border-white/30'
               }`}
               disabled={!poem.musicUrl}
             >
-              Música
+              🎵 Música
+            </button>
+            <button
+              onClick={() => setViewMode('voice')}
+              className={`py-3 px-3 sm:py-4 sm:px-4 border-b-2 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap ${
+                viewMode === 'voice'
+                  ? 'border-[#FFD700] text-[#FFD700]'
+                  : 'border-transparent text-white/60 hover:text-white hover:border-white/30'
+              }`}
+              disabled={!poem.voiceUrl}
+            >
+              🎙️ Voz
             </button>
           </nav>
         </div>
 
         {/* Content */}
         <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
-          <CardContent className="p-8">
+          <CardContent className="p-4 sm:p-6 lg:p-8">
             {viewMode === 'text' && (
               <div className="prose prose-invert max-w-none">
-                <p className="text-lg text-white/90 whitespace-pre-wrap leading-relaxed">
+                <p className="text-base sm:text-lg text-white/90 whitespace-pre-wrap leading-relaxed">
                   {poem.content}
                 </p>
               </div>
@@ -207,7 +218,7 @@ export default function PoemDetailPage() {
             )}
 
             {viewMode === 'music' && poem.musicUrl && (
-              <div className="text-center py-8">
+              <div className="text-center py-6 sm:py-8">
                 <audio
                   src={poem.musicUrl}
                   controls
@@ -218,12 +229,31 @@ export default function PoemDetailPage() {
               </div>
             )}
 
+            {viewMode === 'voice' && poem.voiceUrl && (
+              <div className="text-center py-6 sm:py-8">
+                <div className="mb-4">
+                  <p className="text-xs sm:text-sm text-white/60 mb-4">🎙️ Narración del poema</p>
+                </div>
+                <audio
+                  src={poem.voiceUrl}
+                  controls
+                  className="w-full"
+                >
+                  Tu navegador no soporta audio HTML5.
+                </audio>
+              </div>
+            )}
+
             {viewMode !== 'text' && !poem[`${viewMode}Url`] && (
-              <div className="text-center py-12 text-white/60">
-                <p>
+              <div className="text-center py-8 sm:py-12 text-white/60">
+                <p className="text-sm sm:text-base">
                   {viewMode === 'video'
                     ? 'Video no disponible'
-                    : 'Versión musicada no disponible'}
+                    : viewMode === 'music'
+                    ? 'Versión musicada no disponible'
+                    : viewMode === 'voice'
+                    ? 'Narración no disponible'
+                    : 'Contenido no disponible'}
                 </p>
               </div>
             )}
@@ -231,9 +261,9 @@ export default function PoemDetailPage() {
         </Card>
 
         {/* Back Button */}
-        <div className="mt-8">
-          <Link href="/explore">
-            <Button variant="outline" className="border-white/30 text-[#FFD700] hover:bg-white/10 hover:border-[#FFD700]/50">
+        <div className="mt-6 sm:mt-8">
+          <Link href="/explore" className="block">
+            <Button variant="outline" className="w-full sm:w-auto border-white/30 text-[#FFD700] hover:bg-white/10 hover:border-[#FFD700]/50">
               ← Volver a Explorar
             </Button>
           </Link>

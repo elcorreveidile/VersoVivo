@@ -67,7 +67,7 @@ function EditBookContent() {
       return;
     }
 
-    if (formData.price < 0) {
+    if ((formData.price ?? 0) < 0) {
       setError('El precio no puede ser negativo');
       return;
     }
@@ -144,7 +144,7 @@ function EditBookContent() {
           <p className="text-white/60">Modifica los datos del libro</p>
         </div>
         <Link href="/admin/books">
-          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+          <Button variant="outline" className="bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black">
             ← Volver
           </Button>
         </Link>
@@ -234,8 +234,8 @@ function EditBookContent() {
                 step="0.01"
                 min="0"
                 required
-                value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
+                value={formData.price ?? 0}
+                onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
                 className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
               />
             </div>
@@ -291,7 +291,7 @@ function EditBookContent() {
                       <h4 className="text-xl font-bold text-white">{formData.title || 'Título'}</h4>
                       <p className="text-white/60">{formData.author || 'Autor'}</p>
                       <div className="mt-2">
-                        <span className="text-[#FFD700] font-semibold">€{formData.price.toFixed(2)}</span>
+                        <span className="text-[#FFD700] font-semibold">€{(formData.price ?? 0).toFixed(2)}</span>
                       </div>
                       <div className="mt-2">
                         <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium border ${
@@ -333,7 +333,7 @@ function EditBookContent() {
                   type="button"
                   variant="outline"
                   disabled={saving}
-                  className="w-full border-white/20 text-white hover:bg-white/10"
+                  className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
                 >
                   Cancelar
                 </Button>

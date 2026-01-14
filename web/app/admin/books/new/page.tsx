@@ -84,7 +84,7 @@ function NewBookContent() {
           <p className="text-white/60">Completa los datos del libro</p>
         </div>
         <Link href="/admin/books">
-          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+          <Button variant="outline" className="bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black">
             ← Volver
           </Button>
         </Link>
@@ -264,7 +264,7 @@ function NewBookContent() {
                   type="button"
                   variant="outline"
                   disabled={loading}
-                  className="w-full border-white/20 text-white hover:bg-white/10"
+                  className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
                 >
                   Cancelar
                 </Button>

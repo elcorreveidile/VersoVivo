@@ -276,6 +276,17 @@ export const createPoem = async (poem: Omit<any, 'id' | 'createdAt' | 'updatedAt
       updatedAt: new Date()
     });
 
+    // Si se creó con bookId, añadir el poema al array poems del libro
+    if (poem.bookId) {
+      const bookRef = doc(db, BOOKS_COLLECTION, poem.bookId);
+      const bookDoc = await getDoc(bookRef);
+      if (bookDoc.exists()) {
+        const bookData = bookDoc.data();
+        const updatedPoems = [...(bookData.poems || []), newPoemRef.id];
+        await updateDoc(bookRef, { poems: updatedPoems, updatedAt: new Date() });
+      }
+    }
+
     return { success: true, poemId: newPoemRef.id };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -285,6 +296,41 @@ export const createPoem = async (poem: Omit<any, 'id' | 'createdAt' | 'updatedAt
 export const updatePoem = async (poemId: string, poem: Partial<any>): Promise<{ success: boolean; error?: string }> => {
   try {
     const poemRef = doc(db, POEMS_COLLECTION, poemId);
+
+    // Si se está actualizando el bookId, sincronizar con el libro
+    if ('bookId' in poem) {
+      // Obtener el poema actual para saber su bookId anterior
+      const currentPoemDoc = await getDoc(poemRef);
+      if (!currentPoemDoc.exists()) {
+        return { success: false, error: 'Poema no encontrado' };
+      }
+      const currentPoem = { id: currentPoemDoc.id, ...currentPoemDoc.data() };
+      const oldBookId = currentPoem.bookId;
+      const newBookId = poem.bookId;
+
+      // Si tenía un libro anterior y es diferente, quitar el poema de ese libro
+      if (oldBookId && oldBookId !== newBookId) {
+        const oldBookRef = doc(db, BOOKS_COLLECTION, oldBookId);
+        const oldBookDoc = await getDoc(oldBookRef);
+        if (oldBookDoc.exists()) {
+          const oldBookData = oldBookDoc.data();
+          const updatedPoems = (oldBookData.poems || []).filter((id: string) => id !== poemId);
+          await updateDoc(oldBookRef, { poems: updatedPoems, updatedAt: new Date() });
+        }
+      }
+
+      // Si se está asignando un nuevo libro, añadir el poema a ese libro
+      if (newBookId) {
+        const newBookRef = doc(db, BOOKS_COLLECTION, newBookId);
+        const newBookDoc = await getDoc(newBookRef);
+        if (newBookDoc.exists()) {
+          const newBookData = newBookDoc.data();
+          const updatedPoems = [...(newBookData.poems || []), poemId];
+          await updateDoc(newBookRef, { poems: updatedPoems, updatedAt: new Date() });
+        }
+      }
+    }
+
     await updateDoc(poemRef, {
       ...poem,
       updatedAt: new Date()
@@ -298,7 +344,27 @@ export const updatePoem = async (poemId: string, poem: Partial<any>): Promise<{ 
 
 export const deletePoem = async (poemId: string): Promise<{ success: boolean; error?: string }> => {
   try {
+    // Primero obtener el poema para saber su bookId
     const poemRef = doc(db, POEMS_COLLECTION, poemId);
+    const poemDoc = await getDoc(poemRef);
+
+    if (poemDoc.exists()) {
+      const poemData = poemDoc.data();
+      const bookId = poemData.bookId;
+
+      // Si tiene un libro, quitar el poema del array poems del libro
+      if (bookId) {
+        const bookRef = doc(db, BOOKS_COLLECTION, bookId);
+        const bookDoc = await getDoc(bookRef);
+        if (bookDoc.exists()) {
+          const bookData = bookDoc.data();
+          const updatedPoems = (bookData.poems || []).filter((id: string) => id !== poemId);
+          await updateDoc(bookRef, { poems: updatedPoems, updatedAt: new Date() });
+        }
+      }
+    }
+
+    // Eliminar el poema
     await deleteDoc(poemRef);
 
     return { success: true };
@@ -357,3 +423,276 @@ export const deactivateUser = async (userId: string): Promise<{ success: boolean
     return { success: false, error: error.message };
   }
 };
+
+// ============================================
+// IMPORT/EXPORT
+// ============================================
+
+export const exportPoemsToJSON = async (): Promise<string> => {
+  try {
+    const poems = await getAllPoemsForAdmin();
+    const exportData = {
+      timestamp: new Date().toISOString(),
+      version: '1.0',
+      count: poems.length,
+      data: poems
+    };
+    return JSON.stringify(exportData, null, 2);
+  } catch (error: any) {
+    throw new Error(error.message || 'Error al exportar poemas');
+  }
+};
+
+export const exportBooksToJSON = async (): Promise<string> => {
+  try {
+    const books = await getAllBooks();
+    const exportData = {
+      timestamp: new Date().toISOString(),
+      version: '1.0',
+      count: books.length,
+      data: books
+    };
+    return JSON.stringify(exportData, null, 2);
+  } catch (error: any) {
+    throw new Error(error.message || 'Error al exportar libros');
+  }
+};
+
+export const exportAllData = async (): Promise<{ poems: any[]; books: any[] }> => {
+  try {
+    const [poems, books] = await Promise.all([
+      getAllPoemsForAdmin(),
+      getAllBooks()
+    ]);
+
+    return {
+      poems,
+      books
+    };
+  } catch (error: any) {
+    throw new Error(error.message || 'Error al exportar datos');
+  }
+};
+
+export const importPoemsFromJSON = async (
+  jsonData: string,
+  options: { overwrite?: boolean; updateExisting?: boolean } = {}
+): Promise<{ success: boolean; imported: number; updated: number; errors: string[] }> => {
+  const errors: string[] = [];
+  let imported = 0;
+  let updated = 0;
+
+  try {
+    const parsedData = JSON.parse(jsonData);
+
+    // Validar estructura
+    if (!parsedData.data || !Array.isArray(parsedData.data)) {
+      return { success: false, imported: 0, updated: 0, errors: ['Formato JSON inválido'] };
+    }
+
+    const poems = parsedData.data;
+
+    for (const poem of poems) {
+      try {
+        // Validar campos obligatorios
+        if (!poem.title || !poem.author || !poem.content) {
+          errors.push(`Poema "${poem.title || 'Sin título'}": Campos obligatorios faltantes (título, autor, contenido)`);
+          continue;
+        }
+
+        // Verificar si ya existe
+        const existing = await getDoc(query(
+          collection(db, POEMS_COLLECTION),
+          where('title', '==', poem.title),
+          where('author', '==', poem.author)
+        ));
+
+        if (!existing.empty) {
+          if (options.overwrite) {
+            // Eliminar existente
+            const existingDoc = existing.docs[0];
+            await deleteDoc(doc(db, POEMS_COLLECTION, existingDoc.id));
+          } else if (options.updateExisting) {
+            // Actualizar existente
+            const existingDoc = existing.docs[0];
+            const { id, createdAt, ...updateData } = poem;
+            await updateDoc(doc(db, POEMS_COLLECTION, existingDoc.id), {
+              ...updateData,
+              updatedAt: new Date()
+            });
+            updated++;
+            continue;
+          } else {
+            errors.push(`Poema "${poem.title}": Ya existe (usar opción de sobrescribir o actualizar)`);
+            continue;
+          }
+        }
+
+        // Crear nuevo poema
+        const { id, createdAt, updatedAt, ...poemData } = poem;
+        await createPoem(poemData);
+        imported++;
+
+      } catch (err: any) {
+        errors.push(`Poema "${poem.title || 'Sin título'}": ${err.message}`);
+      }
+    }
+
+    return {
+      success: true,
+      imported,
+      updated,
+      errors
+    };
+
+  } catch (error: any) {
+    return {
+      success: false,
+      imported: 0,
+      updated: 0,
+      errors: [error.message || 'Error al procesar JSON']
+    };
+  }
+};
+
+export const importBooksFromJSON = async (
+  jsonData: string,
+  options: { overwrite?: boolean; updateExisting?: boolean } = {}
+): Promise<{ success: boolean; imported: number; updated: number; errors: string[] }> => {
+  const errors: string[] = [];
+  let imported = 0;
+  let updated = 0;
+
+  try {
+    const parsedData = JSON.parse(jsonData);
+
+    // Validar estructura
+    if (!parsedData.data || !Array.isArray(parsedData.data)) {
+      return { success: false, imported: 0, updated: 0, errors: ['Formato JSON inválido'] };
+    }
+
+    const books = parsedData.data;
+
+    for (const book of books) {
+      try {
+        // Validar campos obligatorios
+        if (!book.title || !book.author) {
+          errors.push(`Libro "${book.title || 'Sin título'}": Campos obligatorios faltantes (título, autor)`);
+          continue;
+        }
+
+        // Verificar si ya existe
+        const q = query(
+          collection(db, BOOKS_COLLECTION),
+          where('title', '==', book.title),
+          where('author', '==', book.author)
+        );
+        const existing = await getDocs(q);
+
+        if (!existing.empty) {
+          if (options.overwrite) {
+            // Eliminar existente
+            const existingDoc = existing.docs[0];
+            await deleteDoc(doc(db, BOOKS_COLLECTION, existingDoc.id));
+          } else if (options.updateExisting) {
+            // Actualizar existente
+            const existingDoc = existing.docs[0];
+            const { id, createdAt, updatedAt, ...updateData } = book;
+            await updateDoc(doc(db, BOOKS_COLLECTION, existingDoc.id), {
+              ...updateData,
+              updatedAt: new Date()
+            });
+            updated++;
+            continue;
+          } else {
+            errors.push(`Libro "${book.title}": Ya existe (usar opción de sobrescribir o actualizar)`);
+            continue;
+          }
+        }
+
+        // Crear nuevo libro
+        const { id, createdAt, updatedAt, ...bookData } = book;
+        await createBook(bookData);
+        imported++;
+
+      } catch (err: any) {
+        errors.push(`Libro "${book.title || 'Sin título'}": ${err.message}`);
+      }
+    }
+
+    return {
+      success: true,
+      imported,
+      updated,
+      errors
+    };
+
+  } catch (error: any) {
+    return {
+      success: false,
+      imported: 0,
+      updated: 0,
+      errors: [error.message || 'Error al procesar JSON']
+    };
+  }
+};
+
+// ============================================
+// DATA CONSISTENCY
+// ============================================
+
+export const verifyDataConsistency = async (): Promise<{
+  issues: Array<{ type: string; description: string; count: number; items?: string[] }>
+}> => {
+  const issues: Array<{ type: string; description: string; count: number; items?: string[] }> = [];
+
+  try {
+    // Verificar poemas sin libro
+    const poems = await getAllPoemsForAdmin();
+    const books = await getAllBooks();
+    const bookPoemIds = new Set<string>();
+
+    books.forEach(book => {
+      if (book.poems) {
+        book.poems.forEach(id => bookPoemIds.add(id));
+      }
+    });
+
+    const orphanPoems = poems.filter(poem => !bookPoemIds.has(poem.id));
+    if (orphanPoems.length > 0) {
+      issues.push({
+        type: 'warning',
+        description: 'Poemas sin libro asociado',
+        count: orphanPoems.length,
+        items: orphanPoems.slice(0, 10).map(p => p.title)
+      });
+    }
+
+    // Verificar libros con poemas que no existen
+    const invalidPoemRefs: string[] = [];
+    books.forEach(book => {
+      if (book.poems) {
+        book.poems.forEach(poemId => {
+          if (!poems.find(p => p.id === poemId)) {
+            invalidPoemRefs.push(`${book.title} -> ${poemId}`);
+          }
+        });
+      }
+    });
+
+    if (invalidPoemRefs.length > 0) {
+      issues.push({
+        type: 'error',
+        description: 'Libros con referencias a poemas inexistentes',
+        count: invalidPoemRefs.length,
+        items: invalidPoemRefs.slice(0, 10)
+      });
+    }
+
+  } catch (error: any) {
+    console.error('Error verifying data consistency:', error);
+  }
+
+  return { issues };
+};
+

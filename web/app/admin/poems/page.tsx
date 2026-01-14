@@ -151,6 +151,16 @@ function PoemsContent() {
                       🎵 Música
                     </span>
                   )}
+                  {poem.voiceUrl && (
+                    <span className="inline-flex items-center text-xs bg-[#FFD700]/10 text-[#FFD700] px-2 py-1 rounded">
+                      🎙️ Voz
+                    </span>
+                  )}
+                  {poem.thumbnailUrl && (
+                    <span className="inline-flex items-center text-xs bg-white/10 text-white/60 px-2 py-1 rounded">
+                      🖼️ Miniatura
+                    </span>
+                  )}
                 </div>
 
                 {/* Content preview */}
@@ -189,7 +199,7 @@ function PoemsContent() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-full border-white/20 text-white hover:bg-white/10 hover:text-[#FFD700]"
+                      className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
                     >
                       Editar
                     </Button>

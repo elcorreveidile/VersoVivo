@@ -11,6 +11,7 @@ import { ActivityLog } from '@/types/poem';
 function ActivityContent() {
   const [logs, setLogs] = useState<ActivityLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterAction, setFilterAction] = useState<string>('all');
   const [filterResource, setFilterResource] = useState<string>('all');
@@ -21,9 +22,16 @@ function ActivityContent() {
 
   const loadLogs = async () => {
     setLoading(true);
-    const logsData = await getActivityLogs(200);
-    setLogs(logsData);
-    setLoading(false);
+    setError('');
+    try {
+      const logsData = await getActivityLogs(200);
+      setLogs(logsData);
+    } catch (err: any) {
+      console.error('Error loading activity logs:', err);
+      setError('No tienes permisos para ver el registro de actividad. Asegúrate de estar autenticado como administrador.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const filteredLogs = logs.filter((log) => {
@@ -108,7 +116,7 @@ function ActivityContent() {
         </div>
         <Button
           onClick={loadLogs}
-          className="bg-white/5 border-white/20 text-white hover:bg-white/10"
+          className="bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
         >
           🔄 Actualizar
         </Button>
@@ -117,6 +125,19 @@ function ActivityContent() {
       {/* Filters */}
       <Card className="bg-white/5 border-white/10">
         <CardContent className="p-4">
+          {/* Error message */}
+          {error && (
+            <div className="mb-4 bg-red-900/50 border border-red-500/30 text-red-200 p-4 rounded-lg">
+              <div className="flex items-start gap-2">
+                <span className="text-lg">⚠️</span>
+                <div>
+                  <div className="font-medium mb-1">Error de permisos</div>
+                  <div className="text-sm">{error}</div>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
               <Input
@@ -207,49 +228,65 @@ function ActivityContent() {
 
                 {/* Changes Detail */}
                 {log.changes && (
-                  <div className="bg-black/20 rounded-lg p-4 space-y-2">
-                    <div className="text-sm text-white/60 mb-2">Detalles del cambio:</div>
+                  <details className="bg-black/20 rounded-lg">
+                    <summary className="p-3 cursor-pointer hover:bg-white/5 rounded-lg">
+                      <span className="text-sm text-white/60">Ver detalles del cambio</span>
+                    </summary>
+                    <div className="p-3 pt-0 space-y-2">
 
-                    {/* For update actions, show before/after */}
-                    {log.action === 'update' && log.changes.before && log.changes.after && (
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        <div>
-                          <div className="text-xs text-red-400 mb-1">Antes:</div>
-                          <div className="text-xs text-white/80 bg-white/5 rounded p-2">
-                            {Object.entries(log.changes.before).map(([key, value]: [string, any]) => (
-                              <div key={key} className="mb-1 last:mb-0">
-                                <span className="text-white/60">{key}:</span>{' '}
-                                <span className="text-white">{String(value).substring(0, 50)}{String(value).length > 50 ? '...' : ''}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                        <div>
-                          <div className="text-xs text-green-400 mb-1">Después:</div>
-                          <div className="text-xs text-white/80 bg-white/5 rounded p-2">
-                            {Object.entries(log.changes.after).map(([key, value]: [string, any]) => (
-                              <div key={key} className="mb-1 last:mb-0">
-                                <span className="text-white/60">{key}:</span>{' '}
-                                <span className="text-white">{String(value).substring(0, 50)}{String(value).length > 50 ? '...' : ''}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                      {/* For update actions, show only changed fields */}
+                      {log.action === 'update' && log.changes.before && log.changes.after && (() => {
+                        // Find fields that actually changed
+                        const changedFields = Object.keys(log.changes.after).filter(key => {
+                          const before = log.changes.before[key];
+                          const after = log.changes.after[key];
+                          return JSON.stringify(before) !== JSON.stringify(after);
+                        });
 
-                    {/* For other actions, show the data */}
-                    {log.action !== 'update' && (
-                      <div className="text-xs text-white/80 bg-white/5 rounded p-2">
-                        {Object.entries(log.changes).map(([key, value]: [string, any]) => (
-                          <div key={key} className="mb-1 last:mb-0">
-                            <span className="text-white/60">{key}:</span>{' '}
-                            <span className="text-white">{String(value).substring(0, 100)}{String(value).length > 100 ? '...' : ''}</span>
+                        return changedFields.length > 0 ? (
+                          <div className="space-y-2">
+                            {changedFields.map((key) => {
+                              const before = log.changes.before[key];
+                              const after = log.changes.after[key];
+                              const displayBefore = typeof before === 'object' ? '[Objeto]' : String(before).substring(0, 100);
+                              const displayAfter = typeof after === 'object' ? '[Objeto]' : String(after).substring(0, 100);
+
+                              return (
+                                <div key={key} className="text-xs">
+                                  <div className="text-[#FFD700] font-medium mb-1">{key}</div>
+                                  <div className="flex items-start gap-2 text-white/70">
+                                    <span className="text-red-400">-</span>
+                                    <span>{displayBefore}</span>
+                                  </div>
+                                  <div className="flex items-start gap-2 text-white/70">
+                                    <span className="text-green-400">+</span>
+                                    <span>{displayAfter}</span>
+                                  </div>
+                                </div>
+                              );
+                            })}
                           </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                        ) : (
+                          <div className="text-xs text-white/40">No hay cambios detectados</div>
+                        );
+                      })()}
+
+                      {/* For create actions, show summary */}
+                      {log.action === 'create' && (
+                        <div className="text-xs text-white/70">
+                          Recurso creado: <span className="text-[#FFD700]">{log.resourceTitle}</span>
+                        </div>
+                      )}
+
+                      {/* For delete actions, show summary */}
+                      {log.action === 'delete' && (
+                        <div className="text-xs text-white/70">
+                          Recurso eliminado: <span className="text-red-400">{log.resourceTitle}</span>
+                        </div>
+                      )}
+
+                    </div>
+                  </details>
                 )}
               </CardContent>
             </Card>
