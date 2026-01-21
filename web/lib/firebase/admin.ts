@@ -434,15 +434,27 @@ export const updatePoem = async (poemId: string, poem: Partial<Poem>): Promise<{
     // NOTA: Ya no sincronizamos el array poems del libro
     // Usar solo Poem.bookId para la relación
 
+    // DEBUG: Log what we're receiving
+    console.log('📝 updatePoem called with:', { poemId, poem });
+    console.log('📝 Title in poem object:', poem.title);
+
     // Limpiar campos undefined antes de enviar
     const cleanedPoem = removeUndefinedFields(poem);
+
+    // DEBUG: Log what we're sending to Firestore
+    console.log('📝 Cleaned poem to send:', cleanedPoem);
+    console.log('📝 Title in cleaned poem:', cleanedPoem.title);
+
     await updateDoc(poemRef, {
       ...cleanedPoem,
       updatedAt: new Date()
     });
 
+    console.log('✅ updateDoc completed successfully');
+
     return { success: true };
   } catch (error: any) {
+    console.error('❌ updatePoem error:', error);
     return { success: false, error: error.message };
   }
 };

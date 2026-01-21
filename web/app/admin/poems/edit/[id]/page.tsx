@@ -94,11 +94,20 @@ function EditPoemContent() {
         .map(tag => tag.trim())
         .filter(tag => tag.length > 0);
 
-      const result = await updatePoem(poemId, {
+      // DEBUG: Log what we're about to send
+      console.log('📤 Form data before sending:', formData);
+      console.log('📤 Title in formData:', formData.title);
+
+      const updatePayload = {
         ...formData,
         tags: tagsArray,
         bookId: formData.bookId || undefined,
-      });
+      };
+
+      console.log('📤 Update payload:', updatePayload);
+      console.log('📤 Title in payload:', updatePayload.title);
+
+      const result = await updatePoem(poemId, updatePayload);
 
       if (!result.success) {
         throw new Error(result.error || 'Error al actualizar poema');
