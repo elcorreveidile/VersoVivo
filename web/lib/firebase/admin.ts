@@ -397,14 +397,19 @@ export const getPoemByIdForAdmin = async (id: string): Promise<Poem | null> => {
 };
 
 // Helper function para remover campos undefined de un objeto
-const removeUndefinedFields = <T extends Record<string, unknown>>(obj: T): T => {
-  const cleaned = {} as Partial<T>;
+const removeUndefinedFields = <T extends Record<string, unknown>>(obj: T): Partial<T> => {
+  const cleaned: Record<string, unknown> = {};
   for (const key in obj) {
-    if (obj[key] !== undefined) {
-      (cleaned as any)[key] = obj[key];
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const value = obj[key];
+      // Solo incluir si el valor NO es undefined
+      // Permitir null, strings vacíos, y otros valores falsy
+      if (value !== undefined) {
+        cleaned[key] = value;
+      }
     }
   }
-  return cleaned as T;
+  return cleaned as Partial<T>;
 };
 
 export const createPoem = async (poem: Omit<Poem, 'id' | 'createdAt' | 'updatedAt'>): Promise<{ success: boolean; poemId?: string; error?: string }> => {
@@ -437,6 +442,7 @@ export const updatePoem = async (poemId: string, poem: Partial<Poem>): Promise<{
     // DEBUG: Log what we're receiving
     console.log('📝 updatePoem called with:', { poemId, poem });
     console.log('📝 Title in poem object:', poem.title);
+    console.log('📝 All keys in poem:', Object.keys(poem));
 
     // Limpiar campos undefined antes de enviar
     const cleanedPoem = removeUndefinedFields(poem);
@@ -444,11 +450,18 @@ export const updatePoem = async (poemId: string, poem: Partial<Poem>): Promise<{
     // DEBUG: Log what we're sending to Firestore
     console.log('📝 Cleaned poem to send:', cleanedPoem);
     console.log('📝 Title in cleaned poem:', cleanedPoem.title);
+    console.log('📝 All keys in cleaned poem:', Object.keys(cleanedPoem));
 
-    await updateDoc(poemRef, {
+    // Prepare update data explicitly with updatedAt
+    const updateData: Record<string, any> = {
       ...cleanedPoem,
       updatedAt: new Date()
-    });
+    };
+
+    console.log('📝 Final updateData:', updateData);
+    console.log('📝 Title in updateData:', updateData.title);
+
+    await updateDoc(poemRef, updateData);
 
     console.log('✅ updateDoc completed successfully');
 
