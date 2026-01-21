@@ -436,30 +436,67 @@ export const updatePoem = async (poemId: string, poem: Partial<Poem>): Promise<{
   try {
     const poemRef = doc(db, POEMS_COLLECTION, poemId);
 
-    // NOTA: Ya no sincronizamos el array poems del libro
-    // Usar solo Poem.bookId para la relación
-
     // DEBUG: Log what we're receiving
     console.log('📝 updatePoem called with:', { poemId, poem });
     console.log('📝 Title in poem object:', poem.title);
     console.log('📝 All keys in poem:', Object.keys(poem));
 
-    // Limpiar campos undefined antes de enviar
-    const cleanedPoem = removeUndefinedFields(poem);
+    // Build update object - only include fields that have actual values
+    const updateData: Record<string, any> = {};
+
+    // Required fields - include if present and not empty
+    if (poem.title !== undefined && poem.title.trim() !== '') {
+      updateData.title = poem.title.trim();
+    }
+    if (poem.author !== undefined && poem.author.trim() !== '') {
+      updateData.author = poem.author.trim();
+    }
+    if (poem.content !== undefined && poem.content.trim() !== '') {
+      updateData.content = poem.content.trim();
+    }
+
+    // Optional fields - include if present and not empty
+    if (poem.category !== undefined && poem.category.trim() !== '') {
+      updateData.category = poem.category.trim();
+    }
+    if (poem.tags !== undefined) {
+      updateData.tags = poem.tags;
+    }
+    if (poem.videoUrl !== undefined && poem.videoUrl.trim() !== '') {
+      updateData.videoUrl = poem.videoUrl.trim();
+    }
+    if (poem.musicUrl !== undefined && poem.musicUrl.trim() !== '') {
+      updateData.musicUrl = poem.musicUrl.trim();
+    }
+    if (poem.voiceUrl !== undefined && poem.voiceUrl.trim() !== '') {
+      updateData.voiceUrl = poem.voiceUrl.trim();
+    }
+    if (poem.thumbnailUrl !== undefined && poem.thumbnailUrl.trim() !== '') {
+      updateData.thumbnailUrl = poem.thumbnailUrl.trim();
+    }
+    if (poem.bookId !== undefined && poem.bookId.trim() !== '') {
+      updateData.bookId = poem.bookId.trim();
+    }
+    if (poem.contentSpanish !== undefined && poem.contentSpanish.trim() !== '') {
+      updateData.contentSpanish = poem.contentSpanish.trim();
+    }
+    if (poem.originalLanguage !== undefined && poem.originalLanguage.trim() !== '') {
+      updateData.originalLanguage = poem.originalLanguage.trim();
+    }
+
+    // Always update timestamp
+    updateData.updatedAt = new Date();
 
     // DEBUG: Log what we're sending to Firestore
-    console.log('📝 Cleaned poem to send:', cleanedPoem);
-    console.log('📝 Title in cleaned poem:', cleanedPoem.title);
-    console.log('📝 All keys in cleaned poem:', Object.keys(cleanedPoem));
-
-    // Prepare update data explicitly with updatedAt
-    const updateData: Record<string, any> = {
-      ...cleanedPoem,
-      updatedAt: new Date()
-    };
-
     console.log('📝 Final updateData:', updateData);
     console.log('📝 Title in updateData:', updateData.title);
+    console.log('📝 All keys in updateData:', Object.keys(updateData));
+
+    if (Object.keys(updateData).length <= 1) {
+      // Only updatedAt, nothing else to update
+      console.warn('⚠️ No fields to update besides timestamp');
+      return { success: false, error: 'No hay campos para actualizar' };
+    }
 
     await updateDoc(poemRef, updateData);
 
