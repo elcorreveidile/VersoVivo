@@ -228,7 +228,7 @@ export default function HomePage() {
               </div>
               <h3 className="mt-6 text-lg font-semibold text-white">Lectura Inmersiva</h3>
               <p className="mt-2 text-base text-white/60">
-                Texto con tipografía elegante y animaciones sutiles
+                Poemas con versiones traducidas y texto original
               </p>
             </div>
 
@@ -238,9 +238,9 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h3 className="mt-6 text-lg font-semibold text-white">Recitación en Video</h3>
+              <h3 className="mt-6 text-lg font-semibold text-white">Poema Musicado</h3>
               <p className="mt-2 text-base text-white/60">
-                Interpretación visual del poema por su autor
+                Poemas convertidos en canción con videoclip
               </p>
             </div>
 
@@ -250,9 +250,9 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
                 </svg>
               </div>
-              <h3 className="mt-6 text-lg font-semibold text-white">Versión Musicada</h3>
+              <h3 className="mt-6 text-lg font-semibold text-white">Versión Recitada</h3>
               <p className="mt-2 text-base text-white/60">
-                Adaptación musical generada con inteligencia artificial
+                Poemas leídos por su autor, locutores, actores u otros poetas
               </p>
             </div>
           </div>
