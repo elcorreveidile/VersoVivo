@@ -20,6 +20,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "VersoVivo - Poesía que cobra vida",
   description: "Una experiencia inmersiva de videopoemas que combina texto, recitación y música generada por IA",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({
