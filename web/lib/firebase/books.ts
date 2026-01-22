@@ -5,7 +5,6 @@ import {
   getDocs,
   query,
   where,
-  orderBy,
 } from 'firebase/firestore';
 import { db } from './config';
 import { Book, Poem } from '@/types/poem';
@@ -18,14 +17,23 @@ const POEMS_COLLECTION = 'poems';
  */
 export const getPublishedBooks = async (): Promise<Book[]> => {
   try {
+    console.log('📚 [getPublishedBooks] Buscando libros publicados...');
     const q = query(
       collection(db, BOOKS_COLLECTION),
       where('status', '==', 'published')
     );
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Book));
+    console.log(`📚 [getPublishedBooks] Encontrados ${snapshot.size} libros publicados`);
+
+    const books = snapshot.docs.map(doc => {
+      const book = { id: doc.id, ...doc.data() } as Book;
+      console.log(`📚 Libro: "${book.title}" - status: ${book.status}`);
+      return book;
+    });
+
+    return books;
   } catch (error) {
-    console.error('Error fetching published books:', error);
+    console.error('❌ [getPublishedBooks] Error:', error);
     return [];
   }
 };
@@ -52,25 +60,37 @@ export const getBookById = async (id: string): Promise<Book | null> => {
  */
 export const getBookWithPoems = async (bookId: string): Promise<{ book: Book | null, poems: Poem[] }> => {
   try {
+    console.log('📚 [getBookWithPoems] Buscando libro:', bookId);
+
     // Get book
     const bookDoc = await getDoc(doc(db, BOOKS_COLLECTION, bookId));
     if (!bookDoc.exists()) {
+      console.error('❌ [getBookWithPoems] Libro no encontrado:', bookId);
       return { book: null, poems: [] };
     }
     const book = { id: bookDoc.id, ...bookDoc.data() } as Book;
+    console.log(`✅ [getBookWithPoems] Libro encontrado: "${book.title}"`);
 
-    // Get poems for this book
+    // Get poems for this book - sin orderBy para evitar error de índice
     const poemsQuery = query(
       collection(db, POEMS_COLLECTION),
-      where('bookId', '==', bookId),
-      orderBy('createdAt', 'asc')
+      where('bookId', '==', bookId)
     );
     const poemsSnapshot = await getDocs(poemsQuery);
-    const poems = poemsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Poem));
+    let poems = poemsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Poem));
+
+    // Ordenar por createdAt en cliente
+    poems.sort((a, b) => {
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return dateA - dateB;
+    });
+
+    console.log(`📚 [getBookWithPoems] ${poems.length} poemas encontrados`);
 
     return { book, poems };
   } catch (error) {
-    console.error('Error fetching book with poems:', error);
+    console.error('❌ [getBookWithPoems] Error:', error);
     return { book: null, poems: [] };
   }
 };

@@ -87,7 +87,7 @@ export default function BooksPage() {
               >
                 <Card className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-[#FFD700]/30 transition-all h-full">
                   {book.coverUrl && (
-                    <div className="relative aspect-[3/4] overflow-hidden rounded-t-lg">
+                    <div className="relative aspect-[2/3] w-2/3 mx-auto overflow-hidden rounded-t-lg">
                       <img
                         src={book.coverUrl}
                         alt={book.title}

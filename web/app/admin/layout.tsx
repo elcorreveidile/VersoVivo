@@ -74,10 +74,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="min-h-screen bg-black">
-      {/* Mobile overlay */}
+      {/* Mobile overlay - debe estar ENCIMA del sidebar */}
       {isMobile && mobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-20 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
@@ -89,12 +89,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         className={cn(
-          'fixed inset-y-0 left-0 z-30 bg-black border-r border-white/10 transition-transform duration-300 lg:transition-all lg:duration-300',
+          'fixed inset-y-0 left-0 z-50 bg-black border-r border-white/10 transition-transform duration-300 lg:transition-all lg:duration-300',
           // Desktop: siempre visible, colapsable
           'hidden lg:block',
           sidebarCollapsed ? 'lg:w-20' : 'lg:w-64',
           // Mobile: oculto por defecto, se desliza
-          isMobile && mobileMenuOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'
+          'translate-x-full',
+          isMobile && mobileMenuOpen && 'translate-x-0 w-64'
         )}
       >
         <div className="flex flex-col h-full">
