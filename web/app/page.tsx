@@ -179,7 +179,7 @@ export default function HomePage() {
                                       {poem.title}
                                     </h4>
                                     <p className="text-sm text-white/60 line-clamp-2">
-                                      {poem.content.substring(0, 100)}...
+                                      {poem.content ? poem.content.substring(0, 100) + '...' : 'Sin contenido'}
                                     </p>
                                   </div>
                                   <div className="text-white/40">
