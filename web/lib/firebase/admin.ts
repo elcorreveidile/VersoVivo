@@ -5,6 +5,29 @@ import { User, Book, ActivityLog, AdminStats, Poem } from '@/types/poem';
 const USERS_COLLECTION = 'users';
 const POEMS_COLLECTION = 'poems';
 const BOOKS_COLLECTION = 'books';
+
+// Helper function to safely convert Firestore Timestamps to Dates
+const toDate = (timestamp: any): Date | null => {
+  if (!timestamp) return null;
+
+  // If it's already a Date, return it
+  if (timestamp instanceof Date) {
+    return timestamp;
+  }
+
+  // If it has toDate() method (Firestore Timestamp), call it
+  if (typeof timestamp.toDate === 'function') {
+    return timestamp.toDate();
+  }
+
+  // If it's a string or number, try to create a Date
+  if (typeof timestamp === 'string' || typeof timestamp === 'number') {
+    const date = new Date(timestamp);
+    return isNaN(date.getTime()) ? null : date;
+  }
+
+  return null;
+};
 const ACTIVITY_LOG_COLLECTION = 'activityLog';
 
 // ============================================
@@ -81,7 +104,7 @@ export const getAdminStats = async (): Promise<AdminStats> => {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
     const activeUsers = usersSnapshot.docs.filter(doc => {
-      const lastLogin = doc.data().lastLoginAt?.toDate();
+      const lastLogin = toDate(doc.data().lastLoginAt);
       return lastLogin && lastLogin > sevenDaysAgo;
     }).length;
     console.log(`📊 [getAdminStats] Usuarios activos (7 días): ${activeUsers}`);
@@ -143,7 +166,7 @@ export const getAdminStats = async (): Promise<AdminStats> => {
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
     const newUsersThisWeek = usersSnapshot.docs.filter(doc => {
-      const createdAt = doc.data().createdAt?.toDate();
+      const createdAt = toDate(doc.data().createdAt);
       return createdAt && createdAt > weekAgo;
     }).length;
 
@@ -151,7 +174,7 @@ export const getAdminStats = async (): Promise<AdminStats> => {
     const monthAgo = new Date();
     monthAgo.setMonth(monthAgo.getMonth() - 1);
     const newUsersThisMonth = usersSnapshot.docs.filter(doc => {
-      const createdAt = doc.data().createdAt?.toDate();
+      const createdAt = toDate(doc.data().createdAt);
       return createdAt && createdAt > monthAgo;
     }).length;
 
