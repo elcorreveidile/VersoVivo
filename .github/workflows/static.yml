@@ -1,13 +1,13 @@
-# Solo para despliegue estático si es necesario
-# Este workflow está desactivado por defecto
-name: Static HTML (para GitHub Pages)
+# Deploy docs/ folder to GitHub Pages
+# Solo se ejecuta manualmente o cuando se añade [deploy-pages] al commit
+name: Deploy Docs to GitHub Pages
 
 on:
-  workflow_dispatch: # Solo se ejecuta manualmente
+  workflow_dispatch: # Permitir ejecución manual desde Actions
   push:
     branches: ["main"]
     paths:
-      - "docs/**" # Solo si hay cambios en la carpeta docs
+      - "docs/**"
       - ".github/workflows/static.yml"
 
 permissions:
@@ -21,7 +21,10 @@ concurrency:
 
 jobs:
   deploy:
-    if: github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[deploy-pages]')
+    # Solo ejecutar si el commit contiene [deploy-pages] o es workflow_dispatch
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.head_commit.message, '[deploy-pages]')
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -34,7 +37,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './docs' # Cambia esto según lo que quieras desplegar en Pages
+          path: './docs'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
