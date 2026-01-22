@@ -231,8 +231,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="lg:hidden p-2 text-white/60 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
               >
-                {mobileMenuOpen ? '✕' : '☰'}
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  {mobileMenuOpen ? (
+                    <path d="M6 18L18 6M6 6l12 12" />
+                  ) : (
+                    <path d="M4 6h16M4 12h16M4 18h16" />
+                  )}
+                </svg>
               </button>
               {/* Botón colapsar en desktop */}
               <button
