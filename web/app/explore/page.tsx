@@ -149,7 +149,8 @@ export default function ExplorePage() {
             {filteredBooks.map((book) => {
               const poems = getFilteredPoems(book.id);
               const isExpanded = expandedBooks.has(book.id);
-              const poemCount = poemsMap.get(book.id)?.length || 0;
+              const allPoemsCount = poemsMap.get(book.id)?.length || 0;
+              const displayedPoemsCount = searchQuery ? poems.length : allPoemsCount;
 
               return (
                 <div key={book.id} className="bg-white/5 border border-white/10 rounded-lg overflow-hidden">
@@ -174,7 +175,12 @@ export default function ExplorePage() {
                           <div className="flex items-center gap-4 text-sm text-white/60">
                             <span>por {book.author}</span>
                             <span>•</span>
-                            <span>{poemCount} {poemCount === 1 ? 'poema' : 'poemas'}</span>
+                            <span>
+                              {displayedPoemsCount} {displayedPoemsCount === 1 ? 'poema' : 'poemas'}
+                              {searchQuery && displayedPoemsCount !== allPoemsCount && (
+                                <span> de {allPoemsCount}</span>
+                              )}
+                            </span>
                           </div>
                         </div>
                       </div>
