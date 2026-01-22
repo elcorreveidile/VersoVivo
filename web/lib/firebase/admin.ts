@@ -60,17 +60,22 @@ export const getUserRole = async (userId: string): Promise<'user' | 'admin'> => 
 
 export const getAdminStats = async (): Promise<AdminStats> => {
   try {
+    console.log('📊 [getAdminStats] Iniciando cálculo de estadísticas...');
+
     // Get total users
     const usersSnapshot = await getDocs(collection(db, USERS_COLLECTION));
     const totalUsers = usersSnapshot.size;
+    console.log(`📊 [getAdminStats] Total usuarios: ${totalUsers}`);
 
     // Get total poems
     const poemsSnapshot = await getDocs(collection(db, POEMS_COLLECTION));
     const totalPoems = poemsSnapshot.size;
+    console.log(`📊 [getAdminStats] Total poemas: ${totalPoems}`);
 
     // Get total books
     const booksSnapshot = await getDocs(collection(db, BOOKS_COLLECTION));
     const totalBooks = booksSnapshot.size;
+    console.log(`📊 [getAdminStats] Total libros: ${totalBooks}`);
 
     // Get active users (logged in last 7 days)
     const sevenDaysAgo = new Date();
@@ -79,6 +84,7 @@ export const getAdminStats = async (): Promise<AdminStats> => {
       const lastLogin = doc.data().lastLoginAt?.toDate();
       return lastLogin && lastLogin > sevenDaysAgo;
     }).length;
+    console.log(`📊 [getAdminStats] Usuarios activos (7 días): ${activeUsers}`);
 
     // Get all poems data
     const allPoems = poemsSnapshot.docs.map(doc => ({
@@ -109,6 +115,7 @@ export const getAdminStats = async (): Promise<AdminStats> => {
       .sort((a, b) => b.reads - a.reads)
       .slice(0, 10)
       .filter(p => p.reads > 0);
+    console.log(`📊 [getAdminStats] Poemas más leídos: ${topReadPoems.length}`);
 
     // Calculate top favorite poems from user favoritePoems arrays
     const poemFavoriteCounts = new Map<string, number>();
@@ -130,6 +137,7 @@ export const getAdminStats = async (): Promise<AdminStats> => {
       .sort((a, b) => b.favorites - a.favorites)
       .slice(0, 10)
       .filter(p => p.favorites > 0);
+    console.log(`📊 [getAdminStats] Poemas más favoritos: ${topFavoritePoems.length}`);
 
     // Get new users this week
     const weekAgo = new Date();
@@ -158,7 +166,12 @@ export const getAdminStats = async (): Promise<AdminStats> => {
       newUsersThisMonth
     };
   } catch (error) {
-    console.error('Error getting admin stats:', error);
+    console.error('❌ [getAdminStats] Error al calcular estadísticas:', error);
+    console.error('❌ [getAdminStats] Detalles del error:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      error
+    });
     return {
       totalUsers: 0,
       totalPoems: 0,
@@ -183,6 +196,44 @@ export const getAllBooks = async (): Promise<Book[]> => {
   } catch (error) {
     console.error('Error fetching books:', error);
     return [];
+  }
+};
+
+export const getPublishedBooks = async (): Promise<Book[]> => {
+  try {
+    const q = query(
+      collection(db, BOOKS_COLLECTION),
+      where('status', '==', 'published')
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Book));
+  } catch (error) {
+    console.error('Error fetching published books:', error);
+    return [];
+  }
+};
+
+export const getBookWithPoems = async (bookId: string): Promise<{ book: Book | null, poems: Poem[] }> => {
+  try {
+    // Get book
+    const bookDoc = await getDoc(doc(db, BOOKS_COLLECTION, bookId));
+    if (!bookDoc.exists()) {
+      return { book: null, poems: [] };
+    }
+    const book = { id: bookDoc.id, ...bookDoc.data() } as Book;
+
+    // Get poems for this book
+    const poemsQuery = query(
+      collection(db, POEMS_COLLECTION),
+      where('bookId', '==', bookId)
+    );
+    const poemsSnapshot = await getDocs(poemsQuery);
+    const poems = poemsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Poem));
+
+    return { book, poems };
+  } catch (error) {
+    console.error('Error fetching book with poems:', error);
+    return { book: null, poems: [] };
   }
 };
 

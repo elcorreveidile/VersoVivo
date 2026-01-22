@@ -11,12 +11,14 @@ import { useState } from 'react';
 const publicNavigation = [
   { name: 'Inicio', href: '/' },
   { name: 'Explorar', href: '/explore' },
+  { name: 'Libros', href: '/books' },
 ];
 
 // Authenticated navigation
 const authNavigation = [
   { name: 'Inicio', href: '/' },
   { name: 'Explorar', href: '/explore' },
+  { name: 'Libros', href: '/books' },
   { name: 'Favoritos', href: '/favorites' },
   { name: 'Perfil', href: '/profile' },
 ];
