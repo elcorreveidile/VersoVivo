@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn, signInWithGoogle } from '@/lib/firebase/auth';
+import { signIn, signInWithGoogle, signInWithApple } from '@/lib/firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
@@ -19,6 +19,20 @@ export default function LoginPage() {
     setLoading(true);
 
     const result = await signInWithGoogle();
+
+    if (result.error) {
+      setError(result.error);
+      setLoading(false);
+    } else {
+      router.push('/');
+    }
+  };
+
+  const handleAppleSignIn = async () => {
+    setError('');
+    setLoading(true);
+
+    const result = await signInWithApple();
 
     if (result.error) {
       setError(result.error);
@@ -149,6 +163,20 @@ export default function LoginPage() {
               />
             </svg>
             Google
+          </Button>
+
+          <Button
+            type="button"
+            onClick={handleAppleSignIn}
+            disabled={loading}
+            variant="outline"
+            className="w-full border-white/20 bg-white/5 text-white hover:bg-white/10"
+            size="lg"
+          >
+            <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.91 4.08c.68-1.03.73-2.23.48-3.4-1.18.21-2.45.93-3.22 2.15-.78 1.23-.87 2.45-.54 3.52 1.39.13 2.67-.52 3.28-2.27z"/>
+            </svg>
+            Apple
           </Button>
         </form>
       </div>

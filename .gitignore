@@ -75,3 +75,4 @@ ios/GoogleService-Info.plist
 docs/MyLibrary/
 .vercel
 .env*.local
+/img/
