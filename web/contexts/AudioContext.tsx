@@ -35,7 +35,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const [currentPoemId, setCurrentPoemId] = useState<string | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number | undefined>(undefined);
 
   // Create audio element if it doesn't exist
   useEffect(() => {
