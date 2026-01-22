@@ -178,7 +178,7 @@ function EditPoemContent() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Editar Poema</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Editar poema</h1>
           <p className="text-white/60">Modifica los datos del poema</p>
         </div>
         <Link href="/admin/poems">
@@ -447,7 +447,7 @@ function EditPoemContent() {
                 disabled={saving}
                 className="flex-1 bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
               >
-                {saving ? 'Guardando...' : 'Guardar Cambios'}
+                {saving ? 'Guardando...' : 'Guardar cambios'}
               </Button>
               <Link href="/admin/poems" className="flex-1">
                 <Button

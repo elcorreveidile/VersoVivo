@@ -183,7 +183,7 @@ function UsersContent() {
                     <Button
                       className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
                     >
-                      Ver Detalles
+                      Ver detalles
                     </Button>
                   </Link>
                 </div>

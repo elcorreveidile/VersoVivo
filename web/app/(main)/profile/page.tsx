@@ -90,7 +90,7 @@ function ProfileContent() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold tracking-tight text-white">
-            Mi Perfil
+            Mi perfil
           </h1>
           <p className="mt-2 text-lg text-white/60">
             Gestiona tu información y preferencias
@@ -101,7 +101,7 @@ function ProfileContent() {
         <Card className="mb-8 bg-white/5 border-white/10 backdrop-blur-sm">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="text-white">Información Personal</CardTitle>
+              <CardTitle className="text-white">Información personal</CardTitle>
               {!editing && (
                 <Button
                   onClick={() => setEditing(true)}
@@ -109,7 +109,7 @@ function ProfileContent() {
                   size="sm"
                   className="border-white/30 text-[#FFD700] hover:bg-white/10 hover:border-[#FFD700]/50"
                 >
-                  Editar Perfil
+                  Editar perfil
                 </Button>
               )}
             </div>
@@ -174,7 +174,7 @@ function ProfileContent() {
                       disabled={saving}
                       className="flex-1 bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
                     >
-                      {saving ? 'Guardando...' : 'Guardar Cambios'}
+                      {saving ? 'Guardando...' : 'Guardar cambios'}
                     </Button>
                     <Button
                       onClick={handleCancel}
@@ -252,7 +252,7 @@ function ProfileContent() {
             variant="outline"
             className="border-red-500/30 text-red-400 hover:bg-red-950/30 hover:text-red-300"
           >
-            Cerrar Sesión
+            Cerrar sesión
           </Button>
         </div>
       </div>

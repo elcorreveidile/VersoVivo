@@ -68,7 +68,7 @@ function FavoritesContent() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
             <h1 className="text-4xl font-bold tracking-tight text-white">
-              Mis Favoritos
+              Mis favoritos
             </h1>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -95,7 +95,7 @@ function FavoritesContent() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold tracking-tight text-white">
-            Mis Favoritos
+            Mis favoritos
           </h1>
           <p className="mt-2 text-lg text-white/60">
             {favorites.length} poem{favorites.length !== 1 ? 'as' : 'a'} favorita{favorites.length !== 1 ? 's' : ''}

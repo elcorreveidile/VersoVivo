@@ -152,7 +152,7 @@ function EditBookContent() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Editar Libro</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Editar libro</h1>
           <p className="text-white/60">Modifica los datos del libro</p>
         </div>
         <Link href="/admin/books">
@@ -338,7 +338,7 @@ function EditBookContent() {
                 disabled={saving}
                 className="flex-1 bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
               >
-                {saving ? 'Guardando...' : 'Guardar Cambios'}
+                {saving ? 'Guardando...' : 'Guardar cambios'}
               </Button>
               <Link href="/admin/books" className="flex-1">
                 <Button

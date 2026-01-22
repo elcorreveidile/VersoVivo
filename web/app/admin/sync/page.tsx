@@ -381,7 +381,7 @@ function SyncContent() {
                 className="w-full bg-black text-white border-white/20 hover:bg-white/10"
                 onClick={() => window.open('https://vercel.com/javiers-projects-cc8068ed/verso-vivo-6l3w/deployments', '_blank')}
               >
-                🚀 Ver Deployments en Vercel
+                🚀 Ver deployments en Vercel
               </Button>
               <Button
                 className="w-full bg-black text-white border-white/20 hover:bg-white/10"

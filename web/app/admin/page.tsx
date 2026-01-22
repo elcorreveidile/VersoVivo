@@ -184,7 +184,7 @@ function DashboardContent() {
             <Link href="/admin/users">
               <button className="w-full p-4 bg-white/5 border border-white/10 rounded-lg hover:border-[#FFD700]/50 transition-all text-left">
                 <div className="text-2xl mb-2">👥</div>
-                <div className="text-sm font-medium text-white">Ver Usuarios</div>
+                <div className="text-sm font-medium text-white">Ver usuarios</div>
                 <div className="text-xs text-white/40 mt-1">Gestionar usuarios</div>
               </button>
             </Link>

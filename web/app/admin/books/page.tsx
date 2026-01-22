@@ -140,7 +140,7 @@ function BooksContent() {
         </div>
         <Link href="/admin/books/new">
           <Button className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">
-            + Crear Libro
+            + Crear libro
           </Button>
         </Link>
       </div>
@@ -295,7 +295,7 @@ function BooksContent() {
             {!searchTerm && filterStatus === 'all' && (
               <Link href="/admin/books/new">
                 <Button className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">
-                  + Crear Primer Libro
+                  + Crear primer libro
                 </Button>
               </Link>
             )}

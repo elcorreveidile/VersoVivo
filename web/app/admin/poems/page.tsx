@@ -99,7 +99,7 @@ function PoemsContent() {
         </div>
         <Link href="/admin/poems/new">
           <Button className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">
-            + Crear Poema
+            + Crear poema
           </Button>
         </Link>
       </div>
@@ -271,7 +271,7 @@ function PoemsContent() {
             {!searchTerm && filterBook === 'all' && (
               <Link href="/admin/poems/new">
                 <Button className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">
-                  + Crear Primer Poema
+                  + Crear primer poema
                 </Button>
               </Link>
             )}

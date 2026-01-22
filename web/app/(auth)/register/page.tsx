@@ -47,7 +47,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-md">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tight text-white">
-            Crear Cuenta
+            Crear cuenta
           </h2>
           <p className="mt-2 text-sm text-white/60">
             ¿Ya tienes cuenta?{' '}
@@ -110,7 +110,7 @@ export default function RegisterPage() {
 
           <div>
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-white/80">
-              Confirmar Contraseña
+              Confirmar contraseña
             </label>
             <Input
               id="confirmPassword"
@@ -129,7 +129,7 @@ export default function RegisterPage() {
             className="w-full bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
             size="lg"
           >
-            {loading ? 'Creando cuenta...' : 'Crear Cuenta'}
+            {loading ? 'Creando cuenta...' : 'Crear cuenta'}
           </Button>
         </form>
       </div>

@@ -92,7 +92,7 @@ function NewBookContent() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Crear Nuevo Libro</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Crear nuevo libro</h1>
           <p className="text-white/60">Completa los datos del libro</p>
         </div>
         <Link href="/admin/books">
@@ -269,7 +269,7 @@ function NewBookContent() {
                 disabled={loading}
                 className="flex-1 bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
               >
-                {loading ? 'Creando...' : 'Crear Libro'}
+                {loading ? 'Creando...' : 'Crear libro'}
               </Button>
               <Link href="/admin/books" className="flex-1">
                 <Button

@@ -65,7 +65,7 @@ export default function BooksPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-            📚 Libros Publicados
+            📚 Libros publicados
           </h1>
           <p className="text-lg text-white/60 max-w-2xl mx-auto">
             Explora nuestra colección de libros de poesía, cada uno con una selección curada de poemas

@@ -78,7 +78,7 @@ export default function HomePage() {
               ) : (
                 <Link href="/register">
                   <Button size="lg" className="bg-black/60 backdrop-blur-sm border border-white/20 text-[#FFD700] hover:bg-black/80 hover:border-[#FFD700]/50">
-                    Crear Cuenta
+                    Crear cuenta
                   </Button>
                 </Link>
               )}
@@ -92,7 +92,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Libros Publicados
+              Libros publicados
             </h2>
             <p className="mt-4 text-lg text-white/60">
               Explora nuestra colección de libros de poesía
@@ -203,7 +203,7 @@ export default function HomePage() {
           <div className="mt-12 text-center">
             <Link href="/explore">
               <Button size="lg" className="bg-black/60 backdrop-blur-sm border border-white/20 text-[#FFD700] hover:bg-black/80 hover:border-[#FFD700]/50">
-                Explorar Todos los Libros
+                Explorar todos los libros
               </Button>
             </Link>
           </div>
@@ -215,7 +215,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Tres Formatos de Experiencia
+              Tres formatos de experiencia
             </h2>
           </div>
 

@@ -182,7 +182,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   onClick={handleSignOut}
                   className="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
                 >
-                  Cerrar Sesión
+                  Cerrar sesión
                 </button>
               </>
             ) : (
@@ -205,7 +205,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <button
                   onClick={handleSignOut}
                   className="p-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-                  title="Cerrar Sesión"
+                  title="Cerrar sesión"
                 >
                   🚪
                 </button>
@@ -260,7 +260,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 {sidebarCollapsed ? '▶' : '◀'}
               </button>
               <div className="text-sm text-white/40 hidden sm:block">
-                Panel de Administración
+                Panel de administración
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -268,7 +268,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 href="/"
                 className="text-sm text-[#FFD700] hover:text-[#FFEC8B]"
               >
-                Ver Sitio →
+                Ver sitio →
               </Link>
             </div>
           </div>
