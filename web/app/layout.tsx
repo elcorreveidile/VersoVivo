@@ -21,8 +21,11 @@ export const metadata: Metadata = {
   title: "VersoVivo - Poesía que cobra vida",
   description: "Una experiencia inmersiva de videopoemas que combina texto, recitación y música generada por IA",
   icons: {
-    icon: "/favicon.ico",
-    apple: "/icon.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "32x32", type: "image/x-icon" },
+      { url: "/apple-icon.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: { url: "/apple-icon.png", sizes: "512x512", type: "image/png" },
   },
 };
 
