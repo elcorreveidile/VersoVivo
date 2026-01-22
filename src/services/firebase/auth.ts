@@ -2,13 +2,17 @@
  * Firebase Authentication Service (Expo Compatible)
  */
 
+import { Platform } from 'react-native';
+import * as AppleAuthentication from 'expo-apple-authentication';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
   updateProfile,
   sendPasswordResetEmail,
-  User as FirebaseUser
+  User as FirebaseUser,
+  OAuthProvider,
+  signInWithCredential,
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from './config';
@@ -75,10 +79,73 @@ class AuthService {
   }
 
   /**
-   * Sign in with Google (not available in Expo Go, requires custom build)
+   * Sign in with Apple
+   */
+  async signInWithApple(): Promise<User> {
+    try {
+      if (Platform.OS !== 'ios') {
+        throw new Error('Apple Sign-In solo está disponible en iOS');
+      }
+
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+
+      // Create Firebase credential from Apple credential
+      const { identityToken } = credential;
+      if (!identityToken) {
+        throw new Error('No se pudo obtener el token de identidad de Apple');
+      }
+
+      const provider = new OAuthProvider('apple.com');
+      const firebaseCredential = provider.credential({
+        idToken: identityToken,
+      });
+
+      const userCredential = await signInWithCredential(auth, firebaseCredential);
+
+      // Check if user exists, if not create document
+      const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
+
+      if (!userDoc.exists()) {
+        const user: User = {
+          uid: userCredential.user.uid,
+          email: credential.email || userCredential.user.email || '',
+          displayName: credential.fullName?.givenName || userCredential.user.displayName || 'Usuario',
+          role: 'user', // Default role for new users
+          favorites: [],
+          readPoems: [],
+          listenedPoems: [],
+          watchedPoems: [],
+          createdAt: new Date(),
+          lastLoginAt: new Date(),
+        };
+
+        await setDoc(doc(db, 'users', user.uid), user);
+      } else {
+        // Update last login
+        await updateDoc(doc(db, 'users', userCredential.user.uid), {
+          lastLoginAt: new Date()
+        });
+      }
+
+      return this.getUserData(userCredential.user.uid);
+    } catch (error: any) {
+      if (error.code === 'ERR_CANCELED') {
+        throw new Error('Sign in with Apple fue cancelado');
+      }
+      throw new Error(error.message || 'Error al iniciar sesión con Apple');
+    }
+  }
+
+  /**
+   * Sign in with Google (requires custom Expo build)
    */
   async signInWithGoogle(): Promise<User> {
-    throw new Error('Google Sign-In requiere una compilación personalizada de Expo. Por ahora usa email/contraseña.');
+    throw new Error('Google Sign-In requiere configuración adicional. Por ahora usa Sign in with Apple o email/contraseña.');
   }
 
   /**

@@ -11,13 +11,24 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.versovivo.app"
+      "bundleIdentifier": "com.versovivo.app",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "YOUR_REVERSED_CLIENT_ID"
+        }
+      },
+      "services": [
+        ["com.apple.developer.applesignin"]
+      ]
     },
     "android": {
       "package": "com.versovivo.app",
       "adaptiveIcon": {
         "backgroundColor": "#0A0A0A"
       }
-    }
+    },
+    "plugins": [
+      "expo-apple-authentication"
+    ]
   }
 }

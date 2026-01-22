@@ -50,6 +50,18 @@ export const signInWithGoogle = createAsyncThunk(
   }
 );
 
+export const signInWithApple = createAsyncThunk(
+  'auth/signInWithApple',
+  async (_, { rejectWithValue }) => {
+    try {
+      const user = await authService.signInWithApple();
+      return user;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const signOut = createAsyncThunk(
   'auth/signOut',
   async (_, { rejectWithValue }) => {
@@ -128,6 +140,21 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
     });
     builder.addCase(signInWithGoogle.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload as string;
+    });
+
+    // Sign In with Apple
+    builder.addCase(signInWithApple.pending, state => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(signInWithApple.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.user = action.payload;
+      state.isAuthenticated = true;
+    });
+    builder.addCase(signInWithApple.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload as string;
     });

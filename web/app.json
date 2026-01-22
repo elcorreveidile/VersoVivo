@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "e609b1bf-1976-4e05-afca-92039fcacf15"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.jabelanez.web",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    }
+  }
+}

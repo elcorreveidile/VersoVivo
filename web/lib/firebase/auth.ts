@@ -5,15 +5,49 @@ import {
   signOut as firebaseSignOut,
   sendPasswordResetEmail,
   updateProfile,
-  onAuthStateChanged
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from 'firebase/auth';
 import { auth } from './config';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from './config';
 
 export const signIn = async (email: string, password: string) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    return { user: userCredential.user, error: null };
+  } catch (error: any) {
+    return { user: null, error: error.message };
+  }
+};
+
+export const signInWithGoogle = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
+    const userCredential = await signInWithPopup(auth, provider);
+
+    // Check if user document exists, if not create it
+    const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
+
+    if (!userDoc.exists()) {
+      // Create new user document
+      await setDoc(doc(db, 'users', userCredential.user.uid), {
+        uid: userCredential.user.uid,
+        email: userCredential.user.email,
+        displayName: userCredential.user.displayName || '',
+        photoURL: userCredential.user.photoURL || '',
+        favoritePoems: [],
+        readPoems: [],
+        createdAt: new Date().toISOString(),
+      });
+    } else {
+      // Update last login
+      await updateDoc(doc(db, 'users', userCredential.user.uid), {
+        lastLoginAt: new Date().toISOString(),
+      });
+    }
+
     return { user: userCredential.user, error: null };
   } catch (error: any) {
     return { user: null, error: error.message };

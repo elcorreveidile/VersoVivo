@@ -12,9 +12,10 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import * as AppleAuthentication from 'expo-apple-authentication';
 import { useNavigation } from '@react-navigation/native';
 import { useAppDispatch, useAppSelector } from '@hooks/index';
-import { signIn, signInWithGoogle, clearError } from '@store/slices/authSlice';
+import { signIn, signInWithGoogle, signInWithApple, clearError } from '@store/slices/authSlice';
 import { Button, Input } from '@components/index';
 import { colors, typography, spacing } from '@theme/index';
 
@@ -61,6 +62,11 @@ const LoginScreen: React.FC = () => {
   const handleGoogleLogin = async () => {
     dispatch(clearError());
     await dispatch(signInWithGoogle());
+  };
+
+  const handleAppleLogin = async () => {
+    dispatch(clearError());
+    await dispatch(signInWithApple());
   };
 
   const navigateToSignup = () => {
@@ -112,10 +118,21 @@ const LoginScreen: React.FC = () => {
             <View style={styles.dividerLine} />
           </View>
 
+          {Platform.OS === 'ios' && (
+            <AppleAuthentication.AppleAuthenticationButton
+              buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+              buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+              cornerRadius={5}
+              style={styles.appleButton}
+              onPress={handleAppleLogin}
+            />
+          )}
+
           <Button
             title="Continuar con Google"
             onPress={handleGoogleLogin}
             variant="outline"
+            style={styles.googleButton}
           />
 
           <TouchableOpacity onPress={navigateToSignup} style={styles.signupLink}>
@@ -179,6 +196,14 @@ const styles = StyleSheet.create({
   signupLink: {
     marginTop: spacing.xl,
     alignItems: 'center',
+  },
+  appleButton: {
+    width: '100%',
+    height: 50,
+    marginBottom: spacing.md,
+  },
+  googleButton: {
+    marginTop: 0,
   },
   signupText: {
     color: colors.text.darkSecondary,

@@ -38,11 +38,14 @@ export interface PoemFilter {
 }
 
 // User Types
+export type UserRole = 'user' | 'admin' | 'editor';
+
 export interface User {
   uid: string;
   email: string;
   displayName?: string;
   photoURL?: string;
+  role?: UserRole; // Required by Firestore rules
   favorites: string[]; // Array of poem IDs
   readPoems: string[]; // Array of poem IDs
   listenedPoems: string[]; // Array of poem IDs
@@ -50,6 +53,15 @@ export interface User {
   createdAt: Date;
   lastLoginAt?: Date;
   preferences?: UserPreferences;
+  subscription?: UserSubscription;
+  purchasedBooks?: string[]; // Array of book IDs
+}
+
+export interface UserSubscription {
+  status: 'active' | 'inactive' | 'expired';
+  expiresAt?: number;
+  platform?: 'ios' | 'android';
+  productId?: string;
 }
 
 export interface UserPreferences {
