@@ -153,8 +153,8 @@ export default function Header() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-white/10 bg-black/95 backdrop-blur-xl">
-          <div className="px-4 pt-2 pb-6 space-y-2">
+        <div className="md:hidden fixed inset-x-0 top-16 z-50 border-t border-white/10 bg-black/95 backdrop-blur-xl">
+          <div className="px-4 pt-2 pb-6 space-y-2 max-h-[calc(100vh-4rem)] overflow-y-auto">
             {[...navigation, ...(isAdmin ? adminNavigation : [])].map((item) => (
               <Link
                 key={item.href}

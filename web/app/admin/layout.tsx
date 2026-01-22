@@ -89,13 +89,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         className={cn(
-          'fixed inset-y-0 left-0 z-50 bg-black border-r border-white/10 transition-transform duration-300 lg:transition-all lg:duration-300',
-          // Desktop: siempre visible, colapsable
+          'fixed inset-y-0 left-0 z-50 bg-black border-r border-white/10 transition-all duration-300',
+          // Desktop: siempre visible
           'hidden lg:block',
-          sidebarCollapsed ? 'lg:w-20' : 'lg:w-64',
-          // Mobile: oculto por defecto, se desliza
-          'translate-x-full',
-          isMobile && mobileMenuOpen && 'translate-x-0 w-64'
+          sidebarCollapsed && !isMobile ? 'lg:w-20' : 'lg:w-64',
+          // Mobile: mostrar cuando el menú está abierto
+          isMobile && mobileMenuOpen && '!block w-64',
+          // Transformación para móvil
+          isMobile && !mobileMenuOpen && '-translate-x-full'
         )}
       >
         <div className="flex flex-col h-full">

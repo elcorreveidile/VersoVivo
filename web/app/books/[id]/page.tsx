@@ -135,7 +135,7 @@ export default function BookDetailPage() {
                             </h3>
                           </div>
                           <p className="text-white/60 text-sm line-clamp-2">
-                            {poem.content.substring(0, 150)}...
+                            {poem.content ? poem.content.substring(0, 150) + '...' : 'Sin contenido'}
                           </p>
                           {poem.tags && poem.tags.length > 0 && (
                             <div className="flex flex-wrap gap-2 mt-3">

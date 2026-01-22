@@ -4,24 +4,51 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { getFeaturedPoems } from '@/lib/firebase/poems';
-import { Poem } from '@/types/poem';
+import { getPublishedBooks, getBookWithPoems } from '@/lib/firebase/books';
+import { Book, Poem } from '@/types/poem';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function HomePage() {
   const { user, userProfile } = useAuth();
-  const [poems, setPoems] = useState<Poem[]>([]);
+  const [books, setBooks] = useState<Book[]>([]);
+  const [poemsMap, setPoemsMap] = useState<Map<string, Poem[]>>(new Map());
   const [loading, setLoading] = useState(true);
+  const [expandedBooks, setExpandedBooks] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    loadFeaturedPoems();
+    loadBooks();
   }, []);
 
-  const loadFeaturedPoems = async () => {
+  const loadBooks = async () => {
     setLoading(true);
-    const featured = await getFeaturedPoems(6);
-    setPoems(featured);
+    const booksData = await getPublishedBooks();
+    setBooks(booksData);
+
+    // Cargar poemas para cada libro
+    const poemsPromises = booksData.map(async (book) => {
+      const { poems } = await getBookWithPoems(book.id);
+      return { bookId: book.id, poems };
+    });
+
+    const poemsResults = await Promise.all(poemsPromises);
+    const newPoemsMap = new Map<string, Poem[]>();
+    poemsResults.forEach(({ bookId, poems }) => {
+      newPoemsMap.set(bookId, poems);
+    });
+    setPoemsMap(newPoemsMap);
     setLoading(false);
+  };
+
+  const toggleBook = (bookId: string) => {
+    setExpandedBooks(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(bookId)) {
+        newSet.delete(bookId);
+      } else {
+        newSet.add(bookId);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -60,79 +87,123 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured Poems Section */}
+      {/* Books Section */}
       <section className="py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Poemas Destacados
+              Libros Publicados
             </h2>
             <p className="mt-4 text-lg text-white/60">
-              Descubre nuestra selección de poemas más recientes
+              Explora nuestra colección de libros de poesía
             </p>
           </div>
 
           {loading ? (
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {[...Array(6)].map((_, i) => (
-                <Card key={i} className="animate-pulse bg-white/5 border-white/10 backdrop-blur-sm">
-                  <CardHeader>
-                    <div className="h-4 bg-white/10 rounded w-3/4"></div>
-                    <div className="h-3 bg-white/10 rounded w-1/2 mt-2"></div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-20 bg-white/10 rounded"></div>
-                  </CardContent>
-                </Card>
+            <div className="mt-12 space-y-4">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="animate-pulse bg-white/5 border border-white/10 rounded-lg h-32"></div>
               ))}
             </div>
-          ) : poems.length > 0 ? (
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {poems.map((poem) => (
-                <Link key={poem.id} href={`/poem/${poem.id}`}>
-                  <Card className="card-hover cursor-pointer h-full bg-white/5 border-white/10 backdrop-blur-sm hover:border-[#FFD700]/30">
-                    {poem.thumbnailUrl && (
-                      <div className="aspect-video w-full overflow-hidden rounded-t-xl bg-white/5">
-                        <img
-                          src={poem.thumbnailUrl}
-                          alt={poem.title}
-                          className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
-                    )}
-                    <CardHeader>
-                      <CardTitle className="text-xl text-white">{poem.title}</CardTitle>
-                      <p className="text-sm text-white/60 mt-1">por {poem.author}</p>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-white/60 line-clamp-3">
-                        {poem.content ? poem.content.substring(0, 150) : 'Sin descripción'}...
-                      </p>
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {poem.tags && poem.tags.length > 0 && poem.tags.slice(0, 3).map((tag) => (
-                          <span
-                            key={tag}
-                            className="inline-flex items-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/20 px-2.5 py-0.5 text-xs font-medium text-[#FFD700]"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
+          ) : books.length === 0 ? (
+            <div className="mt-12 text-center">
+              <p className="text-white/60">No hay libros disponibles en este momento.</p>
             </div>
           ) : (
-            <div className="mt-12 text-center">
-              <p className="text-white/60">No hay poemas disponibles en este momento.</p>
+            <div className="mt-12 space-y-4">
+              {books.map((book) => {
+                const poems = poemsMap.get(book.id) || [];
+                const isExpanded = expandedBooks.has(book.id);
+                const poemCount = poems.length;
+
+                return (
+                  <div key={book.id} className="bg-white/5 border border-white/10 rounded-lg overflow-hidden">
+                    {/* Book Header - Clickable */}
+                    <button
+                      onClick={() => toggleBook(book.id)}
+                      className="w-full px-6 py-4 flex items-center justify-between hover:bg-white/5 transition-colors"
+                    >
+                      <div className="flex items-center gap-4 flex-1">
+                        {book.coverUrl && (
+                          <img
+                            src={book.coverUrl}
+                            alt={book.title}
+                            className="w-12 h-16 object-cover rounded"
+                          />
+                        )}
+                        <div className="flex-1 text-left">
+                          <h3 className="text-lg font-semibold text-white mb-1">
+                            {book.title}
+                          </h3>
+                          <div className="flex items-center gap-4 text-sm text-white/60">
+                            <span>por {book.author}</span>
+                            <span>•</span>
+                            <span>{poemCount} {poemCount === 1 ? 'poema' : 'poemas'}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-white/60">
+                        {isExpanded ? (
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        ) : (
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        )}
+                      </div>
+                    </button>
+
+                    {/* Poems List - Expanded */}
+                    {isExpanded && (
+                      <div className="border-t border-white/10">
+                        {poems.length === 0 ? (
+                          <div className="px-6 py-8 text-center text-white/60">
+                            Este libro no tiene poemas aún
+                          </div>
+                        ) : (
+                          <div className="divide-y divide-white/5">
+                            {poems.map((poem, index) => (
+                              <Link
+                                key={poem.id}
+                                href={`/poem/${poem.id}`}
+                                className="block hover:bg-white/5 transition-colors"
+                              >
+                                <div className="px-6 py-4 flex items-start gap-4">
+                                  <span className="text-[#FFD700] text-sm font-medium pt-1">
+                                    {index + 1}
+                                  </span>
+                                  <div className="flex-1 min-w-0">
+                                    <h4 className="text-base font-medium text-white mb-1">
+                                      {poem.title}
+                                    </h4>
+                                    <p className="text-sm text-white/60 line-clamp-2">
+                                      {poem.content.substring(0, 100)}...
+                                    </p>
+                                  </div>
+                                  <div className="text-white/40">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                    </svg>
+                                  </div>
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
 
           <div className="mt-12 text-center">
             <Link href="/explore">
               <Button size="lg" className="bg-black/60 backdrop-blur-sm border border-white/20 text-[#FFD700] hover:bg-black/80 hover:border-[#FFD700]/50">
-                Ver Todos los Poemas
+                Explorar Todos los Libros
               </Button>
             </Link>
           </div>
