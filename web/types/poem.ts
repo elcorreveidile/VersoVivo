@@ -44,7 +44,10 @@ export interface Book {
   author: string;
   description: string;
   coverUrl?: string;
+  pdfUrl?: string; // URL del libro en PDF
   price?: number;
+  purchaseSkuIos?: string;
+  purchaseSkuAndroid?: string;
   currency?: 'EUR';
   status?: 'draft' | 'published' | 'archived';
   poems?: string[]; // Array of poem IDs

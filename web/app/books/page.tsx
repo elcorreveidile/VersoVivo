@@ -105,12 +105,27 @@ export default function BooksPage() {
                     <p className="text-white/70 text-sm line-clamp-3 mb-4">
                       {book.description}
                     </p>
-                    {book.inSubscription && (
-                      <div className="flex items-center gap-2 text-xs text-[#FFD700]">
-                        <span>⭐</span>
-                        <span>Disponible con suscripción</span>
-                      </div>
-                    )}
+                    <div className="flex flex-col gap-3">
+                      {book.inSubscription && (
+                        <div className="flex items-center gap-2 text-xs text-[#FFD700]">
+                          <span>⭐</span>
+                          <span>Disponible con suscripción</span>
+                        </div>
+                      )}
+                      {book.pdfUrl && (
+                        <a
+                          href={book.pdfUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-xs text-red-300 hover:text-red-200 transition-colors"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          <span>Descargar PDF</span>
+                        </a>
+                      )}
+                    </div>
                   </CardContent>
                 </Card>
               </Link>
