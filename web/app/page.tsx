@@ -226,7 +226,7 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <h3 className="mt-6 text-lg font-semibold text-white">Lectura Inmersiva</h3>
+              <h3 className="mt-6 text-lg font-semibold text-white">Lectura inmersiva</h3>
               <p className="mt-2 text-base text-white/60">
                 Poemas con versiones traducidas y texto original
               </p>
@@ -238,7 +238,7 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h3 className="mt-6 text-lg font-semibold text-white">Poema Musicado</h3>
+              <h3 className="mt-6 text-lg font-semibold text-white">Poema musicado</h3>
               <p className="mt-2 text-base text-white/60">
                 Poemas convertidos en canción con videoclip
               </p>
@@ -250,7 +250,7 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
                 </svg>
               </div>
-              <h3 className="mt-6 text-lg font-semibold text-white">Versión Recitada</h3>
+              <h3 className="mt-6 text-lg font-semibold text-white">Versión recitada</h3>
               <p className="mt-2 text-base text-white/60">
                 Poemas leídos por su autor, locutores, actores u otros poetas
               </p>
