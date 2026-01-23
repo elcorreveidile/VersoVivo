@@ -37,8 +37,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const loadUserProfile = async (uid: string) => {
-    const profile = await getUserProfile(uid);
-    setUserProfile(profile);
+    try {
+      const profile = await getUserProfile(uid);
+      if (!profile) {
+        console.warn('⚠️ User profile not found in Firestore for UID:', uid);
+        // Create a default profile if it doesn't exist
+        setUserProfile({
+          uid,
+          email: '',
+          displayName: 'Usuario',
+          photoURL: '',
+          favoritePoems: [],
+          readPoems: [],
+          createdAt: new Date().toISOString(),
+        });
+      } else {
+        setUserProfile(profile);
+      }
+    } catch (error) {
+      console.error('❌ Error loading user profile:', error);
+      // Set a default profile on error to prevent infinite loading
+      setUserProfile({
+        uid,
+        email: '',
+        displayName: 'Usuario',
+        photoURL: '',
+        favoritePoems: [],
+        readPoems: [],
+        createdAt: new Date().toISOString(),
+      });
+    }
   };
 
   const refreshProfile = async () => {
