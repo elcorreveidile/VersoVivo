@@ -49,6 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           photoURL: '',
           favoritePoems: [],
           readPoems: [],
+          role: 'user',
           createdAt: new Date().toISOString(),
         });
       } else {
@@ -64,6 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         photoURL: '',
         favoritePoems: [],
         readPoems: [],
+        role: 'user',
         createdAt: new Date().toISOString(),
       });
     }

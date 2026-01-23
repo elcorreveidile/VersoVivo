@@ -13,8 +13,8 @@ export interface Poem {
   contentSpanish?: string;  // Traducción al español
   originalLanguage?: string; // Idioma original: 'gl' (gallego), 'en', 'fr', etc.
   bookId?: string; // Referencia opcional al libro
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
 export interface PoemMode {
@@ -33,8 +33,8 @@ export interface User {
   listenedPoems?: string[];
   watchedPoems?: string[];
   role: 'user' | 'admin';
-  createdAt: Date;
-  lastLoginAt?: Date;
+  createdAt: string | Date; // Firestore returns string, accept both
+  lastLoginAt?: string | Date;
   active?: boolean;
 }
 
@@ -52,9 +52,9 @@ export interface Book {
   status?: 'draft' | 'published' | 'archived';
   poems?: string[]; // Array of poem IDs
   inSubscription?: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  publishedAt?: Date;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  publishedAt?: string | Date;
 }
 
 export interface ActivityLog {
@@ -66,7 +66,7 @@ export interface ActivityLog {
   resourceId: string;
   resourceTitle: string;
   changes?: Record<string, any>;
-  timestamp: Date;
+  timestamp: string | Date;
 }
 
 export interface AdminStats {
