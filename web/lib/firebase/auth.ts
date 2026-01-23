@@ -69,14 +69,14 @@ export const signInWithApple = async () => {
     if (!userDoc.exists()) {
       // Get additional user info from Apple
       const displayName = userCredential.user.displayName || '';
-      const firstName = userCredential._additionalUserInfo?.profile?.given_name || '';
-      const lastName = userCredential._additionalUserInfo?.profile?.family_name || '';
+      const firstName = (userCredential as any).additionalUserInfo?.profile?.given_name || '';
+      const lastName = (userCredential as any).additionalUserInfo?.profile?.family_name || '';
 
       // Create new user document
       await setDoc(doc(db, 'users', userCredential.user.uid), {
         uid: userCredential.user.uid,
         email: userCredential.user.email,
-        displayName: displayName || `${firstName} ${lastName}`.trim(),
+        displayName: displayName || `${firstName} ${lastName}`.trim() || 'Usuario',
         photoURL: userCredential.user.photoURL || '',
         favoritePoems: [],
         readPoems: [],
