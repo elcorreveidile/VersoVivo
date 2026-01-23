@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import PersistentAudioPlayer from "@/components/layout/PersistentAudioPlayer";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AudioProvider } from "@/contexts/AudioContext";
 import { Toaster } from "@/components/ui/toast";
@@ -47,6 +48,7 @@ export default function RootLayout({
                 {children}
               </main>
               <Footer />
+              <PersistentAudioPlayer />
             </Toaster>
           </AudioProvider>
         </AuthProvider>
