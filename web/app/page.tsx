@@ -19,9 +19,16 @@ export default function HomePage() {
 
   const loadFeaturedPoems = async () => {
     setLoading(true);
-    const featured = await getFeaturedPoems(6);
-    setPoems(featured);
-    setLoading(false);
+    try {
+      const featured = await getFeaturedPoems(6);
+      setPoems(featured);
+    } catch (error) {
+      console.error('Error loading featured poems:', error);
+      setPoems([]);
+    } finally {
+      // Asegurar que loading siempre se ponga en false
+      setLoading(false);
+    }
   };
 
   return (
