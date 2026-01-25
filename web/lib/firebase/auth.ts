@@ -77,24 +77,35 @@ export const signInWithApple = async () => {
 
       console.log('👤 Creating user profile:', { finalDisplayName, email: userCredential.user.email });
 
-      // Create new user document
-      await setDoc(doc(db, 'users', userCredential.user.uid), {
-        uid: userCredential.user.uid,
-        email: userCredential.user.email,
-        displayName: finalDisplayName,
-        photoURL: userCredential.user.photoURL || '',
-        favoritePoems: [],
-        readPoems: [],
-        createdAt: new Date().toISOString(),
-      });
-
-      console.log('✅ User profile created in Firestore');
+      // Create new user document with explicit role field
+      try {
+        await setDoc(doc(db, 'users', userCredential.user.uid), {
+          uid: userCredential.user.uid,
+          email: userCredential.user.email,
+          displayName: finalDisplayName,
+          photoURL: userCredential.user.photoURL || '',
+          role: 'user', // Explicitly set role to match Firestore rules
+          favoritePoems: [],
+          readPoems: [],
+          createdAt: new Date().toISOString(),
+        });
+        console.log('✅ User profile created in Firestore');
+      } catch (createError: any) {
+        // If creation fails, log but don't fail the login
+        console.error('⚠️ Warning: Could not create user profile in Firestore:', createError);
+        console.log('👤 User is authenticated in Firebase Auth, but profile creation failed');
+        // Don't throw error - user is logged in even if profile creation fails
+      }
     } else {
       // Update last login
-      await updateDoc(doc(db, 'users', userCredential.user.uid), {
-        lastLoginAt: new Date().toISOString(),
-      });
-      console.log('✅ User login time updated');
+      try {
+        await updateDoc(doc(db, 'users', userCredential.user.uid), {
+          lastLoginAt: new Date().toISOString(),
+        });
+        console.log('✅ User login time updated');
+      } catch (updateError: any) {
+        console.warn('⚠️ Warning: Could not update last login time:', updateError);
+      }
     }
 
     return { user: userCredential.user, error: null };
