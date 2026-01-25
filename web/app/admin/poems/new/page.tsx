@@ -115,7 +115,7 @@ function NewPoemContent() {
           <p className="text-white/60">Completa los datos del poema</p>
         </div>
         <Link href="/admin/poems">
-          <Button variant="outline" className="bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black">
+          <Button variant="outline" className="bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black">
             ← Volver
           </Button>
         </Link>
@@ -144,7 +144,7 @@ function NewPoemContent() {
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                 placeholder="Ej: Versos sencillos para despistar a la poesía"
               />
             </div>
@@ -159,7 +159,7 @@ function NewPoemContent() {
                 required
                 value={formData.author}
                 onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                 placeholder="Ej: Javier Benítez Láinez"
               />
             </div>
@@ -174,7 +174,7 @@ function NewPoemContent() {
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                 rows={10}
                 required
-                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:border-[#FFD700] focus:outline-none"
+                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:border-[var(--accent)] focus:outline-none"
                 placeholder="Escribe el poema aquí..."
               />
             </div>
@@ -190,7 +190,7 @@ function NewPoemContent() {
                 <select
                   value={formData.originalLanguage}
                   onChange={(e) => setFormData({ ...formData, originalLanguage: e.target.value })}
-                  className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[#FFD700] focus:outline-none"
+                  className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[var(--accent)] focus:outline-none"
                 >
                   <option value="" className="bg-black">Español (sin traducción)</option>
                   <option value="gl" className="bg-black">Gallego</option>
@@ -215,7 +215,7 @@ function NewPoemContent() {
                     value={formData.contentSpanish}
                     onChange={(e) => setFormData({ ...formData, contentSpanish: e.target.value })}
                     rows={10}
-                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:border-[#FFD700] focus:outline-none"
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:border-[var(--accent)] focus:outline-none"
                     placeholder="Pega aquí la traducción del poema al español..."
                   />
                   <p className="text-xs text-white/40 mt-1">
@@ -234,7 +234,7 @@ function NewPoemContent() {
                 type="text"
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                 placeholder="Ej: Amor, Naturaleza, Tiempo..."
               />
             </div>
@@ -248,7 +248,7 @@ function NewPoemContent() {
                 type="text"
                 value={formData.tags}
                 onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                 placeholder="amor, memoria, tiempo (separadas por comas)"
               />
               <p className="text-xs text-white/40 mt-1">
@@ -264,7 +264,7 @@ function NewPoemContent() {
               <select
                 value={formData.bookId}
                 onChange={(e) => setFormData({ ...formData, bookId: e.target.value })}
-                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[#FFD700] focus:outline-none"
+                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[var(--accent)] focus:outline-none"
               >
                 <option value="" className="bg-black">Sin libro</option>
                 {!loadingBooks && books
@@ -324,7 +324,7 @@ function NewPoemContent() {
                   type="url"
                   value={formData.videoUrl}
                   onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                   placeholder="https://firebasestorage.app/..."
                 />
                 <p className="text-xs text-white/40 mt-1">
@@ -340,7 +340,7 @@ function NewPoemContent() {
                   type="url"
                   value={formData.musicUrl}
                   onChange={(e) => setFormData({ ...formData, musicUrl: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                   placeholder="https://firebasestorage.app/..."
                 />
                 <p className="text-xs text-white/40 mt-1">
@@ -356,7 +356,7 @@ function NewPoemContent() {
                   type="url"
                   value={formData.voiceUrl}
                   onChange={(e) => setFormData({ ...formData, voiceUrl: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                   placeholder="https://firebasestorage.app/..."
                 />
                 <p className="text-xs text-white/40 mt-1">
@@ -372,7 +372,7 @@ function NewPoemContent() {
                   type="url"
                   value={formData.thumbnailUrl}
                   onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                   placeholder="https://firebasestorage.app/..."
                 />
                 <p className="text-xs text-white/40 mt-1">
@@ -386,7 +386,7 @@ function NewPoemContent() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
+                className="flex-1 bg-[var(--accent)] text-black hover:bg-[#FFEC8B]"
               >
                 {loading ? 'Creando...' : 'Crear poema'}
               </Button>
@@ -395,7 +395,7 @@ function NewPoemContent() {
                   type="button"
                   variant="outline"
                   disabled={loading}
-                  className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                  className="w-full bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black"
                 >
                   Cancelar
                 </Button>

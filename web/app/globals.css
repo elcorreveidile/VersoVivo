@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  /* Spotify-Inspired Dark Theme for VersoVivo */
-  --bg-primary: #000000;
-  --bg-secondary: #0a0a0a;
+  /* Sophisticated Dark Theme - Black to Navy Gradient */
+  --bg-primary: #121212;
+  --bg-secondary: #0A1929;
   --bg-tertiary: #121212;
-  --bg-elevated: #1a1a1a;
+  --bg-elevated: #1E1E1E;
   --bg-highlight: #282828;
   --bg-hover: #ffffff0a;
 
@@ -15,23 +15,23 @@
   --text-tertiary: #FFFFFFB3;
   --text-muted: #FFFFFF80;
 
-  /* Gold Accent (Spotify's Green replacement) */
-  --accent: #FFD700;
-  --accent-hover: #FFEC8B;
-  --accent-subtle: rgba(255, 215, 0, 0.1);
-  --accent-glow: rgba(255, 215, 0, 0.3);
+  /* Gold Accent - Warmer tone like in screenshot */
+  --accent: #D4AF37;
+  --accent-hover: #B8860B;
+  --accent-subtle: rgba(212, 175, 55, 0.1);
+  --accent-glow: rgba(212, 175, 55, 0.3);
 
-  /* Cards - Glassmorphism */
-  --card-bg: rgba(255, 255, 255, 0.03);
-  --card-bg-hover: rgba(255, 255, 255, 0.06);
-  --card-border: rgba(255, 215, 0, 0.1);
-  --card-border-hover: rgba(255, 215, 0, 0.3);
+  /* Cards - Dark Gray with Rounded Corners */
+  --card-bg: rgba(30, 30, 30, 0.8);
+  --card-bg-hover: rgba(45, 45, 45, 0.9);
+  --card-border: rgba(212, 175, 55, 0.15);
+  --card-border-hover: rgba(212, 175, 55, 0.4);
   --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 
   /* Buttons */
-  --btn-primary: #FFD700;
-  --btn-primary-hover: #FFEC8B;
-  --btn-primary-text: #000000;
+  --btn-primary: #D4AF37;
+  --btn-primary-hover: #B8860B;
+  --btn-primary-text: #FFFFFF;
   --btn-secondary: rgba(255, 255, 255, 0.08);
   --btn-secondary-hover: rgba(255, 255, 255, 0.12);
 }
@@ -44,7 +44,7 @@
 }
 
 body {
-  background: var(--bg-primary);
+  background: linear-gradient(180deg, #121212 0%, #0A1929 100%);
   color: var(--text-primary);
   font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
   min-height: 100vh;

@@ -107,7 +107,7 @@ function ProfileContent() {
                   onClick={() => setEditing(true)}
                   variant="outline"
                   size="sm"
-                  className="border-white/30 text-[#FFD700] hover:bg-white/10 hover:border-[#FFD700]/50"
+                  className="border-white/30 text-[var(--accent)] hover:bg-white/10 hover:border-[var(--accent)]/50"
                 >
                   Editar perfil
                 </Button>
@@ -128,10 +128,10 @@ function ProfileContent() {
                   <img
                     src={photoURL}
                     alt={displayName || 'Usuario'}
-                    className="h-24 w-24 rounded-full object-cover ring-4 ring-[#FFD700]/30"
+                    className="h-24 w-24 rounded-full object-cover ring-4 ring-[var(--accent)]/30"
                   />
                 ) : (
-                  <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#FFD700] text-black text-3xl font-bold ring-4 ring-[#FFD700]/30">
+                  <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[var(--accent)] text-black text-3xl font-bold ring-4 ring-[var(--accent)]/30">
                     {displayName?.charAt(0).toUpperCase() || 'U'}
                   </div>
                 )}
@@ -172,7 +172,7 @@ function ProfileContent() {
                     <Button
                       onClick={handleSave}
                       disabled={saving}
-                      className="flex-1 bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
+                      className="flex-1 bg-[var(--accent)] text-black hover:bg-[#FFEC8B]"
                     >
                       {saving ? 'Guardando...' : 'Guardar cambios'}
                     </Button>
@@ -197,7 +197,7 @@ function ProfileContent() {
             <Card key={stat.label} className="bg-white/5 border-white/10 backdrop-blur-sm card-hover">
               <CardContent className="pt-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-[#FFD700]">
+                  <div className="text-3xl font-bold text-[var(--accent)]">
                     {stat.value}
                   </div>
                   <div className="mt-2 text-sm font-medium text-white/60">
@@ -225,7 +225,7 @@ function ProfileContent() {
                   <Link
                     key={poem.id}
                     href={`/poem/${poem.id}`}
-                    className="block p-4 rounded-lg border border-white/10 hover:border-[#FFD700]/50 hover:bg-white/5 transition-all"
+                    className="block p-4 rounded-lg border border-white/10 hover:border-[var(--accent)]/50 hover:bg-white/5 transition-all"
                   >
                     <h4 className="font-semibold text-white">{poem.title}</h4>
                     <p className="text-sm text-white/60 mt-1">por {poem.author}</p>
@@ -238,7 +238,7 @@ function ProfileContent() {
                   Aún no has leído ningún poema
                 </p>
                 <Link href="/explore">
-                  <Button className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">Explorar Poemas</Button>
+                  <Button className="bg-[var(--accent)] text-black hover:bg-[#FFEC8B]">Explorar Poemas</Button>
                 </Link>
               </div>
             )}

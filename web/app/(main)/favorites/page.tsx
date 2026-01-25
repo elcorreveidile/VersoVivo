@@ -106,7 +106,7 @@ function FavoritesContent() {
         {favorites.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {favorites.map((poem) => (
-              <Card key={poem.id} className="card-hover relative bg-white/5 border-white/10 backdrop-blur-sm hover:border-[#FFD700]/30">
+              <Card key={poem.id} className="card-hover relative bg-white/5 border-white/10 backdrop-blur-sm hover:border-[var(--accent)]/30">
                 {/* Remove Button */}
                 <button
                   onClick={() => handleRemoveFavorite(poem.id)}
@@ -146,7 +146,7 @@ function FavoritesContent() {
                       {poem.tags?.slice(0, 3).map((tag) => (
                         <span
                           key={tag}
-                          className="inline-flex items-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/20 px-2.5 py-0.5 text-xs font-medium text-[#FFD700]"
+                          className="inline-flex items-center rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 px-2.5 py-0.5 text-xs font-medium text-[var(--accent)]"
                         >
                           {tag}
                         </span>
@@ -162,7 +162,7 @@ function FavoritesContent() {
           <Card className="text-center py-16 bg-white/5 border-white/10 backdrop-blur-sm">
             <CardContent>
               <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-white/5 border border-white/10 mb-6">
-                <svg className="h-12 w-12 text-[#FFD700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-12 w-12 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
               </div>
@@ -173,7 +173,7 @@ function FavoritesContent() {
                 Comienza a explorar y guarda tus poemas favoritos
               </p>
               <Link href="/explore">
-                <Button size="lg" className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">Explorar Poemas</Button>
+                <Button size="lg" className="bg-[var(--accent)] text-black hover:bg-[#FFEC8B]">Explorar Poemas</Button>
               </Link>
             </CardContent>
           </Card>

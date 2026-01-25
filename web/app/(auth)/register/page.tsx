@@ -79,7 +79,7 @@ export default function RegisterPage() {
           </h2>
           <p className="mt-2 text-sm text-white/60">
             ¿Ya tienes cuenta?{' '}
-            <Link href="/login" className="font-medium text-[#FFD700] hover:text-[#FFEC8B]">
+            <Link href="/login" className="font-medium text-[var(--accent)] hover:text-[#FFEC8B]">
               Inicia sesión aquí
             </Link>
           </p>
@@ -101,7 +101,7 @@ export default function RegisterPage() {
               type="text"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
-              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
               placeholder="Tu nombre"
             />
           </div>
@@ -116,7 +116,7 @@ export default function RegisterPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
               placeholder="tu@email.com"
             />
           </div>
@@ -131,7 +131,7 @@ export default function RegisterPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
               placeholder="Mínimo 6 caracteres"
             />
           </div>
@@ -146,7 +146,7 @@ export default function RegisterPage() {
               required
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
               placeholder="Repite tu contraseña"
             />
           </div>
@@ -154,7 +154,7 @@ export default function RegisterPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
+            className="w-full bg-[var(--accent)] text-black hover:bg-[#FFEC8B]"
             size="lg"
           >
             {loading ? 'Creando cuenta...' : 'Crear cuenta'}

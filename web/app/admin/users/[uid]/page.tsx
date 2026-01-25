@@ -114,7 +114,7 @@ function UserDetailContent() {
       <div className="max-w-4xl mx-auto text-center py-12">
         <h1 className="text-2xl font-bold text-white mb-4">Usuario no encontrado</h1>
         <Link href="/admin/users">
-          <Button className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">
+          <Button className="bg-[var(--accent)] text-black hover:bg-[#FFEC8B]">
             ← Volver a Usuarios
           </Button>
         </Link>
@@ -134,7 +134,7 @@ function UserDetailContent() {
           <p className="text-white/60">Información completa y actividad del usuario</p>
         </div>
         <Link href="/admin/users">
-          <Button variant="outline" className="bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black">
+          <Button variant="outline" className="bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black">
             ← Volver
           </Button>
         </Link>
@@ -161,10 +161,10 @@ function UserDetailContent() {
               <img
                 src={user.photoURL}
                 alt={user.displayName || 'Usuario'}
-                className="w-24 h-24 rounded-full object-cover border-2 border-[#FFD700]/30"
+                className="w-24 h-24 rounded-full object-cover border-2 border-[var(--accent)]/30"
               />
             ) : (
-              <div className="w-24 h-24 rounded-full bg-[#FFD700]/10 border border-[#FFD700]/20 flex items-center justify-center text-[#FFD700] font-bold text-3xl">
+              <div className="w-24 h-24 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center justify-center text-[var(--accent)] font-bold text-3xl">
                 {(user.displayName || user.email || 'U').charAt(0).toUpperCase()}
               </div>
             )}
@@ -238,7 +238,7 @@ function UserDetailContent() {
               <Button
                 onClick={() => handleChangeRole('admin')}
                 disabled={actionLoading || user.role === 'admin'}
-                className="flex-1 bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                className="flex-1 bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black"
               >
                 Hacer Admin
               </Button>
@@ -264,7 +264,7 @@ function UserDetailContent() {
             <CardTitle className="text-white text-lg">❤️ Poemas Favoritos</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-[#FFD700] mb-2">{favoritePoemsList.length}</p>
+            <p className="text-3xl font-bold text-[var(--accent)] mb-2">{favoritePoemsList.length}</p>
             <p className="text-sm text-white/60">poemas en favoritos</p>
 
             {favoritePoemsList.length > 0 && (
@@ -288,7 +288,7 @@ function UserDetailContent() {
             <CardTitle className="text-white text-lg">📖 Poemas Leídos</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-[#FFD700] mb-2">{readPoemsList.length}</p>
+            <p className="text-3xl font-bold text-[var(--accent)] mb-2">{readPoemsList.length}</p>
             <p className="text-sm text-white/60">poemas leídos</p>
 
             {readPoemsList.length > 0 && (

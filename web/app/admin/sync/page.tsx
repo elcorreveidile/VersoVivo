@@ -225,7 +225,7 @@ function SyncContent() {
             <div className="pt-4 border-t border-white/10">
               <Button
                 onClick={loadStorageUsage}
-                className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                className="w-full bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black"
               >
                 🔄 Actualizar
               </Button>
@@ -253,14 +253,14 @@ function SyncContent() {
                 <Button
                   onClick={handleExportPoems}
                   disabled={exporting}
-                  className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                  className="w-full bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black"
                 >
                   {exporting ? 'Exportando...' : '📤 Exportar Poemas (JSON)'}
                 </Button>
                 <Button
                   onClick={handleExportBooks}
                   disabled={exporting}
-                  className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                  className="w-full bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black"
                 >
                   {exporting ? 'Exportando...' : '📤 Exportar Libros (JSON)'}
                 </Button>
@@ -327,7 +327,7 @@ function SyncContent() {
               <Button
                 onClick={handleVerifyConsistency}
                 disabled={loading}
-                className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                className="w-full bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black"
               >
                 {loading ? 'Verificando...' : '🔍 Verificar Consistencia'}
               </Button>

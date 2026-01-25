@@ -116,7 +116,7 @@ function ActivityContent() {
         </div>
         <Button
           onClick={loadLogs}
-          className="bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+          className="bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black"
         >
           🔄 Actualizar
         </Button>
@@ -145,14 +145,14 @@ function ActivityContent() {
                 placeholder="Buscar por admin o recurso..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
               />
             </div>
             <div>
               <select
                 value={filterAction}
                 onChange={(e) => setFilterAction(e.target.value)}
-                className="w-full sm:w-48 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[#FFD700] focus:outline-none"
+                className="w-full sm:w-48 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[var(--accent)] focus:outline-none"
               >
                 <option value="all" className="bg-black">Todas las acciones</option>
                 <option value="create" className="bg-black">✨ Creación</option>
@@ -166,7 +166,7 @@ function ActivityContent() {
               <select
                 value={filterResource}
                 onChange={(e) => setFilterResource(e.target.value)}
-                className="w-full sm:w-48 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[#FFD700] focus:outline-none"
+                className="w-full sm:w-48 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[var(--accent)] focus:outline-none"
               >
                 <option value="all" className="bg-black">Todos los recursos</option>
                 <option value="poem" className="bg-black">✍️ Poemas</option>
@@ -193,7 +193,7 @@ function ActivityContent() {
       ) : filteredLogs.length > 0 ? (
         <div className="space-y-4">
           {filteredLogs.map((log) => (
-            <Card key={log.id} className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-[#FFD700]/30 transition-all">
+            <Card key={log.id} className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-[var(--accent)]/30 transition-all">
               <CardContent className="p-6">
                 {/* Header: Action, Resource, Timestamp */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
@@ -205,7 +205,7 @@ function ActivityContent() {
                     </span>
 
                     {/* Resource Badge */}
-                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-[#FFD700]/10 text-[#FFD700] border border-[#FFD700]/20">
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">
                       <span>{getResourceIcon(log.resourceType)}</span>
                       <span>{getResourceLabel(log.resourceType)}</span>
                     </span>
@@ -257,7 +257,7 @@ function ActivityContent() {
 
                               return (
                                 <div key={key} className="text-xs">
-                                  <div className="text-[#FFD700] font-medium mb-1">{key}</div>
+                                  <div className="text-[var(--accent)] font-medium mb-1">{key}</div>
                                   <div className="flex items-start gap-2 text-white/70">
                                     <span className="text-red-400">-</span>
                                     <span>{displayBefore}</span>
@@ -278,7 +278,7 @@ function ActivityContent() {
                       {/* For create actions, show summary */}
                       {log.action === 'create' && (
                         <div className="text-xs text-white/70">
-                          Recurso creado: <span className="text-[#FFD700]">{log.resourceTitle}</span>
+                          Recurso creado: <span className="text-[var(--accent)]">{log.resourceTitle}</span>
                         </div>
                       )}
 

@@ -49,7 +49,7 @@ function DashboardContent() {
         <p className="text-white/60 mb-4">Error al cargar estadísticas</p>
         <button
           onClick={loadStats}
-          className="bg-[#FFD700] text-black px-6 py-2 rounded-lg hover:bg-[#FFEC8B]"
+          className="bg-[var(--accent)] text-black px-6 py-2 rounded-lg hover:bg-[#FFEC8B]"
         >
           Reintentar
         </button>
@@ -70,7 +70,7 @@ function DashboardContent() {
         <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
           <CardContent className="p-6">
             <div className="text-sm text-white/60 mb-2">Total Usuarios</div>
-            <div className="text-3xl font-bold text-[#FFD700]">{stats.totalUsers}</div>
+            <div className="text-3xl font-bold text-[var(--accent)]">{stats.totalUsers}</div>
             <div className="text-xs text-white/40 mt-2">+{stats.newUsersThisWeek} esta semana</div>
           </CardContent>
         </Card>
@@ -78,7 +78,7 @@ function DashboardContent() {
         <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
           <CardContent className="p-6">
             <div className="text-sm text-white/60 mb-2">Total Poemas</div>
-            <div className="text-3xl font-bold text-[#FFD700]">{stats.totalPoems}</div>
+            <div className="text-3xl font-bold text-[var(--accent)]">{stats.totalPoems}</div>
             <div className="text-xs text-white/40 mt-2">Contenido total</div>
           </CardContent>
         </Card>
@@ -86,7 +86,7 @@ function DashboardContent() {
         <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
           <CardContent className="p-6">
             <div className="text-sm text-white/60 mb-2">Total Libros</div>
-            <div className="text-3xl font-bold text-[#FFD700]">{stats.totalBooks}</div>
+            <div className="text-3xl font-bold text-[var(--accent)]">{stats.totalBooks}</div>
             <div className="text-xs text-white/40 mt-2">Libros publicados</div>
           </CardContent>
         </Card>
@@ -94,7 +94,7 @@ function DashboardContent() {
         <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
           <CardContent className="p-6">
             <div className="text-sm text-white/60 mb-2">Usuarios Activos</div>
-            <div className="text-3xl font-bold text-[#FFD700]">{stats.activeUsers}</div>
+            <div className="text-3xl font-bold text-[var(--accent)]">{stats.activeUsers}</div>
             <div className="text-xs text-white/40 mt-2">Últimos 7 días</div>
           </CardContent>
         </Card>
@@ -113,14 +113,14 @@ function DashboardContent() {
                 {stats.topReadPoems.slice(0, 5).map((poem, index) => (
                   <div key={poem.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFD700]/10 text-[#FFD700] text-sm font-bold">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-sm font-bold">
                         {index + 1}
                       </div>
                       <div>
                         <div className="text-sm font-medium text-white">{poem.title}</div>
                       </div>
                     </div>
-                    <div className="text-sm text-[#FFD700] font-semibold">{poem.reads}</div>
+                    <div className="text-sm text-[var(--accent)] font-semibold">{poem.reads}</div>
                   </div>
                 ))}
               </div>
@@ -141,7 +141,7 @@ function DashboardContent() {
                 {stats.topFavoritePoems.slice(0, 5).map((poem, index) => (
                   <div key={poem.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFD700]/10 text-[#FFD700] text-sm font-bold">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-sm font-bold">
                         {index + 1}
                       </div>
                       <div>
@@ -150,7 +150,7 @@ function DashboardContent() {
                     </div>
                     <div className="flex items-center space-x-1">
                       <span className="text-red-400">♥</span>
-                      <span className="text-sm text-[#FFD700] font-semibold">{poem.favorites}</span>
+                      <span className="text-sm text-[var(--accent)] font-semibold">{poem.favorites}</span>
                     </div>
                   </div>
                 ))}
@@ -163,26 +163,26 @@ function DashboardContent() {
       </div>
 
       {/* Quick Actions */}
-      <Card className="bg-[#FFD700]/5 border-[#FFD700]/20 backdrop-blur-sm">
+      <Card className="bg-[var(--accent)]/5 border-[var(--accent)]/20 backdrop-blur-sm">
         <CardContent className="p-8">
           <h2 className="text-xl font-semibold text-white mb-4">Acciones Rápidas</h2>
           <div className="grid gap-4 sm:grid-cols-3">
             <Link href="/admin/books">
-              <button className="w-full p-4 bg-white/5 border border-white/10 rounded-lg hover:border-[#FFD700]/50 transition-all text-left">
+              <button className="w-full p-4 bg-white/5 border border-white/10 rounded-lg hover:border-[var(--accent)]/50 transition-all text-left">
                 <div className="text-2xl mb-2">📚</div>
                 <div className="text-sm font-medium text-white">Gestionar Libros</div>
                 <div className="text-xs text-white/40 mt-1">Crear y editar libros</div>
               </button>
             </Link>
             <Link href="/admin/poems">
-              <button className="w-full p-4 bg-white/5 border border-white/10 rounded-lg hover:border-[#FFD700]/50 transition-all text-left">
+              <button className="w-full p-4 bg-white/5 border border-white/10 rounded-lg hover:border-[var(--accent)]/50 transition-all text-left">
                 <div className="text-2xl mb-2">✍️</div>
                 <div className="text-sm font-medium text-white">Gestionar Poemas</div>
                 <div className="text-xs text-white/40 mt-1">Añadir contenido multimedia</div>
               </button>
             </Link>
             <Link href="/admin/users">
-              <button className="w-full p-4 bg-white/5 border border-white/10 rounded-lg hover:border-[#FFD700]/50 transition-all text-left">
+              <button className="w-full p-4 bg-white/5 border border-white/10 rounded-lg hover:border-[var(--accent)]/50 transition-all text-left">
                 <div className="text-2xl mb-2">👥</div>
                 <div className="text-sm font-medium text-white">Ver usuarios</div>
                 <div className="text-xs text-white/40 mt-1">Gestionar usuarios</div>

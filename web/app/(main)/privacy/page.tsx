@@ -16,7 +16,7 @@ export default function PrivacyPage() {
 
           <div className="space-y-8">
             <section className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Datos que recopilamos</h2>
+              <h2 className="text-2xl font-bold text-[var(--accent)] mb-4">Datos que recopilamos</h2>
               <ul className="space-y-2 text-white/80">
                 <li>• Datos de cuenta: correo electrónico y nombre visible</li>
                 <li>• Datos de uso: poemas leídos, favoritos y progreso</li>
@@ -26,7 +26,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Cómo usamos los datos</h2>
+              <h2 className="text-2xl font-bold text-[var(--accent)] mb-4">Cómo usamos los datos</h2>
               <ul className="space-y-2 text-white/80">
                 <li>• Crear y mantener tu cuenta</li>
                 <li>• Sincronizar favoritos y acceso a libros</li>
@@ -36,7 +36,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Servicios de terceros</h2>
+              <h2 className="text-2xl font-bold text-[var(--accent)] mb-4">Servicios de terceros</h2>
               <ul className="space-y-2 text-white/80">
                 <li>• Firebase (Google) para autenticación y base de datos</li>
                 <li>• Apple App Store / Google Play para compras dentro de la app</li>
@@ -44,7 +44,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Conservación y seguridad</h2>
+              <h2 className="text-2xl font-bold text-[var(--accent)] mb-4">Conservación y seguridad</h2>
               <p className="text-white/80">
                 Conservamos los datos mientras la cuenta esté activa o sea necesario para prestar el servicio.
                 Aplicamos medidas técnicas para proteger la información.
@@ -52,24 +52,24 @@ export default function PrivacyPage() {
             </section>
 
             <section className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Tus derechos</h2>
+              <h2 className="text-2xl font-bold text-[var(--accent)] mb-4">Tus derechos</h2>
               <p className="text-white/80">
                 Puedes solicitar acceso, corrección o eliminación de tus datos escribiendo a{' '}
-                <a href="mailto:info@poedronomo.com" className="text-[#FFD700] hover:text-[#FFEC8B] underline">
+                <a href="mailto:info@poedronomo.com" className="text-[var(--accent)] hover:text-[#FFEC8B] underline">
                   info@poedronomo.com
                 </a>
               </p>
             </section>
 
             <section className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Menores</h2>
+              <h2 className="text-2xl font-bold text-[var(--accent)] mb-4">Menores</h2>
               <p className="text-white/80">
                 La app no está dirigida a menores de 13 años.
               </p>
             </section>
 
             <section className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Cambios</h2>
+              <h2 className="text-2xl font-bold text-[var(--accent)] mb-4">Cambios</h2>
               <p className="text-white/80">
                 Podremos actualizar esta política. Los cambios se publicarán en esta página.
               </p>

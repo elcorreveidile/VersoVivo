@@ -57,7 +57,7 @@ export default function HomePage() {
       <section className="relative overflow-hidden bg-gradient-to-br from-black via-[#0a0a0a] to-[#1a1a1a] text-white border-b border-white/10">
         <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
           <div className="text-center fade-in">
-            <h1 className="text-5xl font-bold tracking-tight sm:text-7xl text-[#FFD700]">
+            <h1 className="text-5xl font-bold tracking-tight sm:text-7xl text-[var(--accent)]">
               VersoVivo
             </h1>
             <p className="mt-6 text-lg leading-8 text-white/70 sm:text-xl max-w-3xl mx-auto">
@@ -65,19 +65,19 @@ export default function HomePage() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link href="/explore">
-                <Button size="lg" className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">
+                <Button size="lg" className="bg-[var(--accent)] text-black hover:bg-[#FFEC8B]">
                   Explorar Poemas
                 </Button>
               </Link>
               {user ? (
                 <Link href="/profile">
-                  <Button size="lg" className="bg-black/60 backdrop-blur-sm border border-white/20 text-[#FFD700] hover:bg-black/80 hover:border-[#FFD700]/50">
+                  <Button size="lg" className="bg-black/60 backdrop-blur-sm border border-white/20 text-[var(--accent)] hover:bg-black/80 hover:border-[var(--accent)]/50">
                     👋 Hola, {userProfile?.displayName?.split(' ')[0] || 'Usuario'}
                   </Button>
                 </Link>
               ) : (
                 <Link href="/register">
-                  <Button size="lg" className="bg-black/60 backdrop-blur-sm border border-white/20 text-[#FFD700] hover:bg-black/80 hover:border-[#FFD700]/50">
+                  <Button size="lg" className="bg-black/60 backdrop-blur-sm border border-white/20 text-[var(--accent)] hover:bg-black/80 hover:border-[var(--accent)]/50">
                     Crear cuenta
                   </Button>
                 </Link>
@@ -171,7 +171,7 @@ export default function HomePage() {
                                 className="block hover:bg-white/5 transition-colors"
                               >
                                 <div className="px-6 py-4 flex items-start gap-4">
-                                  <span className="text-[#FFD700] text-sm font-medium pt-1">
+                                  <span className="text-[var(--accent)] text-sm font-medium pt-1">
                                     {index + 1}
                                   </span>
                                   <div className="flex-1 min-w-0">
@@ -202,7 +202,7 @@ export default function HomePage() {
 
           <div className="mt-12 text-center">
             <Link href="/explore">
-              <Button size="lg" className="bg-black/60 backdrop-blur-sm border border-white/20 text-[#FFD700] hover:bg-black/80 hover:border-[#FFD700]/50">
+              <Button size="lg" className="bg-black/60 backdrop-blur-sm border border-white/20 text-[var(--accent)] hover:bg-black/80 hover:border-[var(--accent)]/50">
                 Explorar todos los libros
               </Button>
             </Link>
@@ -221,7 +221,7 @@ export default function HomePage() {
 
           <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <div className="text-center group">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/30 text-[#FFD700]">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-[var(--accent)]">
                 <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
@@ -233,7 +233,7 @@ export default function HomePage() {
             </div>
 
             <div className="text-center group">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/30 text-[#FFD700]">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-[var(--accent)]">
                 <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
@@ -245,7 +245,7 @@ export default function HomePage() {
             </div>
 
             <div className="text-center group">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/30 text-[#FFD700]">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-[var(--accent)]">
                 <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
                 </svg>

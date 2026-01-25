@@ -72,7 +72,7 @@ export default function ContactPage() {
                       required
                       value={formData.name}
                       onChange={handleChange}
-                      className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                      className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                       placeholder="Tu nombre"
                     />
                   </div>
@@ -88,7 +88,7 @@ export default function ContactPage() {
                       required
                       value={formData.email}
                       onChange={handleChange}
-                      className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                      className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                       placeholder="tu@email.com"
                     />
                   </div>
@@ -104,7 +104,7 @@ export default function ContactPage() {
                       required
                       value={formData.subject}
                       onChange={handleChange}
-                      className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                      className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                       placeholder="¿En qué podemos ayudarte?"
                     />
                   </div>
@@ -120,14 +120,14 @@ export default function ContactPage() {
                       value={formData.message}
                       onChange={handleChange}
                       rows={5}
-                      className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:border-[#FFD700] focus:outline-none focus:ring-2 focus:ring-[#FFD700]/20"
+                      className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20"
                       placeholder="Escribe tu mensaje aquí..."
                     />
                   </div>
 
                   <Button
                     type="submit"
-                    className="w-full bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
+                    className="w-full bg-[var(--accent)] text-black hover:bg-[#FFEC8B]"
                     size="lg"
                   >
                     Enviar Mensaje
@@ -143,14 +143,14 @@ export default function ContactPage() {
             <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
               <CardContent className="p-6">
                 <div className="flex items-start space-x-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/30 text-[#FFD700]">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-[var(--accent)]">
                     <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-white mb-1">Email</h3>
-                    <a href="mailto:info@poedronomo.com" className="text-[#FFD700] hover:text-[#FFEC8B]">
+                    <a href="mailto:info@poedronomo.com" className="text-[var(--accent)] hover:text-[#FFEC8B]">
                       info@poedronomo.com
                     </a>
                     <p className="text-sm text-white/60 mt-1">
@@ -165,7 +165,7 @@ export default function ContactPage() {
             <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
               <CardContent className="p-6">
                 <div className="flex items-start space-x-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/30 text-[#FFD700]">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-[var(--accent)]">
                     <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -187,7 +187,7 @@ export default function ContactPage() {
             <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
               <CardContent className="p-6">
                 <div className="flex items-start space-x-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/30 text-[#FFD700]">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-[var(--accent)]">
                     <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                     </svg>
@@ -208,7 +208,7 @@ export default function ContactPage() {
             </Card>
 
             {/* Authors */}
-            <Card className="bg-[#FFD700]/5 border-[#FFD700]/20 backdrop-blur-sm">
+            <Card className="bg-[var(--accent)]/5 border-[var(--accent)]/20 backdrop-blur-sm">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold text-white mb-3">
                   ¿Eres autor?
@@ -218,7 +218,7 @@ export default function ContactPage() {
                 </p>
                 <a
                   href="mailto:info@poedronomo.com?subject=Publicar mi libro en VersoVivo"
-                  className="inline-flex items-center text-[#FFD700] hover:text-[#FFEC8B] text-sm font-medium"
+                  className="inline-flex items-center text-[var(--accent)] hover:text-[#FFEC8B] text-sm font-medium"
                 >
                   Solicita información
                   <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

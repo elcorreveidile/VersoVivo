@@ -16,7 +16,7 @@ export default function TermsPage() {
 
           <div className="space-y-8">
             <section className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Uso de la app</h2>
+              <h2 className="text-2xl font-bold text-[var(--accent)] mb-4">Uso de la app</h2>
               <ul className="space-y-2 text-white/80">
                 <li>• La app ofrece acceso a libros, audio y contenido audiovisual</li>
                 <li>• No está permitido copiar o redistribuir el contenido sin permiso</li>
@@ -25,7 +25,7 @@ export default function TermsPage() {
             </section>
 
             <section className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Compras y suscripciones</h2>
+              <h2 className="text-2xl font-bold text-[var(--accent)] mb-4">Compras y suscripciones</h2>
               <ul className="space-y-2 text-white/80">
                 <li>• Las compras dentro de la app se gestionan por Apple o Google</li>
                 <li>• Las suscripciones se renuevan según las condiciones de la tienda</li>
@@ -34,10 +34,10 @@ export default function TermsPage() {
             </section>
 
             <section className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Cuenta y seguridad</h2>
+              <h2 className="text-2xl font-bold text-[var(--accent)] mb-4">Cuenta y seguridad</h2>
               <p className="text-white/80">
                 Eres responsable de la confidencialidad de tu cuenta. Si detectas un uso no autorizado,{' '}
-                <a href="mailto:info@poedronomo.com" className="text-[#FFD700] hover:text-[#FFEC8B] underline">
+                <a href="mailto:info@poedronomo.com" className="text-[var(--accent)] hover:text-[#FFEC8B] underline">
                   escríbenos
                 </a>
                 .
@@ -45,24 +45,24 @@ export default function TermsPage() {
             </section>
 
             <section className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Limitación de responsabilidad</h2>
+              <h2 className="text-2xl font-bold text-[var(--accent)] mb-4">Limitación de responsabilidad</h2>
               <p className="text-white/80">
                 VersoVivo se ofrece &quot;tal cual&quot;. No garantizamos disponibilidad continua ni la ausencia total de errores.
               </p>
             </section>
 
             <section className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Cambios</h2>
+              <h2 className="text-2xl font-bold text-[var(--accent)] mb-4">Cambios</h2>
               <p className="text-white/80">
                 Podemos actualizar estos términos. Los cambios se publicarán en esta página.
               </p>
             </section>
 
             <section className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Contacto</h2>
+              <h2 className="text-2xl font-bold text-[var(--accent)] mb-4">Contacto</h2>
               <p className="text-white/80">
                 Para dudas o soporte:{' '}
-                <a href="mailto:info@poedronomo.com" className="text-[#FFD700] hover:text-[#FFEC8B] underline">
+                <a href="mailto:info@poedronomo.com" className="text-[var(--accent)] hover:text-[#FFEC8B] underline">
                   info@poedronomo.com
                 </a>
               </p>

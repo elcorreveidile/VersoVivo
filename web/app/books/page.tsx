@@ -50,7 +50,7 @@ export default function BooksPage() {
           <p className="text-white/60 mb-6">{error}</p>
           <Button
             onClick={loadBooks}
-            className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
+            className="bg-[var(--accent)] text-black hover:bg-[#FFEC8B]"
           >
             Reintentar
           </Button>
@@ -85,7 +85,7 @@ export default function BooksPage() {
                 href={`/books/${book.id}`}
                 className="group"
               >
-                <Card className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-[#FFD700]/30 transition-all h-full">
+                <Card className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-[var(--accent)]/30 transition-all h-full">
                   {book.coverUrl && (
                     <div className="relative aspect-[2/3] w-2/3 mx-auto overflow-hidden rounded-t-lg">
                       <img
@@ -96,7 +96,7 @@ export default function BooksPage() {
                     </div>
                   )}
                   <CardHeader>
-                    <CardTitle className="text-white text-xl group-hover:text-[#FFD700] transition-colors">
+                    <CardTitle className="text-white text-xl group-hover:text-[var(--accent)] transition-colors">
                       {book.title}
                     </CardTitle>
                     <p className="text-white/60 text-sm">por {book.author}</p>
@@ -107,7 +107,7 @@ export default function BooksPage() {
                     </p>
                     <div className="flex flex-col gap-3">
                       {book.inSubscription && (
-                        <div className="flex items-center gap-2 text-xs text-[#FFD700]">
+                        <div className="flex items-center gap-2 text-xs text-[var(--accent)]">
                           <span>⭐</span>
                           <span>Disponible con suscripción</span>
                         </div>
@@ -136,7 +136,7 @@ export default function BooksPage() {
         {/* Back to Explore */}
         <div className="mt-12 text-center">
           <Link href="/explore">
-            <Button variant="outline" className="border-white/30 text-[#FFD700] hover:bg-white/10 hover:border-[#FFD700]/50">
+            <Button variant="outline" className="border-white/30 text-[var(--accent)] hover:bg-white/10 hover:border-[var(--accent)]/50">
               ← Volver a Explorar
             </Button>
           </Link>

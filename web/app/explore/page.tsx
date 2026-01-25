@@ -119,7 +119,7 @@ export default function ExplorePage() {
               placeholder="Buscar por título, autor o poema..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700] pr-10"
+              className="w-full bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)] pr-10"
             />
             {searchQuery && (
               <button
@@ -216,7 +216,7 @@ export default function ExplorePage() {
                     {/* Link to book detail page */}
                     <Link
                       href={`/books/${book.id}`}
-                      className="px-4 py-4 text-[#FFD700] hover:text-[#FFEC8B] transition-colors"
+                      className="px-4 py-4 text-[var(--accent)] hover:text-[#FFEC8B] transition-colors"
                       title="Ver libro completo"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -241,7 +241,7 @@ export default function ExplorePage() {
                               className="block hover:bg-white/5 transition-colors"
                             >
                               <div className="px-6 py-4 flex items-start gap-4">
-                                <span className="text-[#FFD700] text-sm font-medium pt-1">
+                                <span className="text-[var(--accent)] text-sm font-medium pt-1">
                                   {index + 1}
                                 </span>
                                 <div className="flex-1 min-w-0">
@@ -256,7 +256,7 @@ export default function ExplorePage() {
                                       {poem.tags.slice(0, 3).map((tag) => (
                                         <span
                                           key={tag}
-                                          className="text-xs px-2 py-1 bg-[#FFD700]/10 border border-[#FFD700]/20 text-[#FFD700] rounded"
+                                          className="text-xs px-2 py-1 bg-[var(--accent)]/10 border border-[var(--accent)]/20 text-[var(--accent)] rounded"
                                         >
                                           {tag}
                                         </span>

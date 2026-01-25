@@ -51,7 +51,7 @@ export default function BookDetailPage() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-2xl font-bold text-white mb-4">Libro no encontrado</h1>
           <Link href="/books">
-            <Button className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">
+            <Button className="bg-[var(--accent)] text-black hover:bg-[#FFEC8B]">
               ← Volver a Libros
             </Button>
           </Link>
@@ -66,7 +66,7 @@ export default function BookDetailPage() {
         {/* Back Button */}
         <div className="mb-8">
           <Link href="/books">
-            <Button variant="outline" className="border-white/30 text-[#FFD700] hover:bg-white/10 hover:border-[#FFD700]/50">
+            <Button variant="outline" className="border-white/30 text-[var(--accent)] hover:bg-white/10 hover:border-[var(--accent)]/50">
               ← Volver a Libros
             </Button>
           </Link>
@@ -94,7 +94,7 @@ export default function BookDetailPage() {
               </p>
               <div className="flex flex-wrap gap-4 text-sm text-white/60">
                 {book.inSubscription && (
-                  <div className="flex items-center gap-2 px-4 py-2 bg-[#FFD700]/10 border border-[#FFD700]/30 rounded-lg">
+                  <div className="flex items-center gap-2 px-4 py-2 bg-[var(--accent)]/10 border border-[var(--accent)]/30 rounded-lg">
                     <span>⭐</span>
                     <span>Incluido en suscripción</span>
                   </div>
@@ -135,15 +135,15 @@ export default function BookDetailPage() {
             <div className="space-y-4">
               {poems.map((poem, index) => (
                 <Link key={poem.id} href={`/poem/${poem.id}`}>
-                  <Card className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-[#FFD700]/30 transition-all">
+                  <Card className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-[var(--accent)]/30 transition-all">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
-                            <span className="text-[#FFD700] text-sm font-medium">
+                            <span className="text-[var(--accent)] text-sm font-medium">
                               {String(index + 1).padStart(2, '0')}
                             </span>
-                            <h3 className="text-xl font-semibold text-white group-hover:text-[#FFD700] transition-colors">
+                            <h3 className="text-xl font-semibold text-white group-hover:text-[var(--accent)] transition-colors">
                               {poem.title}
                             </h3>
                           </div>
@@ -155,7 +155,7 @@ export default function BookDetailPage() {
                               {poem.tags.slice(0, 3).map((tag) => (
                                 <span
                                   key={tag}
-                                  className="text-xs px-2 py-1 bg-[#FFD700]/10 border border-[#FFD700]/20 text-[#FFD700] rounded"
+                                  className="text-xs px-2 py-1 bg-[var(--accent)]/10 border border-[var(--accent)]/20 text-[var(--accent)] rounded"
                                 >
                                   {tag}
                                 </span>
@@ -163,7 +163,7 @@ export default function BookDetailPage() {
                             </div>
                           )}
                         </div>
-                        <div className="text-[#FFD700]">
+                        <div className="text-[var(--accent)]">
                           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>

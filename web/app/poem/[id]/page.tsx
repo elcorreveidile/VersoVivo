@@ -148,7 +148,7 @@ export default function PoemDetailPage() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-2xl font-bold text-white mb-4">Poema no encontrado</h1>
           <Link href="/explore">
-            <Button className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">
+            <Button className="bg-[var(--accent)] text-black hover:bg-[#FFEC8B]">
               Volver a Explorar
             </Button>
           </Link>
@@ -184,7 +184,7 @@ export default function PoemDetailPage() {
               variant={isFavorite ? "outline" : "default"}
               className={`${isFavorite
                 ? 'border-red-500/30 text-red-400 hover:bg-red-950/30'
-                : 'bg-[#FFD700] text-black hover:bg-[#FFEC8B]'
+                : 'bg-[var(--accent)] text-black hover:bg-[#FFEC8B]'
               } ${!user ? 'w-full sm:w-auto' : ''}`}
             >
               {togglingFavorite ? (
@@ -203,7 +203,7 @@ export default function PoemDetailPage() {
               {poem.tags.map((tag: string) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/20 px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium text-[#FFD700]"
+                  className="inline-flex items-center rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium text-[var(--accent)]"
                 >
                   {tag}
                 </span>
@@ -219,7 +219,7 @@ export default function PoemDetailPage() {
               onClick={() => handleViewModeChange('text')}
               className={`py-3 px-3 sm:py-4 sm:px-4 border-b-2 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap ${
                 viewMode === 'text'
-                  ? 'border-[#FFD700] text-[#FFD700]'
+                  ? 'border-[var(--accent)] text-[var(--accent)]'
                   : 'border-transparent text-white/60 hover:text-white hover:border-white/30'
               }`}
             >
@@ -229,7 +229,7 @@ export default function PoemDetailPage() {
               onClick={() => handleViewModeChange('video')}
               className={`py-3 px-3 sm:py-4 sm:px-4 border-b-2 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap ${
                 viewMode === 'video'
-                  ? 'border-[#FFD700] text-[#FFD700]'
+                  ? 'border-[var(--accent)] text-[var(--accent)]'
                   : 'border-transparent text-white/60 hover:text-white hover:border-white/30'
               }`}
               disabled={!poem.videoUrl}
@@ -240,7 +240,7 @@ export default function PoemDetailPage() {
               onClick={() => handleViewModeChange('music')}
               className={`py-3 px-3 sm:py-4 sm:px-4 border-b-2 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap ${
                 viewMode === 'music'
-                  ? 'border-[#FFD700] text-[#FFD700]'
+                  ? 'border-[var(--accent)] text-[var(--accent)]'
                   : 'border-transparent text-white/60 hover:text-white hover:border-white/30'
               }`}
               disabled={!poem.musicUrl}
@@ -251,7 +251,7 @@ export default function PoemDetailPage() {
               onClick={() => handleViewModeChange('voice')}
               className={`py-3 px-3 sm:py-4 sm:px-4 border-b-2 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap ${
                 viewMode === 'voice'
-                  ? 'border-[#FFD700] text-[#FFD700]'
+                  ? 'border-[var(--accent)] text-[var(--accent)]'
                   : 'border-transparent text-white/60 hover:text-white hover:border-white/30'
               }`}
               disabled={!poem.voiceUrl}
@@ -271,7 +271,7 @@ export default function PoemDetailPage() {
                   <div className="mb-4 flex justify-end">
                     <button
                       onClick={() => setShowTranslation(!showTranslation)}
-                      className="flex items-center gap-2 px-4 py-2 bg-[#FFD700]/10 hover:bg-[#FFD700]/20 border border-[#FFD700]/30 text-[#FFD700] rounded-lg transition-colors text-sm font-medium"
+                      className="flex items-center gap-2 px-4 py-2 bg-[var(--accent)]/10 hover:bg-[var(--accent)]/20 border border-[var(--accent)]/30 text-[var(--accent)] rounded-lg transition-colors text-sm font-medium"
                     >
                       <span>🌐</span>
                       <span>{showTranslation ? 'Ver original' : 'Ver traducción'}</span>
@@ -295,11 +295,11 @@ export default function PoemDetailPage() {
 
                 {/* Persistent Audio Player - shown in text mode if audio is playing */}
                 {showPersistentAudioPlayer && (
-                  <div className="mt-8 p-4 bg-black/30 border border-[#FFD700]/20 rounded-lg">
+                  <div className="mt-8 p-4 bg-black/30 border border-[var(--accent)]/20 rounded-lg">
                     <div className="flex items-center gap-3 mb-3">
                       <button
                         onClick={() => audio.isPlaying ? audio.pause() : audio.resume()}
-                        className="w-10 h-10 rounded-full bg-[#FFD700] flex items-center justify-center hover:bg-[#FFEC8B] transition-colors"
+                        className="w-10 h-10 rounded-full bg-[var(--accent)] flex items-center justify-center hover:bg-[#FFEC8B] transition-colors"
                       >
                         <span className="text-black text-lg">{audio.isPlaying ? '⏸' : '▶'}</span>
                       </button>
@@ -352,11 +352,11 @@ export default function PoemDetailPage() {
                 </div>
 
                 {/* Custom Audio Player for Music */}
-                <div className="max-w-md mx-auto p-6 bg-black/30 border border-[#FFD700]/20 rounded-lg">
+                <div className="max-w-md mx-auto p-6 bg-black/30 border border-[var(--accent)]/20 rounded-lg">
                   <div className="flex items-center justify-center gap-4 mb-6">
                     <button
                       onClick={() => isPlayingCurrentMusic ? audio.pause() : audio.play(poem.musicUrl!, 'music', poem.id)}
-                      className="w-16 h-16 rounded-full bg-[#FFD700] flex items-center justify-center hover:bg-[#FFEC8B] transition-colors shadow-lg"
+                      className="w-16 h-16 rounded-full bg-[var(--accent)] flex items-center justify-center hover:bg-[#FFEC8B] transition-colors shadow-lg"
                     >
                       <span className="text-black text-2xl">{isPlayingCurrentMusic ? '⏸' : '▶'}</span>
                     </button>
@@ -395,11 +395,11 @@ export default function PoemDetailPage() {
                 </div>
 
                 {/* Custom Audio Player for Voice */}
-                <div className="max-w-md mx-auto p-6 bg-black/30 border border-[#FFD700]/20 rounded-lg">
+                <div className="max-w-md mx-auto p-6 bg-black/30 border border-[var(--accent)]/20 rounded-lg">
                   <div className="flex items-center justify-center gap-4 mb-6">
                     <button
                       onClick={() => isPlayingCurrentVoice ? audio.pause() : audio.play(poem.voiceUrl!, 'voice', poem.id)}
-                      className="w-16 h-16 rounded-full bg-[#FFD700] flex items-center justify-center hover:bg-[#FFEC8B] transition-colors shadow-lg"
+                      className="w-16 h-16 rounded-full bg-[var(--accent)] flex items-center justify-center hover:bg-[#FFEC8B] transition-colors shadow-lg"
                     >
                       <span className="text-black text-2xl">{isPlayingCurrentVoice ? '⏸' : '▶'}</span>
                     </button>
@@ -450,7 +450,7 @@ export default function PoemDetailPage() {
         {/* Back Button */}
         <div className="mt-6 sm:mt-8">
           <Link href="/explore" className="block">
-            <Button variant="outline" className="w-full sm:w-auto border-white/30 text-[#FFD700] hover:bg-white/10 hover:border-[#FFD700]/50">
+            <Button variant="outline" className="w-full sm:w-auto border-white/30 text-[var(--accent)] hover:bg-white/10 hover:border-[var(--accent)]/50">
               ← Volver a Explorar
             </Button>
           </Link>

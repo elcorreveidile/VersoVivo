@@ -139,7 +139,7 @@ function EditBookContent() {
         <h1 className="text-2xl font-bold text-white mb-4">Error</h1>
         <p className="text-white/60 mb-6">{error}</p>
         <Link href="/admin/books">
-          <Button className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">
+          <Button className="bg-[var(--accent)] text-black hover:bg-[#FFEC8B]">
             ← Volver a Libros
           </Button>
         </Link>
@@ -156,7 +156,7 @@ function EditBookContent() {
           <p className="text-white/60">Modifica los datos del libro</p>
         </div>
         <Link href="/admin/books">
-          <Button variant="outline" className="bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black">
+          <Button variant="outline" className="bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black">
             ← Volver
           </Button>
         </Link>
@@ -185,7 +185,7 @@ function EditBookContent() {
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                 placeholder="Ej: Versos sencillos para despistar a la poesía"
               />
             </div>
@@ -200,7 +200,7 @@ function EditBookContent() {
                 required
                 value={formData.author}
                 onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                 placeholder="Ej: Javier Benítez Láinez"
               />
             </div>
@@ -214,7 +214,7 @@ function EditBookContent() {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={4}
-                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:border-[#FFD700] focus:outline-none"
+                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:border-[var(--accent)] focus:outline-none"
                 placeholder="Breve descripción del libro..."
               />
             </div>
@@ -228,7 +228,7 @@ function EditBookContent() {
                 type="url"
                 value={formData.coverUrl}
                 onChange={(e) => setFormData({ ...formData, coverUrl: e.target.value })}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                 placeholder="https://ejemplo.com/portada.jpg"
               />
               <p className="text-xs text-white/40 mt-1">
@@ -248,7 +248,7 @@ function EditBookContent() {
                 required
                 value={formData.price ?? 0}
                 onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
               />
             </div>
 
@@ -260,7 +260,7 @@ function EditBookContent() {
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value as 'draft' | 'published' | 'archived' })}
-                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[#FFD700] focus:outline-none"
+                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[var(--accent)] focus:outline-none"
               >
                 <option value="draft" className="bg-black">Borrador</option>
                 <option value="published" className="bg-black">Publicado</option>
@@ -275,7 +275,7 @@ function EditBookContent() {
                 id="inSubscription"
                 checked={formData.inSubscription}
                 onChange={(e) => setFormData({ ...formData, inSubscription: e.target.checked })}
-                className="w-5 h-5 rounded border-white/20 bg-white/5 text-[#FFD700] focus:ring-[#FFD700]"
+                className="w-5 h-5 rounded border-white/20 bg-white/5 text-[var(--accent)] focus:ring-[var(--accent)]"
               />
               <label htmlFor="inSubscription" className="text-sm text-white/80">
                 Incluir en suscripción
@@ -284,7 +284,7 @@ function EditBookContent() {
 
             {/* Preview */}
             {formData.title && (
-              <Card className="bg-[#FFD700]/5 border-[#FFD700]/20">
+              <Card className="bg-[var(--accent)]/5 border-[var(--accent)]/20">
                 <CardContent className="p-6">
                   <h3 className="text-lg font-semibold text-white mb-4">Vista Previa</h3>
                   <div className="flex items-start space-x-4">
@@ -303,7 +303,7 @@ function EditBookContent() {
                       <h4 className="text-xl font-bold text-white">{formData.title || 'Título'}</h4>
                       <p className="text-white/60">{formData.author || 'Autor'}</p>
                       <div className="mt-2">
-                        <span className="text-[#FFD700] font-semibold">€{(formData.price ?? 0).toFixed(2)}</span>
+                        <span className="text-[var(--accent)] font-semibold">€{(formData.price ?? 0).toFixed(2)}</span>
                       </div>
                       <div className="mt-2">
                         <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium border ${
@@ -326,7 +326,7 @@ function EditBookContent() {
             {book && book.poems && book.poems.length > 0 && (
               <div className="bg-white/5 border border-white/10 rounded-lg p-4">
                 <div className="text-sm text-white/60">
-                  Este libro contiene <span className="text-[#FFD700] font-semibold">{book.poems.length}</span> poema{book.poems.length !== 1 ? 's' : ''}
+                  Este libro contiene <span className="text-[var(--accent)] font-semibold">{book.poems.length}</span> poema{book.poems.length !== 1 ? 's' : ''}
                 </div>
               </div>
             )}
@@ -336,7 +336,7 @@ function EditBookContent() {
               <Button
                 type="submit"
                 disabled={saving}
-                className="flex-1 bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
+                className="flex-1 bg-[var(--accent)] text-black hover:bg-[#FFEC8B]"
               >
                 {saving ? 'Guardando...' : 'Guardar cambios'}
               </Button>
@@ -345,7 +345,7 @@ function EditBookContent() {
                   type="button"
                   variant="outline"
                   disabled={saving}
-                  className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                  className="w-full bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black"
                 >
                   Cancelar
                 </Button>

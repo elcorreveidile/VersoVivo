@@ -69,14 +69,14 @@ function UsersContent() {
                 placeholder="Buscar por email o nombre..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
               />
             </div>
             <div>
               <select
                 value={filterRole}
                 onChange={(e) => setFilterRole(e.target.value)}
-                className="w-full sm:w-48 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[#FFD700] focus:outline-none"
+                className="w-full sm:w-48 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[var(--accent)] focus:outline-none"
               >
                 <option value="all" className="bg-black">Todos los roles</option>
                 <option value="admin" className="bg-black">Administradores</option>
@@ -103,7 +103,7 @@ function UsersContent() {
       ) : filteredUsers.length > 0 ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredUsers.map((user) => (
-            <Card key={user.uid} className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-[#FFD700]/30 transition-all">
+            <Card key={user.uid} className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-[var(--accent)]/30 transition-all">
               <CardContent className="p-6">
                 {/* User Info */}
                 <div className="mb-4">
@@ -121,7 +121,7 @@ function UsersContent() {
                         className="w-12 h-12 rounded-full object-cover border-2 border-white/10"
                       />
                     ) : (
-                      <div className="w-12 h-12 rounded-full bg-[#FFD700]/10 border border-[#FFD700]/20 flex items-center justify-center text-[#FFD700] font-semibold text-lg">
+                      <div className="w-12 h-12 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center justify-center text-[var(--accent)] font-semibold text-lg">
                         {(user.displayName || user.email || 'U').charAt(0).toUpperCase()}
                       </div>
                     )}
@@ -181,7 +181,7 @@ function UsersContent() {
                 <div className="pt-4 border-t border-white/10">
                   <Link href={`/admin/users/${user.uid}`} className="block">
                     <Button
-                      className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                      className="w-full bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black"
                     >
                       Ver detalles
                     </Button>

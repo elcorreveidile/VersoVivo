@@ -66,7 +66,7 @@ export default function LoginPage() {
           </h2>
           <p className="mt-2 text-sm text-white/60">
             ¿No tienes cuenta?{' '}
-            <Link href="/register" className="font-medium text-[#FFD700] hover:text-[#FFEC8B]">
+            <Link href="/register" className="font-medium text-[var(--accent)] hover:text-[#FFEC8B]">
               Regístrate aquí
             </Link>
           </p>
@@ -89,7 +89,7 @@ export default function LoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
               placeholder="tu@email.com"
             />
           </div>
@@ -104,7 +104,7 @@ export default function LoginPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+              className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
               placeholder="••••••••"
             />
           </div>
@@ -112,7 +112,7 @@ export default function LoginPage() {
           <div>
             <Link
               href="/forgot-password"
-              className="text-sm text-[#FFD700] hover:text-[#FFEC8B]"
+              className="text-sm text-[var(--accent)] hover:text-[#FFEC8B]"
             >
               ¿Olvidaste tu contraseña?
             </Link>
@@ -121,7 +121,7 @@ export default function LoginPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
+            className="w-full bg-[var(--accent)] text-black hover:bg-[#FFEC8B]"
             size="lg"
           >
             {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}

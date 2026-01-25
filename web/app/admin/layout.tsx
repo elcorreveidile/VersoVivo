@@ -104,7 +104,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="flex items-center justify-between h-16 px-6 border-b border-white/10">
             <Link href="/admin" className="flex items-center space-x-2">
               <span className={cn(
-                'text-xl font-bold text-[#FFD700]',
+                'text-xl font-bold text-[var(--accent)]',
                 sidebarCollapsed && !isMobile && 'text-2xl'
               )}>
                 {sidebarCollapsed && !isMobile ? 'V' : 'VersoVivo'}
@@ -136,7 +136,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   className={cn(
                     'flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all',
                     isActive
-                      ? 'bg-[#FFD700]/10 text-[#FFD700] border border-[#FFD700]/30'
+                      ? 'bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30'
                       : 'text-white/70 hover:text-white hover:bg-white/5'
                   )}
                   title={sidebarCollapsed && !isMobile ? item.name : ''}
@@ -162,10 +162,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     <img
                       src={userProfile.photoURL}
                       alt={userProfile.displayName || 'Admin'}
-                      className="h-10 w-10 rounded-full object-cover ring-2 ring-[#FFD700]/30"
+                      className="h-10 w-10 rounded-full object-cover ring-2 ring-[var(--accent)]/30"
                     />
                   ) : (
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#FFD700] text-black text-sm font-bold">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--accent)] text-black text-sm font-bold">
                       {userProfile?.displayName?.charAt(0).toUpperCase() || 'A'}
                     </div>
                   )}
@@ -191,12 +191,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   <img
                     src={userProfile.photoURL}
                     alt={userProfile.displayName || 'Admin'}
-                    className="h-10 w-10 rounded-full object-cover ring-2 ring-[#FFD700]/30"
+                    className="h-10 w-10 rounded-full object-cover ring-2 ring-[var(--accent)]/30"
                     title={userProfile.displayName || 'Admin'}
                   />
                 ) : (
                   <div
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#FFD700] text-black text-sm font-bold"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--accent)] text-black text-sm font-bold"
                     title={userProfile?.displayName || 'Admin'}
                   >
                     {userProfile?.displayName?.charAt(0).toUpperCase() || 'A'}
@@ -266,7 +266,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <div className="flex items-center space-x-4">
               <Link
                 href="/"
-                className="text-sm text-[#FFD700] hover:text-[#FFEC8B]"
+                className="text-sm text-[var(--accent)] hover:text-[#FFEC8B]"
               >
                 Ver sitio →
               </Link>

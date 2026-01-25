@@ -121,7 +121,7 @@ function PoemsContent() {
             {filterNoContent ? '✓ Mostrando sin contenido' : '⚠️ Ver sin contenido'}
           </Button>
           <Link href="/admin/poems/new">
-            <Button className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">
+            <Button className="bg-[var(--accent)] text-black hover:bg-[#FFEC8B]">
               + Crear poema
             </Button>
           </Link>
@@ -138,14 +138,14 @@ function PoemsContent() {
                 placeholder="Buscar por título o autor..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
               />
             </div>
             <div>
               <select
                 value={filterBook}
                 onChange={(e) => setFilterBook(e.target.value)}
-                className="w-full sm:w-48 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[#FFD700] focus:outline-none"
+                className="w-full sm:w-48 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[var(--accent)] focus:outline-none"
               >
                 <option value="all" className="bg-black">Todos los libros</option>
                 {books.map((book) => (
@@ -180,7 +180,7 @@ function PoemsContent() {
               return (
                 <Card
                   key={poem.id}
-                  className={`bg-white/5 backdrop-blur-sm hover:border-[#FFD700]/30 transition-all ${
+                  className={`bg-white/5 backdrop-blur-sm hover:border-[var(--accent)]/30 transition-all ${
                     hasNoContent
                       ? 'border-2 border-red-500/50 hover:border-red-500'
                       : 'border-white/10'
@@ -220,17 +220,17 @@ function PoemsContent() {
                         </span>
                       )}
                       {poem.videoUrl && (
-                        <span className="inline-flex items-center text-xs bg-[#FFD700]/10 text-[#FFD700] px-2 py-1 rounded">
+                        <span className="inline-flex items-center text-xs bg-[var(--accent)]/10 text-[var(--accent)] px-2 py-1 rounded">
                           🎬 Video
                         </span>
                       )}
                       {poem.musicUrl && (
-                        <span className="inline-flex items-center text-xs bg-[#FFD700]/10 text-[#FFD700] px-2 py-1 rounded">
+                        <span className="inline-flex items-center text-xs bg-[var(--accent)]/10 text-[var(--accent)] px-2 py-1 rounded">
                           🎵 Música
                         </span>
                       )}
                       {poem.voiceUrl && (
-                        <span className="inline-flex items-center text-xs bg-[#FFD700]/10 text-[#FFD700] px-2 py-1 rounded">
+                        <span className="inline-flex items-center text-xs bg-[var(--accent)]/10 text-[var(--accent)] px-2 py-1 rounded">
                           🎙️ Voz
                         </span>
                       )}
@@ -260,7 +260,7 @@ function PoemsContent() {
                       {poem.tags.slice(0, 3).map((tag: string) => (
                         <span
                           key={tag}
-                          className="inline-flex items-center rounded-full bg-[#FFD700]/10 border border-[#FFD700]/20 px-2 py-1 text-xs font-medium text-[#FFD700]"
+                          className="inline-flex items-center rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 px-2 py-1 text-xs font-medium text-[var(--accent)]"
                         >
                           {tag}
                         </span>
@@ -277,7 +277,7 @@ function PoemsContent() {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                        className="w-full bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black"
                       >
                         Editar
                       </Button>
@@ -323,7 +323,7 @@ function PoemsContent() {
             </p>
             {!searchTerm && filterBook === 'all' && (
               <Link href="/admin/poems/new">
-                <Button className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">
+                <Button className="bg-[var(--accent)] text-black hover:bg-[#FFEC8B]">
                   + Crear primer poema
                 </Button>
               </Link>

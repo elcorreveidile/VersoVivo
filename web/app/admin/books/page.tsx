@@ -139,7 +139,7 @@ function BooksContent() {
           <p className="text-white/60">{books.length} libro{books.length !== 1 ? 's' : ''} en total</p>
         </div>
         <Link href="/admin/books/new">
-          <Button className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">
+          <Button className="bg-[var(--accent)] text-black hover:bg-[#FFEC8B]">
             + Crear libro
           </Button>
         </Link>
@@ -155,7 +155,7 @@ function BooksContent() {
                 placeholder="Buscar por título o autor..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
               />
             </div>
             <div className="flex gap-2">
@@ -163,7 +163,7 @@ function BooksContent() {
                 onClick={() => setFilterStatus('all')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   filterStatus === 'all'
-                    ? 'bg-[#FFD700] text-black'
+                    ? 'bg-[var(--accent)] text-black'
                     : 'bg-white/5 text-white/70 hover:text-white hover:bg-white/10'
                 }`}
               >
@@ -173,7 +173,7 @@ function BooksContent() {
                 onClick={() => setFilterStatus('published')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   filterStatus === 'published'
-                    ? 'bg-[#FFD700] text-black'
+                    ? 'bg-[var(--accent)] text-black'
                     : 'bg-white/5 text-white/70 hover:text-white hover:bg-white/10'
                 }`}
               >
@@ -183,7 +183,7 @@ function BooksContent() {
                 onClick={() => setFilterStatus('draft')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   filterStatus === 'draft'
-                    ? 'bg-[#FFD700] text-black'
+                    ? 'bg-[var(--accent)] text-black'
                     : 'bg-white/5 text-white/70 hover:text-white hover:bg-white/10'
                 }`}
               >
@@ -199,7 +199,7 @@ function BooksContent() {
         <>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredBooks.map((book) => (
-              <Card key={book.id} className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-[#FFD700]/30 transition-all">
+              <Card key={book.id} className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-[var(--accent)]/30 transition-all">
                 <CardContent className="p-6">
                   {/* Cover and basic info */}
                   <div className="flex items-start space-x-4 mb-4">
@@ -229,7 +229,7 @@ function BooksContent() {
                   <div className="space-y-2 mb-4">
                     <div className="flex justify-between text-sm">
                       <span className="text-white/60">Precio:</span>
-                      <span className="text-[#FFD700] font-semibold">€{(book.price || 0).toFixed(2)}</span>
+                      <span className="text-[var(--accent)] font-semibold">€{(book.price || 0).toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-white/60">Poemas:</span>
@@ -249,7 +249,7 @@ function BooksContent() {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                        className="w-full bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black"
                       >
                         Editar
                       </Button>
@@ -294,7 +294,7 @@ function BooksContent() {
             </p>
             {!searchTerm && filterStatus === 'all' && (
               <Link href="/admin/books/new">
-                <Button className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">
+                <Button className="bg-[var(--accent)] text-black hover:bg-[#FFEC8B]">
                   + Crear primer libro
                 </Button>
               </Link>

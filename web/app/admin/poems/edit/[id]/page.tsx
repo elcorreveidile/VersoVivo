@@ -165,7 +165,7 @@ function EditPoemContent() {
         <h1 className="text-2xl font-bold text-white mb-4">Error</h1>
         <p className="text-white/60 mb-6">{error}</p>
         <Link href="/admin/poems">
-          <Button className="bg-[#FFD700] text-black hover:bg-[#FFEC8B]">
+          <Button className="bg-[var(--accent)] text-black hover:bg-[#FFEC8B]">
             ← Volver a Poemas
           </Button>
         </Link>
@@ -182,7 +182,7 @@ function EditPoemContent() {
           <p className="text-white/60">Modifica los datos del poema</p>
         </div>
         <Link href="/admin/poems">
-          <Button variant="outline" className="bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black">
+          <Button variant="outline" className="bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black">
             ← Volver
           </Button>
         </Link>
@@ -211,7 +211,7 @@ function EditPoemContent() {
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
               />
             </div>
 
@@ -225,7 +225,7 @@ function EditPoemContent() {
                 required
                 value={formData.author}
                 onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
               />
             </div>
 
@@ -239,7 +239,7 @@ function EditPoemContent() {
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                 rows={10}
                 required
-                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:border-[#FFD700] focus:outline-none"
+                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:border-[var(--accent)] focus:outline-none"
               />
             </div>
 
@@ -254,7 +254,7 @@ function EditPoemContent() {
                 <select
                   value={formData.originalLanguage}
                   onChange={(e) => setFormData({ ...formData, originalLanguage: e.target.value })}
-                  className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[#FFD700] focus:outline-none"
+                  className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[var(--accent)] focus:outline-none"
                 >
                   <option value="" className="bg-black">Español (sin traducción)</option>
                   <option value="gl" className="bg-black">Gallego</option>
@@ -279,7 +279,7 @@ function EditPoemContent() {
                     value={formData.contentSpanish}
                     onChange={(e) => setFormData({ ...formData, contentSpanish: e.target.value })}
                     rows={10}
-                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:border-[#FFD700] focus:outline-none"
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:border-[var(--accent)] focus:outline-none"
                     placeholder="Pega aquí la traducción del poema al español..."
                   />
                   <p className="text-xs text-white/40 mt-1">
@@ -298,7 +298,7 @@ function EditPoemContent() {
                 type="text"
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
               />
             </div>
 
@@ -311,7 +311,7 @@ function EditPoemContent() {
                 type="text"
                 value={formData.tags}
                 onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                 placeholder="amor, memoria, tiempo (separadas por comas)"
               />
               <p className="text-xs text-white/40 mt-1">
@@ -327,7 +327,7 @@ function EditPoemContent() {
               <select
                 value={formData.bookId}
                 onChange={(e) => setFormData({ ...formData, bookId: e.target.value })}
-                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[#FFD700] focus:outline-none"
+                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-[var(--accent)] focus:outline-none"
               >
                 <option value="" className="bg-black">Sin libro</option>
                 {books
@@ -387,7 +387,7 @@ function EditPoemContent() {
                   type="url"
                   value={formData.videoUrl}
                   onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                 />
                 {formData.videoUrl && (
                   <p className="text-xs text-green-400 mt-1">✓ Video configurado</p>
@@ -402,7 +402,7 @@ function EditPoemContent() {
                   type="url"
                   value={formData.musicUrl}
                   onChange={(e) => setFormData({ ...formData, musicUrl: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                 />
                 {formData.musicUrl && (
                   <p className="text-xs text-green-400 mt-1">✓ Música configurada</p>
@@ -417,7 +417,7 @@ function EditPoemContent() {
                   type="url"
                   value={formData.voiceUrl}
                   onChange={(e) => setFormData({ ...formData, voiceUrl: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                 />
                 {formData.voiceUrl && (
                   <p className="text-xs text-green-400 mt-1">✓ Voz configurada</p>
@@ -432,7 +432,7 @@ function EditPoemContent() {
                   type="url"
                   value={formData.thumbnailUrl}
                   onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[#FFD700]"
+                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-[var(--accent)]"
                 />
                 {formData.thumbnailUrl && (
                   <p className="text-xs text-green-400 mt-1">✓ Miniatura configurada</p>
@@ -445,7 +445,7 @@ function EditPoemContent() {
               <Button
                 type="submit"
                 disabled={saving}
-                className="flex-1 bg-[#FFD700] text-black hover:bg-[#FFEC8B]"
+                className="flex-1 bg-[var(--accent)] text-black hover:bg-[#FFEC8B]"
               >
                 {saving ? 'Guardando...' : 'Guardar cambios'}
               </Button>
@@ -454,7 +454,7 @@ function EditPoemContent() {
                   type="button"
                   variant="outline"
                   disabled={saving}
-                  className="w-full bg-black text-[#FFD700] border-[#FFD700] hover:bg-[#FFD700] hover:text-black"
+                  className="w-full bg-black text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black"
                 >
                   Cancelar
                 </Button>
