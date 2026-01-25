@@ -46,7 +46,7 @@ export default function AdminRoute({ children, fallback = 'redirect' }: AdminRou
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="animate-pulse flex flex-col items-center">
-          <div className="w-12 h-12 border-4 border-[#FFD700] border-t-transparent rounded-full animate-spin mb-4"></div>
+          <div className="w-12 h-12 border-4 border-[var(--accent)] border-t-transparent rounded-full animate-spin mb-4"></div>
           <p className="text-white/60">Verificando permisos...</p>
         </div>
       </div>
@@ -62,7 +62,7 @@ export default function AdminRoute({ children, fallback = 'redirect' }: AdminRou
             <p className="text-white/60 mb-8">No tienes permisos para acceder a esta página.</p>
             <button
               onClick={() => router.push('/')}
-              className="bg-[#FFD700] text-black px-6 py-3 rounded-lg hover:bg-[#FFEC8B] transition-colors"
+              className="bg-[var(--accent)] text-black px-6 py-3 rounded-lg hover:bg-[#FFEC8B] transition-colors"
             >
               Volver al Inicio
             </button>

@@ -37,13 +37,13 @@ export default function PersistentAudioPlayer() {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-xl border-t border-[#FFD700]/20 shadow-lg">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-xl border-t border-[var(--accent)]/20 shadow-lg">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3 py-3">
           {/* Play/Pause Button */}
           <button
             onClick={() => audio.isPlaying ? audio.pause() : audio.resume()}
-            className="flex-shrink-0 w-12 h-12 rounded-full bg-[#FFD700] flex items-center justify-center hover:bg-[#FFEC8B] transition-colors shadow-lg"
+            className="flex-shrink-0 w-12 h-12 rounded-full bg-[var(--accent)] flex items-center justify-center hover:bg-[#FFEC8B] transition-colors shadow-lg"
           >
             <span className="text-black text-xl">{audio.isPlaying ? '⏸' : '▶'}</span>
           </button>

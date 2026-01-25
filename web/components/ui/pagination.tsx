@@ -99,7 +99,7 @@ export function Pagination({
                 className={cn(
                   'min-w-[2.5rem]',
                   page === currentPage
-                    ? 'bg-[#FFD700] text-black hover:bg-[#FFEC8B]'
+                    ? 'bg-[var(--accent)] text-black hover:bg-[#FFEC8B]'
                     : 'bg-black text-white border-white/20 hover:bg-white/10'
                 )}
               >

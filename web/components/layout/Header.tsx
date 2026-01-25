@@ -56,7 +56,7 @@ export default function Header() {
             alt="VersoVivo"
             className="h-10 w-10 object-contain"
           />
-          <span className="text-2xl font-bold text-[#FFD700] hover:glow-hover transition-colors">VersoVivo</span>
+          <span className="text-2xl font-bold text-[var(--accent)] hover:glow-hover transition-colors">VersoVivo</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -66,9 +66,9 @@ export default function Header() {
               key={item.href}
               href={item.href}
               className={cn(
-                'text-sm font-medium transition-all hover:text-[#FFD700]',
+                'text-sm font-medium transition-all hover:text-[var(--accent)]',
                 pathname === item.href
-                  ? 'text-[#FFD700]'
+                  ? 'text-[var(--accent)]'
                   : 'text-white/70 hover:text-white'
               )}
             >
@@ -89,16 +89,16 @@ export default function Header() {
                   <img
                     src={userProfile.photoURL}
                     alt={userProfile.displayName || 'Usuario'}
-                    className="h-8 w-8 rounded-full object-cover ring-2 ring-[#FFD700]/30"
+                    className="h-8 w-8 rounded-full object-cover ring-2 ring-[var(--accent)]/30"
                   />
                 ) : (
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFD700] text-black text-sm font-medium">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--accent)] text-black text-sm font-medium">
                     {userProfile?.displayName?.charAt(0).toUpperCase() || 'U'}
                   </div>
                 )}
                 <button
                   onClick={handleSignOut}
-                  className="text-sm font-medium text-white/70 hover:text-[#FFD700] transition-colors"
+                  className="text-sm font-medium text-white/70 hover:text-[var(--accent)] transition-colors"
                 >
                   Cerrar Sesión
                 </button>
@@ -108,13 +108,13 @@ export default function Header() {
             <>
               <Link
                 href="/login"
-                className="text-sm font-medium text-white/70 hover:text-[#FFD700] transition-colors"
+                className="text-sm font-medium text-white/70 hover:text-[var(--accent)] transition-colors"
               >
                 Iniciar Sesión
               </Link>
               <Link
                 href="/register"
-                className="inline-flex items-center justify-center rounded-lg bg-[#FFD700] px-4 py-2 text-sm font-medium text-black hover:bg-[#FFEC8B] transition-colors"
+                className="inline-flex items-center justify-center rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-black hover:bg-[#FFEC8B] transition-colors"
               >
                 Registrarse
               </Link>
@@ -127,7 +127,7 @@ export default function Header() {
           {user && isAdmin && (
             <Link
               href="/admin"
-              className="text-sm font-medium text-[#FFD700] px-3 py-2 rounded-lg hover:bg-[#FFD700]/10 transition-colors"
+              className="text-sm font-medium text-[var(--accent)] px-3 py-2 rounded-lg hover:bg-[var(--accent)]/10 transition-colors"
             >
               ⚙️
             </Link>
@@ -168,7 +168,7 @@ export default function Header() {
                 className={cn(
                   'block px-3 py-3 rounded-lg text-base font-medium transition-colors',
                   pathname === item.href
-                    ? 'bg-[#FFD700]/10 text-[#FFD700]'
+                    ? 'bg-[var(--accent)]/10 text-[var(--accent)]'
                     : 'text-white/70 hover:text-white hover:bg-white/10'
                 )}
               >
@@ -184,10 +184,10 @@ export default function Header() {
                       <img
                         src={userProfile.photoURL}
                         alt={userProfile.displayName || 'Usuario'}
-                        className="h-10 w-10 rounded-full object-cover ring-2 ring-[#FFD700]/30"
+                        className="h-10 w-10 rounded-full object-cover ring-2 ring-[var(--accent)]/30"
                       />
                     ) : (
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#FFD700] text-black text-base font-medium">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--accent)] text-black text-base font-medium">
                         {userProfile?.displayName?.charAt(0).toUpperCase() || 'U'}
                       </div>
                     )}
@@ -224,7 +224,7 @@ export default function Header() {
                   <Link
                     href="/register"
                     onClick={closeMobileMenu}
-                    className="block px-3 py-3 rounded-lg text-base font-medium bg-[#FFD700] text-black hover:bg-[#FFEC8B] transition-colors text-center"
+                    className="block px-3 py-3 rounded-lg text-base font-medium bg-[var(--accent)] text-black hover:bg-[#FFEC8B] transition-colors text-center"
                   >
                     Registrarse
                   </Link>
