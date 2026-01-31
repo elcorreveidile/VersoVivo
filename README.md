@@ -1,5 +1,4 @@
-En la pagina de inicio https://verso-vivo-6l3w.vercel.app/register# VersoVivo 📚✨
-VersoVivo es una aplicación móvil multiplataforma (iOS/Android) que ofrece una experiencia inmersiva de videopoemas. Cada poema incluye tres formatos: texto, video de recitación y versión musicada con IA.
+📚✨ VersoVivo es una aplicación móvil multiplataforma (iOS/Android) que ofrece una experiencia inmersiva de videopoemas. Cada poema incluye tres formatos: texto, video de recitación y versión musicada con IA.
 
 > Una experiencia inmersiva de videopoemas que combina texto, recitación y música generada por IA.
 
