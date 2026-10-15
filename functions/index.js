@@ -10,7 +10,9 @@ const db = getFirestore();
 
 const APPLE_VERIFY_PROD = 'https://buy.itunes.apple.com/verifyReceipt';
 const APPLE_VERIFY_SANDBOX = 'https://sandbox.itunes.apple.com/verifyReceipt';
-const GOOGLE_PLAY_PACKAGE_NAME = 'com.anonymous.versovivo';
+// Identificador de la app: el mismo en app.json (iOS bundleIdentifier y Android package).
+const APP_ID = 'com.versovivo.app';
+const GOOGLE_PLAY_PACKAGE_NAME = APP_ID;
 const APP_STORE_SHARED_SECRET = defineSecret('APP_STORE_SHARED_SECRET');
 const GOOGLE_PLAY_SERVICE_ACCOUNT_JSON = defineSecret(
   'GOOGLE_PLAY_SERVICE_ACCOUNT_JSON'
@@ -61,6 +63,11 @@ const verifyAppleReceipt = async (receipt, sharedSecret) => {
   let data = await postReceipt(APPLE_VERIFY_PROD);
   if (data.status === 21007) {
     data = await postReceipt(APPLE_VERIFY_SANDBOX);
+  }
+
+  // Un recibo válido de OTRA app no sirve: tiene que ser de esta.
+  if (data.status === 0 && (!data.receipt || data.receipt.bundle_id !== APP_ID)) {
+    throw new HttpsError('failed-precondition', 'El recibo no es de esta app.');
   }
 
   return data;

@@ -40,7 +40,7 @@ class AuthService {
         uid: userCredential.user.uid,
         email: credentials.email,
         displayName: credentials.displayName,
-        favorites: [],
+        favoritePoems: [],
         readPoems: [],
         listenedPoems: [],
         watchedPoems: [],
@@ -116,7 +116,7 @@ class AuthService {
           email: credential.email || userCredential.user.email || '',
           displayName: credential.fullName?.givenName || userCredential.user.displayName || 'Usuario',
           role: 'user', // Default role for new users
-          favorites: [],
+          favoritePoems: [],
           readPoems: [],
           listenedPoems: [],
           watchedPoems: [],

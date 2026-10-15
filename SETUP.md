@@ -63,9 +63,6 @@ FIREBASE_MESSAGING_SENDER_ID=123456789
 FIREBASE_APP_ID=1:123456789:web:abcdef
 # FIREBASE_MEASUREMENT_ID es opcional si no usas Analytics
 
-# Suno AI Configuration
-SUNO_AI_API_KEY=tu-suno-api-key
-SUNO_AI_API_URL=https://api.suno.ai/v1
 
 # Google Sign-In
 GOOGLE_WEB_CLIENT_ID=tu-google-client-id.apps.googleusercontent.com
@@ -206,13 +203,9 @@ buildscript {
 apply plugin: 'com.google.gms.google-services'
 ```
 
-### 6. Configurar Suno AI (Opcional)
+### 6. Música de los poemas
 
-1. Regístrate en [Suno AI](https://suno.ai) (nota: URL ficticia para este ejemplo)
-2. Obtén tu API key desde el dashboard
-3. Añade la API key a tu archivo `.env`
-
-**Nota:** En el MVP, puedes usar música pregenerada y añadir esta funcionalidad después.
+La música de cada poema se genera fuera de la app (con Suno u otra herramienta) y se sube ya terminada a Firebase Storage desde el panel de administración. La app **no** llama a ningún servicio de IA: así no hay claves de pago dentro del paquete y no hay coste por usuario.
 
 ### 7. Ejecutar la Aplicación
 
@@ -318,7 +311,7 @@ VersoVivo/
 │   ├── components/       # Componentes reutilizables
 │   ├── screens/         # Pantallas de la aplicación
 │   ├── navigation/      # Navegación
-│   ├── services/        # Servicios (Firebase, Suno AI)
+│   ├── services/        # Servicios (Firebase)
 │   ├── store/           # Redux store
 │   ├── types/           # TypeScript types
 │   ├── utils/           # Utilidades

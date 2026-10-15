@@ -107,7 +107,7 @@ class FirestoreService {
     try {
       const userRef = doc(db, 'users', userId);
       await updateDoc(userRef, {
-        favorites: arrayUnion(poemId),
+        favoritePoems: arrayUnion(poemId),
       });
     } catch (error) {
       console.error('Error adding to favorites:', error);
@@ -122,7 +122,7 @@ class FirestoreService {
     try {
       const userRef = doc(db, 'users', userId);
       await updateDoc(userRef, {
-        favorites: arrayRemove(poemId),
+        favoritePoems: arrayRemove(poemId),
       });
     } catch (error) {
       console.error('Error removing from favorites:', error);
@@ -199,12 +199,12 @@ class FirestoreService {
       const userDoc = await getDoc(userRef);
       const userData = userDoc.data() as User;
 
-      if (!userData.favorites || userData.favorites.length === 0) {
+      if (!userData.favoritePoems || userData.favoritePoems.length === 0) {
         return [];
       }
 
       const poems = await Promise.all(
-        userData.favorites.map(poemId => this.getPoemById(poemId))
+        userData.favoritePoems.map(poemId => this.getPoemById(poemId))
       );
 
       return poems.filter(poem => poem !== null) as Poem[];

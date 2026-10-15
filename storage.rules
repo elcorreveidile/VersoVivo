@@ -1,0 +1,27 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isAdmin() {
+      return request.auth != null && request.auth.token.get('admin', false) == true;
+    }
+
+    function allowedType() {
+      return request.resource.contentType.matches('image/.*')
+        || request.resource.contentType.matches('audio/.*')
+        || request.resource.contentType.matches('video/.*')
+        || request.resource.contentType == 'application/pdf';
+    }
+
+    // Lectura pública mientras todo lo publicado sea gratuito (se restringirá con el
+    // acceso por suscripción o venta). Escritura: solo administradores, solo imagen,
+    // audio, vídeo o PDF y con tope de tamaño (1 GB).
+    match /{allPaths=**} {
+      allow read: if true;
+      allow create, update: if isAdmin()
+        && allowedType()
+        && request.resource.size < 1024 * 1024 * 1024;
+      allow delete: if isAdmin();
+    }
+  }
+}

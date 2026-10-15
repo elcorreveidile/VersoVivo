@@ -47,7 +47,7 @@ const HomeScreen: React.FC = () => {
           <PoemCard
             poem={item}
             onPress={() => handlePoemPress(item)}
-            isFavorite={user?.favorites.includes(item.id)}
+            isFavorite={user?.favoritePoems?.includes(item.id)}
           />
         )}
         contentContainerStyle={styles.listContent}
