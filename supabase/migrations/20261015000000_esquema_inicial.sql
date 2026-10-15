@@ -133,6 +133,8 @@ create table public.poems (
   category         text not null default 'otros' check (char_length(category) between 1 and 60),
   tags             text[] not null default '{}' check (cardinality(tags) <= 20),
   cover_path       text check (cover_path is null or char_length(cover_path) <= 500),
+  -- muestra pública (unos versos) para quien aún no tiene cuenta; el poema entero exige cuenta
+  excerpt          text check (excerpt is null or char_length(excerpt) <= 600),
   duration_seconds integer check (duration_seconds is null or duration_seconds >= 0),
   original_language text not null default 'es' check (char_length(original_language) between 2 and 8),
   access           public.access_level not null default 'free',
@@ -238,7 +240,7 @@ as $$
     where p.id = p_poem_id
       and p.status = 'published'
       and (
-        p.access = 'free'
+        (p.access = 'free' and auth.uid() is not null)  -- gratis = con cuenta
         or (p.access = 'subscription' and public.has_active_subscription())
         or (p.access = 'purchase' and p.book_id is not null and public.owns_book(p.book_id))
         or (p.book_id is not null and public.owns_book(p.book_id))
@@ -410,7 +412,7 @@ create policy poems_delete on public.poems for delete to authenticated
   using (public.is_admin());
 
 -- contenido privado: solo con derecho (gratis, suscripción, compra) o admin.
-create policy poem_content_select on public.poem_content for select to anon, authenticated
+create policy poem_content_select on public.poem_content for select to authenticated
   using (public.can_access_poem(poem_id));
 create policy poem_content_insert on public.poem_content for insert to authenticated
   with check (public.is_admin());
@@ -470,13 +472,13 @@ grant execute on all functions in schema public to service_role;
 
 -- funciones que las políticas necesitan evaluar con los privilegios del que consulta
 grant execute on function public.is_admin()                  to anon, authenticated;
-grant execute on function public.has_active_subscription()   to anon, authenticated;
-grant execute on function public.owns_book(uuid)             to anon, authenticated;
-grant execute on function public.can_access_poem(uuid)       to anon, authenticated;
-grant execute on function public.can_access_book(uuid)       to anon, authenticated;
+grant execute on function public.has_active_subscription()   to authenticated;
+grant execute on function public.owns_book(uuid)             to authenticated;
+grant execute on function public.can_access_poem(uuid)       to authenticated;
+grant execute on function public.can_access_book(uuid)       to authenticated;
 
--- lectura del catálogo: también sin sesión (todo lo publicado hoy es gratis)
-grant select on public.poems, public.books, public.poem_content to anon;
+-- catálogo (metadatos y muestra): también sin sesión. El contenido completo exige cuenta.
+grant select on public.poems, public.books to anon;
 
 grant select on public.poems, public.books, public.poem_content, public.book_files to authenticated;
 grant insert, update, delete on public.poems, public.books, public.poem_content, public.book_files to authenticated; -- solo admin, por RLS

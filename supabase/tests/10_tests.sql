@@ -117,6 +117,8 @@ insert into public.poems (id, title, author, access, status, book_id) values
   ('e0000000-0000-0000-0000-000000000005', 'Archivado gratis', 'Autor', 'free', 'archived', null),
   ('e0000000-0000-0000-0000-000000000006', 'En libro, marcado gratis', 'Autor', 'free', 'published', 'b0000000-0000-0000-0000-000000000001');
 
+update public.poems set excerpt = 'Primeros versos de muestra' where id = 'e0000000-0000-0000-0000-000000000001';
+
 insert into public.poem_content (poem_id, text_content, video_path)
 select id, 'texto de ' || title, 'video/' || id || '.mp4' from public.poems;
 
@@ -163,16 +165,10 @@ select t.check('anon: no ve borradores ni archivados',
   t.n($$select 1 from public.poems where status <> 'published'$$) = 0);
 select t.check('anon: ve solo libros publicados',
   t.n('select 1 from public.books') = 2);
-select t.check('anon: lee el contenido de un poema gratis',
-  t.n($$select 1 from public.poem_content where poem_id = 'e0000000-0000-0000-0000-000000000001'$$) = 1);
-select t.check('anon: NO lee el contenido de pago ni de suscripción',
-  t.n($$select 1 from public.poem_content where poem_id in
-        ('e0000000-0000-0000-0000-000000000002','e0000000-0000-0000-0000-000000000003')$$) = 0);
-select t.check('anon: NO lee contenido de borrador ni archivado',
-  t.n($$select 1 from public.poem_content where poem_id in
-        ('e0000000-0000-0000-0000-000000000004','e0000000-0000-0000-0000-000000000005')$$) = 0);
-select t.check('anon: un poema marcado gratis es gratis aunque esté en un libro (lo que se vende es el PDF)',
-  t.n($$select 1 from public.poem_content where poem_id = 'e0000000-0000-0000-0000-000000000006'$$) = 1);
+select t.check('anon: lee la muestra (excerpt) de un poema publicado',
+  t.n($$select 1 from public.poems where excerpt is not null$$) = 1);
+select t.check('anon: NO accede al contenido completo de ningún poema, ni gratis',
+  t.denied('select 1 from public.poem_content'));
 select t.check('anon: no accede a book_files',
   t.denied('select 1 from public.book_files'));
 select t.check('anon: no accede a profiles, favoritos, actividad, suscripciones, compras ni registro',
@@ -217,7 +213,7 @@ select t.check('B: no lee el PDF del libro por suscripción',
 -- 5. Usuario sin derechos (C) y con derechos caducados/reembolsados (D)
 -- ---------------------------------------------------------------------------
 select t.user_('00000000-0000-0000-0000-00000000000c');
-select t.check('C (nada): solo contenido gratis publicado',
+select t.check('C (cuenta gratuita, sin compras): lee entero todo poema gratis publicado',
   t.n('select 1 from public.poem_content') = 2);   -- 001 y 006
 select t.check('C: ningún PDF',
   t.n('select 1 from public.book_files') = 0);
@@ -393,13 +389,13 @@ select t.check('todas las tablas de public tienen RLS',
   not exists (select 1 from pg_class c join pg_namespace n on n.oid = c.relnamespace
               where n.nspname = 'public' and c.relkind = 'r' and not c.relrowsecurity));
 
-select t.check('anon: solo SELECT en poems, books y poem_content; nada más en ninguna tabla',
+select t.check('anon: solo SELECT en poems y books; nada más en ninguna tabla',
   (select coalesce(string_agg(c.relname || ':' || p.priv, ',' order by c.relname, p.priv), '')
      from pg_class c join pg_namespace n on n.oid = c.relnamespace
      cross join (values ('SELECT'),('INSERT'),('UPDATE'),('DELETE'),('TRUNCATE'),('REFERENCES'),('TRIGGER')) p(priv)
     where n.nspname = 'public' and c.relkind = 'r'
       and has_table_privilege('anon', c.oid, p.priv)
-      and not (p.priv = 'SELECT' and c.relname in ('poems','books','poem_content'))) = '');
+      and not (p.priv = 'SELECT' and c.relname in ('poems','books'))) = '');
 
 select t.check('authenticated: sin TRUNCATE, REFERENCES ni TRIGGER en ninguna tabla',
   not exists (select 1 from pg_class c join pg_namespace n on n.oid = c.relnamespace
@@ -427,6 +423,18 @@ select t.check('anon/authenticated: ejecutan solo las funciones de derechos',
     where n.nspname = 'public'
       and (has_function_privilege('anon', p.oid, 'EXECUTE') or has_function_privilege('authenticated', p.oid, 'EXECUTE'))
       and p.proname not in ('is_admin','has_active_subscription','owns_book','can_access_poem','can_access_book')) = '');
+
+select t.check('anon: solo ejecuta is_admin (las demás exigen cuenta)',
+  (select coalesce(string_agg(p.proname, ','), '')
+     from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname = 'public' and has_function_privilege('anon', p.oid, 'EXECUTE')
+      and p.proname <> 'is_admin') = '');
+
+-- defensa en profundidad: sin identidad (uid nulo) lo «gratis» tampoco se concede
+select t.service();
+select t.check('can_access_poem sin identidad es falso incluso para un poema gratis',
+  not public.can_access_poem('e0000000-0000-0000-0000-000000000001'));
+select t.owner();
 
 select t.check('las funciones security definer fijan search_path',
   not exists (select 1 from pg_proc p join pg_namespace n on n.oid = p.pronamespace

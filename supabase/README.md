@@ -7,8 +7,8 @@ Supabase** (una vez, en orden de nombre). Aún no hay datos que migrar desde Fir
 
 | Tabla | Quién lee | Quién escribe |
 |---|---|---|
-| `poems`, `books` (metadatos públicos) | todos, solo lo `published` (el admin ve todo) | admin |
-| `poem_content` (texto, rutas de vídeo/música/voz) | gratis → todos; suscripción → suscriptor vigente; compra → quien compró el libro; admin → todo | admin |
+| `poems`, `books` (metadatos públicos y `excerpt`, la muestra de unos versos) | todos, también sin cuenta, solo lo `published` (el admin ve todo) | admin |
+| `poem_content` (texto, rutas de vídeo/música/voz) | gratis → **cualquier cuenta** (sin cuenta solo se ve la muestra); suscripción → suscriptor vigente; compra → quien compró el libro; admin → todo | admin |
 | `book_files` (PDF) | igual, según el `access` del libro | admin |
 | `subscriptions`, `purchases` | el dueño (el admin ve todas) | **solo `service_role`** (webhook de RevenueCat) |
 | `profiles` | el dueño (y admin) | el dueño: solo `display_name`, `photo_url`, `preferences`, `last_login_at` |

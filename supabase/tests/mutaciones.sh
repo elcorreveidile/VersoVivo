@@ -27,6 +27,8 @@ MUTACIONES=(
  "actividad sin comprobar el derecho|s=s.replace('with check (user_id = auth.uid() and public.can_access_poem(poem_id))','with check (user_id = auth.uid())')"
  "función sin search_path|s=s.replace(\"security definer\nset search_path = ''\n\",'security definer\n',1)"
  "función interna ejecutable por anon|s+='\ngrant execute on function public.handle_new_user() to anon;\n'"
+ "anon lee el contenido completo|s+='\ngrant select on public.poem_content to anon;\ncreate policy x on public.poem_content for select to anon using (true);\n'"
+ "gratis sin exigir cuenta|s=s.replace(\"(p.access = 'free' and auth.uid() is not null)  -- gratis = con cuenta\",\"p.access = 'free'\")"
  "anon puede escribir poemas|s+='\ngrant insert on public.poems to anon;\n'"
  "administrador escribe suscripciones|s+='\ngrant insert on public.subscriptions to authenticated;\ncreate policy x on public.subscriptions for insert to authenticated with check (public.is_admin());\n'"
 )
