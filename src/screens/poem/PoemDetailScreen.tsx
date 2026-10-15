@@ -26,7 +26,7 @@ const PoemDetailScreen: React.FC = () => {
 
   const poem = (route.params as any)?.poem;
   const [activeMode, setActiveMode] = useState<PlaybackMode>(PlaybackMode.TEXT);
-  const isFavorite = user?.favorites.includes(poem.id) || false;
+  const isFavorite = user?.favoritePoems?.includes(poem.id) || false;
 
   const handleToggleFavorite = () => {
     if (!user) return;

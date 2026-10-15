@@ -70,7 +70,6 @@ VersoVivo revoluciona la forma de consumir poesía en la era digital. Cada poema
 | **Redux Toolkit** | 1.9.x | Gestión de estado |
 | **React Navigation** | 6.1.x | Navegación entre pantallas |
 | **Expo AV** | 13.4.x | Reproductor audio/video |
-| **Suno AI API** | - | Generación de música con IA |
 
 ---
 
@@ -80,7 +79,6 @@ VersoVivo revoluciona la forma de consumir poesía en la era digital. Cada poema
 - Node.js ^18.0.0
 - npm o yarn
 - Cuenta de Firebase
-- Acceso a Suno AI API
 
 ### Pasos de Instalación
 
@@ -112,7 +110,6 @@ VersoVivo revoluciona la forma de consumir poesía en la era digital. Cada poema
    FIREBASE_API_KEY=tu-api-key
    FIREBASE_AUTH_DOMAIN=tu-auth-domain
    FIREBASE_PROJECT_ID=tu-project-id
-   SUNO_AI_API_KEY=tu-suno-api-key
    ```
 
 5. **Ejecuta la aplicación**
@@ -144,7 +141,6 @@ versovivo/
 │   ├── navigation/          # Configuración de navegación
 │   ├── services/            # Servicios y APIs
 │   │   ├── firebaseService.ts
-│   │   └── sunoAIService.ts
 │   ├── store/               # Gestión de estado (Redux)
 │   ├── types/               # Definiciones de TypeScript
 │   └── utils/               # Utilidades y helpers

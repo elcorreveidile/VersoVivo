@@ -46,7 +46,7 @@ export interface User {
   displayName?: string;
   photoURL?: string;
   role?: UserRole; // Required by Firestore rules
-  favorites: string[]; // Array of poem IDs
+  favoritePoems: string[]; // Array of poem IDs (same field the web and the Firestore rules use)
   readPoems: string[]; // Array of poem IDs
   listenedPoems: string[]; // Array of poem IDs
   watchedPoems: string[]; // Array of poem IDs
@@ -120,18 +120,4 @@ export interface PaginatedResponse<T> {
   pageSize: number;
   total: number;
   hasMore: boolean;
-}
-
-// Suno AI Types
-export interface MusicGenerationRequest {
-  prompt: string;
-  duration: number;
-  style?: string;
-}
-
-export interface MusicGenerationResponse {
-  musicUrl: string;
-  status: 'success' | 'processing' | 'error';
-  jobId?: string;
-  message?: string;
 }

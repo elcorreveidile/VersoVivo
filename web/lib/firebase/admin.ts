@@ -1,5 +1,5 @@
 import { doc, getDoc, getDocs, collection, setDoc, updateDoc, addDoc, deleteDoc, query, where, orderBy, limit, startAfter, getDocsFromCache, QueryDocumentSnapshot } from 'firebase/firestore';
-import { db } from './config';
+import { auth, db } from './config';
 import { User, Book, ActivityLog, AdminStats, Poem } from '@/types/poem';
 
 const USERS_COLLECTION = 'users';
@@ -51,13 +51,16 @@ const calculateTotalPages = (totalItems: number, itemsPerPage: number): number =
 // ADMIN VERIFICATION
 // ============================================
 
+// El permiso de administrador viene de los custom claims del token (los asigna
+// scripts/set-admin-claims.js con la Admin SDK), que son lo que comprueban las reglas de
+// Firestore y Storage. El campo `role` del documento de usuario NO concede nada.
+// Esto solo decide qué se muestra; la barrera real son las reglas.
 export const isAdmin = async (userId: string): Promise<boolean> => {
   try {
-    const userDoc = await getDoc(doc(db, USERS_COLLECTION, userId));
-    if (!userDoc.exists()) return false;
-
-    const user = userDoc.data() as User;
-    return user.role === 'admin';
+    const current = auth.currentUser;
+    if (!current || current.uid !== userId) return false;
+    const token = await current.getIdTokenResult();
+    return token.claims.admin === true;
   } catch (error) {
     console.error('Error checking admin status:', error);
     return false;

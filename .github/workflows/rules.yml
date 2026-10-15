@@ -1,0 +1,39 @@
+name: Reglas de seguridad
+
+on:
+  pull_request:
+    paths:
+      - 'firestore.rules'
+      - 'storage.rules'
+      - 'firebase.json'
+      - 'rules-tests/**'
+      - '.github/workflows/rules.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'firestore.rules'
+      - 'storage.rules'
+      - 'firebase.json'
+      - 'rules-tests/**'
+
+jobs:
+  rules:
+    name: pruebas de las reglas (emulador)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: rules-tests/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Instalar dependencias
+        working-directory: rules-tests
+        run: npm ci
+      - name: Probar las reglas con el emulador
+        working-directory: rules-tests
+        run: npx firebase emulators:exec --only firestore,storage --project demo-versovivo --config ../firebase.json "node --test"

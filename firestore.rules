@@ -3,126 +3,114 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // ============================================
-    // HELPER FUNCTIONS
+    // FUNCIONES AUXILIARES
     // ============================================
 
-    // Helper function to check if user is authenticated
     function isSignedIn() {
       return request.auth != null;
     }
 
-    // Helper function to check if user is owner
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    // Admin verification using Custom Claims (método escalable)
+    // El rol de administrador vive SOLO en los custom claims del token (los asigna
+    // web/scripts/set-admin-claims.js con la Admin SDK). Ningún campo de un documento
+    // que el cliente pueda escribir concede permisos.
     function isAdmin() {
-      return isSignedIn() && request.auth.token.admin == true;
-    }
-
-    // Editor verification (using database field)
-    function isEditor() {
-      return isSignedIn() &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'editor';
-    }
-
-    // Admin or Editor check
-    function isAdminOrEditor() {
-      return isAdmin() || isEditor();
+      return isSignedIn() && request.auth.token.get('admin', false) == true;
     }
 
     // ============================================
-    // USERS COLLECTION
+    // USUARIOS
     // ============================================
+    // Campos que el propio usuario puede crear y cambiar. NO están: role, subscription,
+    // purchasedBooks, active. Esos los escribe solo el servidor (Cloud Functions / Admin SDK)
+    // o un administrador.
+    function userEditableKeys() {
+      return [
+        'displayName', 'photoURL', 'favoritePoems', 'readPoems', 'listenedPoems',
+        'watchedPoems', 'preferences', 'lastLoginAt'
+      ];
+    }
+
+    function userCreateKeys() {
+      return userEditableKeys().concat(['uid', 'email', 'createdAt', 'role']);
+    }
+
+    function listOk(data, key) {
+      return !(key in data) || (data[key] is list && data[key].size() <= 2000);
+    }
+
+    function validUserLists(data) {
+      return listOk(data, 'favoritePoems') && listOk(data, 'readPoems')
+        && listOk(data, 'listenedPoems') && listOk(data, 'watchedPoems');
+    }
+
     match /users/{userId} {
-      // Read: Owner or admin
       allow read: if isOwner(userId) || isAdmin();
 
-      // Create: Owner can create (with restrictions on role)
-      allow create: if isOwner(userId) &&
-        (
-          !('role' in request.resource.data) ||
-          request.resource.data.role == 'user' ||
-          request.resource.data.role == 'editor'
-        );
+      // Alta: solo el propio usuario, solo con rol 'user' (o sin rol), sin suscripción ni compras.
+      allow create: if isOwner(userId)
+        && request.resource.data.keys().hasOnly(userCreateKeys())
+        && request.resource.data.uid == request.auth.uid
+        && (!('role' in request.resource.data) || request.resource.data.role == 'user')
+        && validUserLists(request.resource.data);
 
-      // Update: Owner can update own profile (with restrictions)
-      allow update: if isOwner(userId) &&
-        request.resource.data.role == resource.data.role &&
-        request.resource.data.diff(resource.data).changedKeys().hasOnly([
-          'displayName',
-          'photoURL',
-          'favoritePoems',
-          'readPoems',
-          'listenedPoems',
-          'watchedPoems',
-          'subscription',
-          'preferences',
-          'lastLoginAt',
-          'active'
-        ]);
+      // Edición: el rol no cambia y solo se tocan campos de perfil y listas.
+      allow update: if isOwner(userId)
+        && request.resource.data.get('role', 'user') == resource.data.get('role', 'user')
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(userEditableKeys())
+        && validUserLists(request.resource.data);
 
-      // Delete: Only admin
+      // El borrado de una cuenta se hace desde el servidor (borra también Auth y los datos).
       allow delete: if isAdmin();
-
-      // Admin write override
       allow write: if isAdmin();
     }
 
     // ============================================
-    // POEMS COLLECTION
+    // POEMAS Y LIBROS
     // ============================================
+    // De momento todo lo publicado es gratuito y de lectura pública. El acceso por
+    // suscripción o venta (contenido protegido) se añade en el siguiente cambio.
     match /poems/{poemId} {
-      // Read: Public (anyone can read)
       allow read: if true;
-
-      // Create, Update, Delete: Admin only
       allow create, update, delete: if isAdmin();
     }
 
-    // ============================================
-    // BOOKS COLLECTION
-    // ============================================
     match /books/{bookId} {
-      // Read: Public (anyone can read)
       allow read: if true;
-
-      // Create, Update, Delete: Admin only
       allow create, update, delete: if isAdmin();
     }
 
     // ============================================
-    // ACTIVITY LOG COLLECTION
+    // REGISTRO DE ACTIVIDAD (panel de administración)
     // ============================================
+    // Solo un administrador lo lee y solo puede AÑADIR entradas a su nombre; nadie las
+    // modifica ni las borra desde el cliente.
     match /activityLog/{logId} {
-      // Read: Admin only
       allow read: if isAdmin();
+      allow create: if isAdmin() && request.resource.data.adminId == request.auth.uid;
+      allow update, delete: if false;
+    }
 
-      // Write: Server only (Admin SDK bypasses rules)
+    // ============================================
+    // COMPRAS Y SUSCRIPCIONES
+    // ============================================
+    // Las crea únicamente el servidor tras verificar el recibo con Apple o Google.
+    // El cliente solo puede leer las suyas.
+    match /purchases/{purchaseId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow write: if false;
+    }
+
+    match /subscriptions/{subscriptionId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
       allow write: if false;
     }
 
     // ============================================
-    // PURCHASES COLLECTION
-    // ============================================
-    match /purchases/{purchaseId} {
-      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
-      allow create: if false; // Purchases created server-side only
-      allow update, delete: if isAdmin();
-    }
-
-    // ============================================
-    // SUBSCRIPTIONS COLLECTION
-    // ============================================
-    match /subscriptions/{subscriptionId} {
-      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
-      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
-      allow update, delete: if isAdmin();
-    }
-
-    // ============================================
-    // DEFAULT DENY
+    // POR DEFECTO: DENEGAR
     // ============================================
     match /{document=**} {
       allow read, write: if false;
